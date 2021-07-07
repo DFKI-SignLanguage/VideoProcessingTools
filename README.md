@@ -110,3 +110,21 @@ optional arguments:
                         and rotation, as if the person's nose is always facing
                         the front, in the direction of the camera
 ```
+
+### Trim Video
+
+```
+python -m dfki_sl_videotools.trim_video --help                                      
+usage: trim_video.py [-h] --invideo INVIDEO --outvideo OUTVIDEO --startframe
+                     STARTFRAME --endframe ENDFRAME
+
+Trims a video file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --invideo INVIDEO     Input video filepath
+  --outvideo OUTVIDEO   Output video filepath
+  --startframe STARTFRAME
+                        First frame to retain (counting from 1)
+  --endframe ENDFRAME   Last frame to retain (counting from 1)
+```
