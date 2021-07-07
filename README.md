@@ -4,6 +4,8 @@ This is a repository of a set of command-line tools to preprocess videos for sig
 
 These scripts rely on a number of body/face analysis libraries (e.g., MediaPipe, OpenPose, ...) to analyse and extract information of the body parts incolved in sign language utterances. For example, identifying the location of hands/face, cropping at specified bounds, extracting landmarks, ...and the like.
 
+The scripts are heavily based on the [kkroening ffmpeg python](https://kkroening.github.io/ffmpeg-python/) bindings.
+
 ## Installation
 
 Clone the repository and setup a python environment for it (Tested with v3.7).
