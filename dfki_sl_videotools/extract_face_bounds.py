@@ -1,36 +1,12 @@
 import cv2
-import numpy as np
 import mediapipe as mp
 from .common import *
 import ffmpeg
-import argparse
 
 
 mp_face_detection = mp.solutions.face_detection
 mp_pose = mp.solutions.pose
 mp_holistic = mp.solutions.holistic
-
-parser = argparse.ArgumentParser(description='Get the bounding box of the face throughout a video')
-parser.add_argument('--infile',
-                    help='Path to a videofile showing a sign language interpreter.'
-                         ' Hence, we assume that there is a face always present and visible.',
-                    required=True)
-parser.add_argument('--outfile',
-                    help='Path for a JSON output file: a JSON structure containing the pixel-coordinates'
-                         ' of the smallest rectangle containing the face of the person throughout the whole video.'
-                         ' The rectangle must hold the same proportions of the original video (e.g.: 4:3, 16:9).'
-                         ' Output has the format: { "x": int, "y": int, "width": int, "height": int}',
-                    required=True)
-parser.add_argument('--outvideo',
-                    default=None,
-                    help='Path for an (optional) videofile showing the original video'
-                         'and an overlay of the region selected as bounds',
-                    required=False)
-parser.add_argument('--skip_focus',
-                    action='store_true',
-                    help='Skip the body localisation phase.'
-                         ' Useful when the face is already big enough and no body is really visible.',
-                    required=False)
 
 
 def get_roi(image):
@@ -130,6 +106,30 @@ def get_bbox_face(input_video_path, output_video_path=None, skip_focus=False):
 
 
 if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Get the bounding box of the face throughout a video')
+    parser.add_argument('--invideo',
+                        help='Path to a video file showing a sign language interpreter.'
+                             ' Hence, we assume that there is a face always present and visible.',
+                        required=True)
+    parser.add_argument('--outbounds',
+                        help='Path for a JSON output file: a JSON structure containing the pixel-coordinates'
+                             ' of the smallest rectangle containing the face of the person throughout the whole video.'
+                             ' The rectangle must hold the same proportions of the original video (e.g.: 4:3, 16:9).'
+                             ' Output has the format: { "x": int, "y": int, "width": int, "height": int}',
+                        required=True)
+    parser.add_argument('--outvideo',
+                        default=None,
+                        help='Path for an (optional) videofile showing the original video'
+                             'and an overlay of the region selected as bounds',
+                        required=False)
+    parser.add_argument('--skip-focus',
+                        action='store_true',
+                        help='Skip the body localisation phase.'
+                             ' Useful when the face is already big enough and no body is really visible.',
+                        required=False)
+
     args = parser.parse_args()
-    print(get_bbox_face(args.infile, args.outvideo, args.skip_focus),
-          file=open(args.outfile, "w", encoding="utf-8"))
+    print(get_bbox_face(args.invideo, args.outvideo, args.skip_focus),
+          file=open(args.outbounds, "w", encoding="utf-8"))

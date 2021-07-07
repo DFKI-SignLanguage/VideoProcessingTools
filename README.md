@@ -28,53 +28,54 @@ This scripts analyse a video in order to identify the rectangle containing the f
 It is useful on videos showing the full body of the interpreter because some software, like MediaPipe, do not work well when the face occupies only a small portion of the video.
 
 ```
-% python -m dfki-sl-videotools.extract_face_bounds --help
-usage: extract_face_bounds.py [-h] --infile INFILE --outfile OUTFILE
-                              [--outvideo OUTVIDEO] [--skip_focus]
+python -m dfki_sl_videotools.extract_face_bounds --help                             
+usage: extract_face_bounds.py [-h] --invideo INVIDEO --outbounds OUTBOUNDS
+                              [--outvideo OUTVIDEO] [--skip-focus]
 
 Get the bounding box of the face throughout a video
 
 optional arguments:
-  -h, --help           show this help message and exit
-  --infile INFILE      Path to a videofile showing a sign language
-                       interpreter. Hence, we assume that there is a face
-                       always present and visible.
-  --outfile OUTFILE    Path for a JSON output file: a JSON structure
-                       containing the pixel-coordinates of the smallest
-                       rectangle containing the face of the person throughout
-                       the whole video. The rectangle must hold the same
-                       proportions of the original video (e.g.: 4:3, 16:9).
-                       Output has the format: { "x": int, "y": int, "width":
-                       int, "height": int}
-  --outvideo OUTVIDEO  Path for an (optional) videofile showing the original
-                       videoand an overlay of the region selected as bounds
-  --skip_focus         Skip the body localisation phase. Useful when the face
-                       is already big enough and no body is really visible.
+  -h, --help            show this help message and exit
+  --invideo INVIDEO     Path to a video file showing a sign language
+                        interpreter. Hence, we assume that there is a face
+                        always present and visible.
+  --outbounds OUTBOUNDS
+                        Path for a JSON output file: a JSON structure
+                        containing the pixel-coordinates of the smallest
+                        rectangle containing the face of the person throughout
+                        the whole video. The rectangle must hold the same
+                        proportions of the original video (e.g.: 4:3, 16:9).
+                        Output has the format: { "x": int, "y": int, "width":
+                        int, "height": int}
+  --outvideo OUTVIDEO   Path for an (optional) videofile showing the original
+                        videoand an overlay of the region selected as bounds
+  --skip-focus          Skip the body localisation phase. Useful when the face
+                        is already big enough and no body is really visible.
 ```
 
 ### Crop Video
 
 ```
-python -m dfki-sl-videotools.crop_video --help         
-usage: crop_video.py [-h] --infile INFILE --jsonfile JSONFILE --outfile
-                     OUTFILE
+python -m dfki_sl_videotools.crop_video --help
+usage: crop_video.py [-h] --invideo INVIDEO --inbounds INBOUNDS --outvideo
+                     OUTVIDEO
 
-Crop a video at a specified rectangular area
+Crop a video at a specified rectangular area.
 
 optional arguments:
   -h, --help           show this help message and exit
-  --infile INFILE      Path to the input videofile
-  --jsonfile JSONFILE  Path to a JSON file containing the bounds information
+  --invideo INVIDEO    Path to the input videofile
+  --inbounds INBOUNDS  Path to a JSON file containing the bounds information
                        for cropping. Format is: { "x": int, "y": int, "width":
                        int, "height": int}
-  --outfile OUTFILE    Path for the output videofile, showing the cropped area
+  --outvideo OUTVIDEO  Path for the output videofile, showing the cropped area
 ```
 
 
 ### Extract Face Mesh
 
 ```
-python -m dfki-sl-videotools.extract_face_mesh --help
+python -m dfki_sl_videotools.extract_face_mesh --help
 usage: extract_face_mesh.py [-h] --invideo INVIDEO --outfaceanimation
                             OUTFACEANIMATION
                             [--outheadanimation OUTHEADANIMATION]
