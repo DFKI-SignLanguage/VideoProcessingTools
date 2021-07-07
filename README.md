@@ -6,7 +6,7 @@ These scripts rely on a number of body/face analysis libraries (e.g., MediaPipe,
 
 ## Installation
 
-Clone the repository and setup a python environmet for it.
+Clone the repository and setup a python environment for it (Tested with v3.7).
 
 ```sh
 python3 -m venv p3env-videotools
