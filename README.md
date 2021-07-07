@@ -73,6 +73,7 @@ optional arguments:
   --outvideo OUTVIDEO  Path for the output videofile, showing the cropped area
 ```
 
+_Warning!!!_ The resolution of the output video might differ from the width/height specified in the JSON file. This is due to limitations of some codecs.
 
 ### Extract Face Mesh
 
