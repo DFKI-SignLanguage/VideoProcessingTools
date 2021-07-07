@@ -3,6 +3,7 @@ import mediapipe as mp
 from .common import *
 import ffmpeg
 
+from typing import Tuple
 
 mp_face_detection = mp.solutions.face_detection
 mp_pose = mp.solutions.pose
@@ -45,7 +46,7 @@ def get_roi(image):
         return [nose, rshoulder, lshoulder]
 
 
-def get_bbox_face(input_video_path, output_video_path=None, skip_focus=False):
+def extract_face_bounds(input_video_path, output_video_path=None, skip_focus=False) -> Tuple[int, int, int, int]:
     """
         Get the global face boundingbox throughout the video
 
@@ -56,7 +57,7 @@ def get_bbox_face(input_video_path, output_video_path=None, skip_focus=False):
           skip_focus: skip the body detection phase if True
 
         Returns:
-          json(bbox): the global face bbox into json { "x": int, "y": int, "width": int, "height": int }
+            a 4-tuple of int elements, in order: x, y, width, height
     """
 
     cap = cv2.VideoCapture(input_video_path)
@@ -90,7 +91,8 @@ def get_bbox_face(input_video_path, output_video_path=None, skip_focus=False):
             bboxes.append([int(x+xm), int(y+ym), int(wm), int(hm)])
 
     if len(bboxes) == 0:
-        return format_json_bbox(np.zeros(4))
+        # TODO -- instead, maybe raise an exception
+        return [0, 0, 0, 0]
 
     bboxes = np.array(bboxes)
     maxs = bboxes.max(axis=0)  # for coord x,y
@@ -102,7 +104,7 @@ def get_bbox_face(input_video_path, output_video_path=None, skip_focus=False):
         stream = ffmpeg.output(stream, output_video_path)
         ffmpeg.run(stream)
 
-    return format_json_bbox(np.array([mins[0], mins[1], maxs[2], maxs[3]]))
+    return mins[0], mins[1], maxs[2], maxs[3]
 
 
 if __name__ == '__main__':
@@ -131,5 +133,8 @@ if __name__ == '__main__':
                         required=False)
 
     args = parser.parse_args()
-    print(get_bbox_face(args.invideo, args.outvideo, args.skip_focus),
-          file=open(args.outbounds, "w", encoding="utf-8"))
+
+    # Extract the bounds and save them
+    bounds = extract_face_bounds(args.invideo, args.outvideo, args.skip_focus)
+    bounds_json = format_json_bbox(bounds)
+    print(bounds_json, file=open(args.outbounds, "w", encoding="utf-8"))

@@ -128,3 +128,11 @@ optional arguments:
                         First frame to retain (counting from 1)
   --endframe ENDFRAME   Last frame to retain (counting from 1)
 ```
+
+## Testing
+
+Test modules/functions are implemented using [pytest](https://docs.pytest.org/).
+After setting up the python environment, open a terminal and... 
+
+    cd .../VideoProcessingTools
+    pytest

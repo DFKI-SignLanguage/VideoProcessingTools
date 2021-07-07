@@ -2,8 +2,10 @@ import ffmpeg
 
 from .common import *
 
+from typing import Tuple
 
-def crop_video(input_video_path: str, input_json_path: str, output_video_path: str) -> None:
+
+def crop_video(input_video_path: str, bounds_tuple: Tuple[int, int, int, int], output_video_path: str) -> None:
     """ 
         Crop a video from coordinates defined in a json file
 
@@ -16,8 +18,9 @@ def crop_video(input_video_path: str, input_json_path: str, output_video_path: s
              None
     """
     stream = ffmpeg.input(input_video_path)
-    x, y, w, h = get_bbox_from_json(input_json_path)
-    stream = ffmpeg.crop(stream, x, y, w, h)
+    x, y, w, h = bounds_tuple
+    # See here to force exact cropping size: https://stackoverflow.com/questions/61304686/ffmpeg-cropping-size-is-always-wrong
+    stream = ffmpeg.crop(stream, x, y, w, h, exact=0)
     stream = ffmpeg.output(stream, output_video_path)
 
     ffmpeg.run(stream)
@@ -40,6 +43,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    crop_video(args.invideo, args.inbounds, args.outvideo)
+    with open(args.inbounds, "r") as json_file:
+
+        bounds_dict = json.load(json_file)
+        bounds = bounds_dict["x"], bounds_dict["y"], bounds_dict["width"], bounds_dict["height"]
+
+        crop_video(args.invideo, bounds, args.outvideo)
 
     print("Done.")

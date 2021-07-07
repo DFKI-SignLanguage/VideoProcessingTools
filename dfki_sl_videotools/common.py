@@ -58,7 +58,7 @@ def get_bbox_pts(nose, rshoulder):
 
 
 # https://stackoverflow.com/questions/23110383/how-to-dynamically-build-a-json-object-with-python
-def format_json_bbox(x):
+def format_json_bbox(x) -> str:
     """
         Format the numpy array bbox to json
 
