@@ -60,51 +60,57 @@ def extract_face_bounds(input_video_path, output_video_path=None, skip_focus=Fal
             a 4-tuple of int elements, in order: x, y, width, height
     """
 
-    cap = cv2.VideoCapture(input_video_path)
-    with mp_face_detection.FaceDetection(min_detection_confidence=0.5) as face_detection:
-        bboxes = []  # Will accumulate the bboxes across all frames
-        # Frame-by-frame
+      cap = cv2.VideoCapture(input_video_path)
+      with mp_face_detection.FaceDetection(
+          min_detection_confidence=0.5) as face_detection:
+        bboxes = []
+        xs = []
+        ys = []
         while cap.isOpened():
-            success, image = cap.read()
-            if not success:
-                # print("End of video")
-                break
-            # img = image.copy()
-            h, w, _ = image.shape
+          success, image = cap.read()
+          if not success:
+            #print("End of video")
+            break
+          img = image.copy()
+          h,w,_ = image.shape
+          x,y = 0,0
+          if not skip_focus:
+            nose,rshoulder,_ = get_roi(image)
+            #print("nose,rshoulder",nose,rshoulder)
+            pts = get_bbox_pts(nose,rshoulder)
+            #print(pts)
+            x,y,w,h = cv2.boundingRect(pts.astype(int))
+            image = crop_bbox(image,x,y,w,h)
 
-            if not skip_focus:
-                nose, rshoulder, _ = get_roi(image)
-                pts = get_bbox_pts(nose, rshoulder)
-                # print(pts)
-                x, y, w, h = cv2.boundingRect(pts.astype(int))
-                image = crop_bbox(image, x, y, w, h)
+          # Convert the BGR image to RGB and process it with MediaPipe Face Detection.
+          results = face_detection.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
-            # Convert the BGR image to RGB and process it with MediaPipe Face Detection.
-            results = face_detection.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+          if not results.detections: # if nothing detected
+            continue
+          bbox_face = results.detections[0].location_data.relative_bounding_box # we assume that there is always 1 face at least
+          xm,ym,wm,hm = bbox_face.xmin*w, bbox_face.ymin*h, bbox_face.width*w, bbox_face.height*h # map back to the original
+          idx += 1
+          xs += [int(x+xm), int(x+xm+wm)] 
+          ys += [int(y+ym),int(y+ym+hm)]
 
-            if not results.detections:  # if nothing detected
-                continue
-            # we assume that there is always 1 face at least
-            bbox_face = results.detections[0].location_data.relative_bounding_box
-            # map back to the original
-            xm, ym, wm, hm = bbox_face.xmin*w, bbox_face.ymin*h, bbox_face.width*w, bbox_face.height*h
-            bboxes.append([int(x+xm), int(y+ym), int(wm), int(hm)])
+      if len(bboxes)==0:
+        return format_json_bbox(np.zeros(4))
 
-    if len(bboxes) == 0:
-        # TODO -- instead, maybe raise an exception
-        return [0, 0, 0, 0]
+      min_x = min(xs)
+      max_x = max(xs)
 
-    bboxes = np.array(bboxes)
-    maxs = bboxes.max(axis=0)  # for coord x,y
-    mins = bboxes.min(axis=0)  # for width and height
+      min_y = min(ys)
+      max_y = max(ys)
+      wx = max_x - min_x
+      hy = max_y - min_y
 
-    if output_video_path:  # if output is defined
+      if output_video_path: # if output is defined
         stream = ffmpeg.input(input_video_path)
-        stream = ffmpeg.drawbox(stream, mins[0], mins[1], maxs[2], maxs[3], color='red', thickness=2)
-        stream = ffmpeg.output(stream, output_video_path)
+        stream = ffmpeg.drawbox(stream,min_x,min_y,wx,hy, color='red', thickness=2)
+        #stream = ffmpeg.drawbox(stream,x,y,w,h, color='red', thickness=2)
+        stream = ffmpeg.output(stream,output_video_path)
         ffmpeg.run(stream)
-
-    return mins[0], mins[1], maxs[2], maxs[3]
+      return format_json_bbox(np.array([min_x,min_y,wx,hy]))
 
 
 if __name__ == '__main__':
