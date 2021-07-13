@@ -6,26 +6,42 @@ import pkg_resources
 
 TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mov")
 
+from .trim_video import trim_video
 from .extract_face_bounds import extract_face_bounds
 from .crop_video import crop_video
 
 
 def test_face_pipeline(tmp_path):
 
+    #
+    # Fetch video info
     info = ffmpeg.probe(TEST_VIDEO_PATH)
-
-    info_video = None
-    for stream in info['streams']:
-        if stream['codec_type'] == 'video':
-            info_video = stream
-            break
-
-    assert info_video is not None
+    # retrieve the first stream of type 'video'
+    info_video = [stream for stream in info['streams'] if stream['codec_type'] == 'video'][0]
 
     video_w = info_video['width']
     video_h = info_video['height']
+    n_frames = int(info_video['nb_frames'])
 
-    bounds = extract_face_bounds(input_video_path=TEST_VIDEO_PATH)
+    #
+    # Trim the video
+    trimmed_video_path = tmp_path / "trimmed_video.mp4"
+    # Take approximately 80% of the central part of the video
+    sframe = int(n_frames * 0.1)
+    eframe = sframe + int(n_frames * 0.8)
+    trim_video(input_path=TEST_VIDEO_PATH,
+               output_path=str(trimmed_video_path),
+               start_frame=sframe,
+               end_frame=eframe)
+
+    info_trimmed_video = ffmpeg.probe(trimmed_video_path)
+    info_trimmed_video = [stream for stream in info_trimmed_video['streams'] if stream['codec_type'] == 'video'][0]
+    trimmed_n_frames = int(info_trimmed_video['nb_frames'])
+    assert trimmed_n_frames == eframe - sframe + 1
+
+    #
+    # Extract face bounds
+    bounds = extract_face_bounds(input_video_path=str(trimmed_video_path))
     bounds_x, bounds_y, bounds_w, bounds_h = bounds
 
     assert 0 <= bounds_x < video_w  # x
@@ -33,6 +49,8 @@ def test_face_pipeline(tmp_path):
     assert bounds_x + bounds_w <= video_w  # width
     assert bounds_y + bounds_h <= video_h  # height
 
+    #
+    # Crop the video
     cropped_video_path = tmp_path / "cropped_video.mp4"
 
     crop_video(input_video_path=TEST_VIDEO_PATH,
@@ -48,6 +66,5 @@ def test_face_pipeline(tmp_path):
             cropped_video_h = stream['height']
             assert cropped_video_w - 2 < bounds_w < cropped_video_w + 2
             assert cropped_video_h - 2 < bounds_h < cropped_video_h + 2
-
 
     pass
