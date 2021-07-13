@@ -30,9 +30,9 @@ This scripts analyse a video in order to identify the rectangle containing the f
 It is useful on videos showing the full body of the interpreter because some software, like MediaPipe, do not work well when the face occupies only a small portion of the video.
 
 ```
-python -m dfki_sl_videotools.extract_face_bounds --help                             
+python -m dfki_sl_videotools.extract_face_bounds --help
 usage: extract_face_bounds.py [-h] --invideo INVIDEO --outbounds OUTBOUNDS
-                              [--outvideo OUTVIDEO] [--skip-focus]
+                              [--outvideo OUTVIDEO] [--head-focus]
 
 Get the bounding box of the face throughout a video
 
@@ -48,11 +48,13 @@ optional arguments:
                         the whole video. The rectangle must hold the same
                         proportions of the original video (e.g.: 4:3, 16:9).
                         Output has the format: { "x": int, "y": int, "width":
-                        int, "height": int}
+                        int, "height": int}.
   --outvideo OUTVIDEO   Path for an (optional) videofile showing the original
-                        videoand an overlay of the region selected as bounds
-  --skip-focus          Skip the body localisation phase. Useful when the face
-                        is already big enough and no body is really visible.
+                        videoand an overlay of the region selected as bounds.
+  --head-focus          Before trying to recognize the face, try to recognize
+                        the head zone of a full body. Useful when the face is
+                        too small but the body is visible. However, body
+                        recognition is much slower.
 ```
 
 ### Crop Video
