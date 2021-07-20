@@ -134,6 +134,10 @@ optional arguments:
   --endframe ENDFRAME   Last frame to retain (counting from 1)
 ```
 
+## Examples
+
+There examples in the `Examples` directory. Some test videos are in this same package under `dfki_sl_videotools/data`.
+
 ## Testing
 
 Test modules/functions are implemented using [pytest](https://docs.pytest.org/).
