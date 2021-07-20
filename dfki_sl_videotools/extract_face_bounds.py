@@ -46,7 +46,8 @@ def get_roi(image):
         return [nose, rshoulder, lshoulder]
 
 
-def extract_face_bounds(input_video_path, output_video_path=None, head_focus=False) -> Tuple[int, int, int, int]:
+def extract_face_bounds(input_video_path: str, output_video_path: str = None, head_focus: bool = False)\
+        -> Tuple[int, int, int, int]:
     """
         Get the global face boundingbox throughout the video
 
@@ -54,7 +55,7 @@ def extract_face_bounds(input_video_path, output_video_path=None, head_focus=Fal
           input_video_path: path to the input video
           [optional]
           output_video_path: path to the output video
-          skip_focus: skip the body detection phase if True
+          head_focus: if true, use the body detection phase to find the shoulder/head zone
 
         Returns:
             a 4-tuple of int elements, in order: x, y, width, height
@@ -133,7 +134,7 @@ if __name__ == '__main__':
                              'and an overlay of the region selected as bounds.',
                         required=False)
     parser.add_argument('--head-focus',
-                        action='store_false',
+                        action='store_true',
                         help='Before trying to recognize the face, try to recognize the head zone of a full body.'
                              ' Useful when the face is too small but the body is visible.'
                              ' However, body recognition is much slower.',
