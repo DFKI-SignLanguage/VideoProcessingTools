@@ -1,10 +1,8 @@
-import pytest
-
 import ffmpeg
 
 import pkg_resources
 
-TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mov")
+TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mp4")
 
 from .trim_video import trim_video
 from .extract_face_bounds import extract_face_bounds
@@ -12,7 +10,6 @@ from .crop_video import crop_video
 
 
 def test_face_pipeline(tmp_path):
-
     #
     # Fetch video info
     info = ffmpeg.probe(TEST_VIDEO_PATH)
