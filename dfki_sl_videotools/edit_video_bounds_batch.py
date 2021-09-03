@@ -6,14 +6,12 @@ import cv2
 import numpy as np
 import time
 
-from subprocess import call
-
-# Rectangle corners starting and engind coorinates
-
 TERMINATE_SEARCH = False
 
 refPt = []
 cropping = False
+last_start_xy = 0
+last_end_xy = 0
 
 
 def generate_info_box(video_width, video_heihgt, img):
@@ -25,9 +23,11 @@ def generate_info_box(video_width, video_heihgt, img):
     j = 0  # line index
     # this text will be printed on the image from each video
     text_to_print = ["Video Resolution: Width: {0} Height: {1}".format(video_width, video_heihgt),
+                     "---------------------------------------",
                      "Click on a point and drag to draw a rectangle",
-                     "Press r button to see the Region of Interest (ROI) cropped",
-                     "Press 'esc' exit or go to the next video in the video dir",
+                     "Press 'R': Refresh the image and ROI",
+                     "Press 'ESC': go to next video",
+                     "Press Q: Force termination, end directory search",
                      "Last selected rectanlge will be saved in a json file"]
     for line in text_to_print:
         text_size = cv2.getTextSize(line, font, 1, font_thickness)[0]
@@ -39,7 +39,7 @@ def generate_info_box(video_width, video_heihgt, img):
 
     return ret_img
 
-
+# call back function
 def click_and_crop(event, x, y, flags, param):
     # grab references to the global variables
     global refPt, cropping
@@ -75,7 +75,7 @@ def click_and_crop(event, x, y, flags, param):
                 roi = clone[refPt[0][1]:refPt[1][1], refPt[0][0]:refPt[1][0]]
                 last_start_xy = refPt[0]
                 last_end_xy = refPt[1]
-                isCropAreaSet = True
+
 
             # P1 in 2nd quadrant and P2 in 4th quadrant
             # refPt[0][1] > refPt[1][1] and refPt[0][0] < refPt[1][0]
@@ -85,7 +85,7 @@ def click_and_crop(event, x, y, flags, param):
                 roi = clone[refPt[1][1]:refPt[0][1], refPt[0][0]:refPt[1][0]]
                 last_start_xy = [(refPt[0][0], refPt[1][1])]
                 last_end_xy = [(refPt[1][0], refPt[0][1])]
-                isCropAreaSet = True
+
 
             # P1 in 3rd quadrant and P2 in 1st quadrant
             elif refPt[0][1] > refPt[1][1] and refPt[0][0] > refPt[1][0]:
@@ -93,7 +93,7 @@ def click_and_crop(event, x, y, flags, param):
                 roi = clone[refPt[1][1]:refPt[0][1], refPt[1][0]:refPt[0][0]]
                 last_start_xy = refPt[1]
                 last_end_xy = refPt[0]
-                isCropAreaSet = True
+
 
             # P1 in 4th quadrant and P2 in 2nd quadrant
             elif refPt[0][1] < refPt[1][1] and refPt[0][0] > refPt[1][0]:
@@ -101,10 +101,10 @@ def click_and_crop(event, x, y, flags, param):
                 roi = clone[refPt[0][1]:refPt[1][1], refPt[1][0]:refPt[0][0]]
                 last_start_xy = [(refPt[1][0], refPt[0][1])]
                 last_end_xy = [(refPt[0][0], refPt[1][1])]
-                isCropAreaSet = True
+
             else:
                 print("WARNNING: Points are not making a valid rectanlge")
-                isCropAreaSet = False
+
 
             cv2.imshow("ROI", roi)
 
@@ -132,7 +132,7 @@ def get_cropping_area(video_path, video_width, video_heihgt, nb_frames):
     if not cap.isOpened():
         print("Trouble opening the video ")
     else:
-        print("Rendering video frames... ")
+        print("Video successfully opened ")
 
     i = 1
     while cap.isOpened():
@@ -144,14 +144,14 @@ def get_cropping_area(video_path, video_width, video_heihgt, nb_frames):
             i += 1
 
         if i == frame_nb:
-            print("Get {0}th_nd frame of the video".format(i))
+            print("Frame number: {0}".format(i))
             cv2.namedWindow(winname='image')
             # Generate information box on the image
             img = generate_info_box(video_width, video_heihgt, img)
 
 
             while True:
-                print("DEBUG:1 Number of ref Points:{0}".format(len(refPt)))
+                #print("DEBUG:1 Number of ref Points:{0}".format(len(refPt)))
                 cv2.imshow('image', img)
                 clone = img.copy()
                 cv2.setMouseCallback('image', click_and_crop)
@@ -164,12 +164,13 @@ def get_cropping_area(video_path, video_width, video_heihgt, nb_frames):
                 # if the 'r' key is pressed, reset the cropping region
                 # if q or Q is pressed terminate the batch search
                 if key == ord("r"):
+                    print("Pressed R: refreshing image")
                     img = clone.copy()
                 if key == 27:
-                    print("Pressed 'Esc', next video in the video corpus")
+                    print("Pressed 'Esc': Next video in the video corpus or finish")
                     break
                 if key == ord('q') or key == ord('Q'):
-                    print("Pressed Q, Force termination")
+                    print("Pressed Q: Force termination, end directory search")
                     TERMINATE_SEARCH = True
                     break
                # print("DEBUG:3 Number of ref Points:{0}".format(len(refPt)))
@@ -177,23 +178,25 @@ def get_cropping_area(video_path, video_width, video_heihgt, nb_frames):
             break  # break cap.isOpened() loop
 
     if last_start_xy and last_end_xy:
-        crop_width = int(last_end_xy[0]-last_start_xy[0] )
-        crop_height = int(last_end_xy[1]-last_start_xy[1])
+        isCropAreaSet = True
+        crop_width = int (np.abs(last_end_xy[0]-last_start_xy[0] ))
+        crop_height = int (np.abs(last_end_xy[1]-last_start_xy[1]))
         # crop_width = width if last_end_x == -1 else last_end_x
         # x_ = last_start_xy[0] if last_start_xy[0] < last_end_xy[0] else last_end_xy[0]
         # y_ = last_start_xy[1] if last_start_xy[1] < last_end_xy[0] else last_end_xy[1]
         crop_area = {
             'x': last_start_xy[0],
             'y': last_start_xy[1],
-            'width': np.abs(crop_width),
-            'height': np.abs(crop_height),
+            'width': crop_width,
+            'height': crop_height,
         }
     else:
+        isCropAreaSet = False
         crop_area = {
             'x': 0,
             'y': 0,
-            'width': video_width,
-            'height': video_heihgt,
+            'width': 0,
+            'height': 0,
         }
 
     # clear
@@ -230,7 +233,7 @@ def create_output_json(dir, video_format, out_dir, json_name):
 
                 json_array = []
                 if crop_area:
-                    print("crop-area is selected, inserting this to output json")
+                    print("Creating a json ...")
                     metadata = {
                         'nb_frames': nb_frames,
                         "isCropAreaSet":isCropAreaSet,
@@ -246,8 +249,12 @@ def create_output_json(dir, video_format, out_dir, json_name):
                 print("Error: {0}".format(e.stderr), file=sys.stderr)
                 sys.exit(1)
 
-    with open("{0}/{1}_{2}.json".format(out_dir, json_name, time.strftime("%Y%m%d-%H%M%S")), 'w') as f:
+    #create json
+    output_fname = json_name+ "_"+ time.strftime("%Y%m%d-%H%M%S")+".json"
+    out_directory = out_dir+"/"+output_fname
+    with open(out_directory, 'w') as f:
         json.dump(out_json, f)
+        print("{0} created at {1}.json".format(output_fname,out_directory))
 
 
 # def click_event(event, x, y, flags, params):
@@ -288,7 +295,7 @@ if __name__ == '__main__':
     parser.add_argument('--out',
                         help='Path for the output json including cropping area',
                         required=True)
-    parser.add_argument('--f',
+    parser.add_argument('--t',
                         help='for example .m4v or .mp4',
                         required=True)
     parser.add_argument('--oname',
@@ -298,4 +305,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    create_output_json(args.dir, args.f, args.out, args.oname)
+    create_output_json(args.dir, args.t, args.out, args.oname)

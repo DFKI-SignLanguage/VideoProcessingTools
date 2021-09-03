@@ -1,0 +1,49 @@
+name: video_editing
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+ - python=3.7
+ - pip
+ - pip:
+   - kaggle==1.5
+   - yellowbrick==0.9
+   - absl-py==0.12.0
+   - attrs==21.2.0
+   - certifi==2020.12.5
+   - chardet==4.0.0
+   - decorator==4.4.2
+   - ffmpeg-python==0.2.0
+   - future==0.18.2
+   - idna==2.10
+   - imageio==2.9.0
+   - imageio-ffmpeg==0.4.3
+   - importlib-metadata==4.0.1
+   - iniconfig==1.1.1
+   - mediapipe==0.8.7.1
+   - moviepy==1.0.3
+   - numpy==1.20.2
+   - opencv-contrib-python==4.5.2.52
+   - opencv-python==4.5.2.52
+   - packaging==20.9
+   - pandas==1.2.4
+   - pathlib==1.0.1
+   - Pillow==8.2.0
+   - pluggy==0.13.1
+   - proglog==0.1.9
+   - protobuf==3.17.1
+   - py==1.10.0
+   - pyparsing==2.4.7
+   - pytest==6.2.4
+   - python-dateutil==2.8.1
+   - pytz==2021.1
+   - requests==2.25.1
+   - six==1.16.0
+   - toml==0.10.2
+   - tqdm==4.60.0
+   - typing-extensions==3.10.0.0
+   - urllib3
+   - zipp==3.4.1
+

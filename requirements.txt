@@ -10,7 +10,7 @@ imageio==2.9.0
 imageio-ffmpeg==0.4.3
 importlib-metadata==4.0.1
 iniconfig==1.1.1
-mediapipe==0.8.4.2
+mediapipe==0.8.7.1
 moviepy==1.0.3
 numpy==1.20.2
 opencv-contrib-python==4.5.2.52
