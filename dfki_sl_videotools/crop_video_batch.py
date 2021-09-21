@@ -8,8 +8,8 @@ from typing import Tuple
 import os
 
 def make_output_directoy(dir, name):
-    director_ = os.path.splitext(name)[0]
-    path_n = os.path.join(dir, director_)
+    director_name = os.path.splitext(name)[0]
+    path_n = os.path.join(dir, director_name)
     if not os.path.isfile(path_n):
         os.mkdir(path_n)
     else:
@@ -62,25 +62,47 @@ if __name__ == '__main__':
         # "metadata": { "nb_frames": "110431", "is_crop_selected": true, "v_width": 718, "v_height": 576}}], ...}
         #video_name = os.path.basename(args.invideo)
         num_videos_indx = 0
-        for video in bounds_dict:
+        for video_name in bounds_dict:
             num_videos_indx+=1
             print("VIDEO NUMBER {0}:".format(num_videos_indx))
+            in_video = os.path.join(args.inv_dir, video_name)
+
+            if not os.path.isfile(in_video):
+                continue
 
             try:
                 #print("bounds_dict: {}".format(bounds_dict))
-                print("Video name: {0}".format(video))
-                data_ = bounds_dict["{0}".format(video)][0]
+                print("Video name: {0}".format(video_name))
+                data_ = bounds_dict["{0}".format(video_name)][0]
                 crop_dim= data_['crop_area']
+                metadata = data_['metadata']
+
                 print("crop_dim {}".format(crop_dim))
                 bounds = crop_dim["x"], crop_dim["y"], crop_dim["width"], crop_dim["height"]
+                # create a directory for output
 
-                #create a directory for output
-                in_video = os.path.join(args.inv_dir,video)
+                path_n = make_output_directoy(args.ov_dir, video_name)
+                video_out = os.path.join(path_n, "Patient.mp4")
+                crop_video(in_video, bounds, video_out)
 
-                #path_n = make_output_directoy(args.ov_dir, video)
-                video_out = os.path.join(args.ov_dir, "Left.m4v")
+                # get the opposite portion of the video
+                print("metadata {}".format(metadata))
+                video_w = metadata["v_width"]
+                video_h = metadata["v_height"]
 
-                #crop_video(in_video, bounds, video_out)
+                mirror_w = video_w - crop_dim["width"]
+
+                if crop_dim["x"]- mirror_w < 0:
+                    mirror_x = crop_dim["x"] + mirror_w
+                else:
+                    mirror_x = crop_dim["x"] - mirror_w
+
+                bounds_mirror = mirror_x, crop_dim["y"], mirror_w, crop_dim["height"]
+                print("bounds_mirror {}".format(bounds_mirror))
+
+                video_out_mirror = os.path.join(path_n, "Therapy.mp4")
+                crop_video(in_video, bounds_mirror, video_out_mirror)
+
 
             except json.JSONDecodeError as je:
                 print("JSON Decoder Error:{0}".format(je))
