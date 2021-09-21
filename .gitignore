@@ -1,9 +1,10 @@
 .idea
 *.m4v
-*.mp4
+
 *.pyc
 .*json
 
-
+#local data
+First10/
 # MacOS stuff
 .DS_Store
