@@ -2,20 +2,30 @@ import json
 
 import ffmpeg
 import sys
-from .common import *
+import logging
+# from common import *
 
 from typing import Tuple
 import os
+import shutil
+
 
 def make_output_directoy(dir, name):
     director_name = os.path.splitext(name)[0]
     path_n = os.path.join(dir, director_name)
-    if not os.path.isfile(path_n):
-        os.mkdir(path_n)
+    if os.path.isdir(path_n):
+        logging.warning("Directory already exist {}".format(path_n))
+        return path_n
+        #shutil.rmtree(path_n)
+        #logging.info("Creating dir {}".format(path_n))
+        #os.mkdir(path_n)
     else:
-        print("This directory already exists")
+        os.mkdir(path_n)
+        logging.info("Creating dir {}".format(path_n))
 
     return path_n
+
+
 def crop_video(input_video_path: str, bounds_tuple: Tuple[int, int, int, int], output_video_path: str) -> None:
     """
         Crop a video from coordinates defined in a json file
@@ -28,31 +38,42 @@ def crop_video(input_video_path: str, bounds_tuple: Tuple[int, int, int, int], o
         Returns:
              None
     """
-    stream = ffmpeg.input(input_video_path)
-    x, y, w, h = bounds_tuple
-    # See here to force exact cropping size: https://stackoverflow.com/questions/61304686/ffmpeg-cropping-size-is-always-wrong
-    stream = ffmpeg.crop(stream, x, y, w, h, exact=0)
-    stream = ffmpeg.output(stream, output_video_path)
+    if not os.path.isfile(output_video_path):
+        stream = ffmpeg.input(input_video_path)
+        x, y, w, h = bounds_tuple
+        # See here to force exact cropping size: https://stackoverflow.com/questions/61304686/ffmpeg-cropping-size-is-always-wrong
+        stream = ffmpeg.crop(stream, x, y, w, h, exact=0)
+        stream = ffmpeg.output(stream, output_video_path)
 
-    ffmpeg.run(stream)
+        ffmpeg.run(stream)
+    else:
+        logging.warning("This video already exist")
+        print("This video already exist: {}".format(output_video_path))
 
 
 if __name__ == '__main__':
     import argparse
+    import datetime
+
+    logging.basicConfig(filename='log_crop_video_batch{}.log'.format(datetime.datetime.now().strftime('%M_%S_%d_%m_%Y')),
+                        level=logging.DEBUG)
+    logging.info("=============== Start at {} ==================".format(datetime.datetime.now()))
 
     parser = argparse.ArgumentParser(description='Interactively edit a rectangular area in a video. '
                                                  'Useful to manually set cropping bounds.')
     parser.add_argument('--inv_dir',
-                        help='Path to the input videofile',
+                        help='Path to the input video file',
                         required=True)
     parser.add_argument('--in_json',
                         help='Path to a JSON file containing the bounds information for cropping.'
                              ' Format is: { "x": int, "y": int, "width": int, "height": int}',
                         required=True)
     parser.add_argument('--ov_dir',
-                        help='Path for the output videofile, showing the cropped area',
+                        help='Path for the output video file, showing the cropped area',
                         required=True)
-
+    parser.add_argument('--ov_name',
+                        help='name with extension, ex patient.mp4 or patient.m4v',
+                        required=True)
 
     args = parser.parse_args()
 
@@ -60,55 +81,41 @@ if __name__ == '__main__':
         bounds_dict = json.load(json_file)
         # NOTE: inbound json format {"name.m4v": [{"crop_area": {"x":0, "y": 0, "width": 377, "height": 570},
         # "metadata": { "nb_frames": "110431", "is_crop_selected": true, "v_width": 718, "v_height": 576}}], ...}
-        #video_name = os.path.basename(args.invideo)
+        # video_name = os.path.basename(args.invideo)
         num_videos_indx = 0
         for video_name in bounds_dict:
-            num_videos_indx+=1
-            print("VIDEO NUMBER {0}:".format(num_videos_indx))
+            num_videos_indx += 1
+
             in_video = os.path.join(args.inv_dir, video_name)
+            logging.info("VIDEO NUMBER {0}:".format(num_videos_indx))
 
             if not os.path.isfile(in_video):
+                logging.debug("{} is not in the input dir".format(in_video))
                 continue
 
             try:
-                #print("bounds_dict: {}".format(bounds_dict))
-                print("Video name: {0}".format(video_name))
+                # print("bounds_dict: {}".format(bounds_dict))
+                logging.info("Video name: {0}".format(video_name))
+
                 data_ = bounds_dict["{0}".format(video_name)][0]
-                crop_dim= data_['crop_area']
+                crop_dim = data_['crop_area']
                 metadata = data_['metadata']
 
-                print("crop_dim {}".format(crop_dim))
+                logging.info("crop_dim {}".format(crop_dim))
+                logging.info("metadata {}".format(metadata))
+
                 bounds = crop_dim["x"], crop_dim["y"], crop_dim["width"], crop_dim["height"]
                 # create a directory for output
-
                 path_n = make_output_directoy(args.ov_dir, video_name)
-                video_out = os.path.join(path_n, "Patient.mp4")
+                video_out = os.path.join(path_n, args.ov_name)
                 crop_video(in_video, bounds, video_out)
-
-                # get the opposite portion of the video
-                print("metadata {}".format(metadata))
-                video_w = metadata["v_width"]
-                video_h = metadata["v_height"]
-
-                mirror_w = video_w - crop_dim["width"]
-
-                if crop_dim["x"]- mirror_w < 0:
-                    mirror_x = crop_dim["x"] + mirror_w
-                else:
-                    mirror_x = crop_dim["x"] - mirror_w
-
-                bounds_mirror = mirror_x, crop_dim["y"], mirror_w, crop_dim["height"]
-                print("bounds_mirror {}".format(bounds_mirror))
-
-                video_out_mirror = os.path.join(path_n, "Therapy.mp4")
-                crop_video(in_video, bounds_mirror, video_out_mirror)
 
 
             except json.JSONDecodeError as je:
-                print("JSON Decoder Error:{0}".format(je))
+                logging.error("JSON Decoder Error:{0}".format(je))
                 sys.exit(1)
             except ffmpeg.Error as e:
-                print("FFMPEG Error: {0}".format(e.stderr), file=sys.stderr)
+                logging.error("FFMPEG Error: {0}".format(e.stderr), file=sys.stderr)
                 sys.exit(1)
 
-    print("Done.")
+    logging.info("=============== End at {} ==================".format(datetime.datetime.now()))
