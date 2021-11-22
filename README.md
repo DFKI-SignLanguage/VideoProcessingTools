@@ -144,4 +144,5 @@ Test modules/functions are implemented using [pytest](https://docs.pytest.org/).
 After setting up the python environment, open a terminal and... 
 
     cd .../VideoProcessingTools
-    pytest
+    pytest -s
+    # The -s option allows printing some informative stdout on the console.
