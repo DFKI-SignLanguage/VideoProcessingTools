@@ -87,7 +87,9 @@ def test_face_data_extraction(tmp_path):
     video_h = info_video['height']
     n_frames = int(info_video['nb_frames'])
 
-    face_data = extract_face_data(videofilename=TEST_VIDEO_PATH, outcompositevideo=os.path.join(tmp_path, "mediapipe_face_landmarks.mp4"))
+    face_data = extract_face_data(videofilename=TEST_VIDEO_PATH,
+                                  outcompositevideo=os.path.join(tmp_path, "mediapipe_face_landmarks.mp4"),
+                                  normalize_landmarks=True)
 
     assert type(face_data) == np.ndarray
 
