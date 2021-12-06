@@ -1,0 +1,697 @@
+INFO:root:=============== Start at 2021-09-24 15:33:42.734066 ==================
+INFO:root:VIDEO NUMBER 1:
+INFO:root:Video name: OPD_101_No.m4v
+INFO:root:crop_dim {'x': 381, 'y': 3, 'width': 310, 'height': 564}
+INFO:root:metadata {'nb_frames': '145779', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_101_No
+INFO:root:VIDEO NUMBER 2:
+INFO:root:Video name: OPD_102.m4v
+INFO:root:crop_dim {'x': 393, 'y': 2, 'width': 300, 'height': 565}
+INFO:root:metadata {'nb_frames': '157500', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_102
+INFO:root:VIDEO NUMBER 3:
+INFO:root:Video name: OPD_103.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 346, 'height': 567}
+INFO:root:metadata {'nb_frames': '133200', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_103
+INFO:root:VIDEO NUMBER 4:
+INFO:root:Video name: OPD_104.m4v
+INFO:root:crop_dim {'x': 378, 'y': 2, 'width': 315, 'height': 565}
+INFO:root:metadata {'nb_frames': '145825', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_104
+INFO:root:VIDEO NUMBER 5:
+INFO:root:Video name: OPD_105.m4v
+INFO:root:crop_dim {'x': 369, 'y': 2, 'width': 324, 'height': 567}
+INFO:root:metadata {'nb_frames': '160825', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_105
+INFO:root:VIDEO NUMBER 6:
+INFO:root:Video name: OPD_106.m4v
+INFO:root:crop_dim {'x': 374, 'y': 1, 'width': 319, 'height': 568}
+INFO:root:metadata {'nb_frames': '132750', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_106
+INFO:root:VIDEO NUMBER 7:
+INFO:root:Video name: OPD_107.m4v
+INFO:root:crop_dim {'x': 2, 'y': 3, 'width': 331, 'height': 568}
+INFO:root:metadata {'nb_frames': '137675', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_107
+INFO:root:VIDEO NUMBER 8:
+INFO:root:Video name: OPD_108.m4v
+INFO:root:crop_dim {'x': 357, 'y': 2, 'width': 341, 'height': 570}
+INFO:root:metadata {'nb_frames': '163200', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_108
+INFO:root:VIDEO NUMBER 9:
+INFO:root:Video name: OPD_109.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 340, 'height': 567}
+INFO:root:metadata {'nb_frames': '145475', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_109
+INFO:root:VIDEO NUMBER 10:
+INFO:root:Video name: OPD_110.m4v
+INFO:root:crop_dim {'x': 379, 'y': 2, 'width': 316, 'height': 568}
+INFO:root:metadata {'nb_frames': '108250', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_110
+INFO:root:VIDEO NUMBER 11:
+INFO:root:Video name: OPD_111.m4v
+INFO:root:crop_dim {'x': 379, 'y': 3, 'width': 314, 'height': 564}
+INFO:root:metadata {'nb_frames': '131925', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_111
+INFO:root:VIDEO NUMBER 12:
+INFO:root:Video name: OPD_112_No.m4v
+INFO:root:crop_dim {'x': 386, 'y': 2, 'width': 308, 'height': 568}
+INFO:root:metadata {'nb_frames': '197300', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_112_No
+INFO:root:VIDEO NUMBER 13:
+INFO:root:Video name: OPD_113.m4v
+INFO:root:crop_dim {'x': 384, 'y': 2, 'width': 311, 'height': 565}
+INFO:root:metadata {'nb_frames': '133125', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_113
+INFO:root:VIDEO NUMBER 14:
+INFO:root:Video name: OPD_114.m4v
+INFO:root:crop_dim {'x': 3, 'y': 4, 'width': 337, 'height': 564}
+INFO:root:metadata {'nb_frames': '103375', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_114
+INFO:root:VIDEO NUMBER 15:
+INFO:root:Video name: OPD_115.m4v
+INFO:root:crop_dim {'x': 2, 'y': 1, 'width': 359, 'height': 568}
+INFO:root:metadata {'nb_frames': '138150', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_115
+INFO:root:VIDEO NUMBER 16:
+INFO:root:Video name: OPD_116.m4v
+INFO:root:crop_dim {'x': 3, 'y': 2, 'width': 347, 'height': 568}
+INFO:root:metadata {'nb_frames': '138450', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_116
+INFO:root:VIDEO NUMBER 17:
+INFO:root:Video name: OPD_117.m4v
+INFO:root:crop_dim {'x': 364, 'y': 1, 'width': 330, 'height': 568}
+INFO:root:metadata {'nb_frames': '163250', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_117
+INFO:root:VIDEO NUMBER 18:
+INFO:root:Video name: OPD_118.m4v
+INFO:root:crop_dim {'x': 383, 'y': 3, 'width': 310, 'height': 565}
+INFO:root:metadata {'nb_frames': '134900', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_118
+INFO:root:VIDEO NUMBER 19:
+INFO:root:Video name: OPD_119.m4v
+INFO:root:crop_dim {'x': 0, 'y': 1, 'width': 357, 'height': 568}
+INFO:root:metadata {'nb_frames': '143750', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_119
+INFO:root:VIDEO NUMBER 20:
+INFO:root:Video name: OPD_120.m4v
+INFO:root:crop_dim {'x': 1, 'y': 1, 'width': 342, 'height': 568}
+INFO:root:metadata {'nb_frames': '145750', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_120
+INFO:root:VIDEO NUMBER 21:
+INFO:root:Video name: OPD_121.m4v
+INFO:root:crop_dim {'x': 353, 'y': 3, 'width': 341, 'height': 567}
+INFO:root:metadata {'nb_frames': '136325', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_121
+INFO:root:VIDEO NUMBER 22:
+INFO:root:Video name: OPD_123.m4v
+INFO:root:crop_dim {'x': 341, 'y': 0, 'width': 351, 'height': 570}
+INFO:root:metadata {'nb_frames': '113150', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_123
+INFO:root:VIDEO NUMBER 23:
+INFO:root:Video name: OPD_124.m4v
+INFO:root:crop_dim {'x': 357, 'y': 0, 'width': 337, 'height': 571}
+INFO:root:metadata {'nb_frames': '159175', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_124
+INFO:root:VIDEO NUMBER 24:
+INFO:root:Video name: OPD_125.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 342, 'height': 568}
+INFO:root:metadata {'nb_frames': '158125', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_125
+INFO:root:VIDEO NUMBER 25:
+INFO:root:Video name: OPD_201.m4v
+INFO:root:crop_dim {'x': 364, 'y': 0, 'width': 330, 'height': 569}
+INFO:root:metadata {'nb_frames': '129800', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_201
+INFO:root:VIDEO NUMBER 26:
+INFO:root:Video name: OPD_202.m4v
+INFO:root:crop_dim {'x': 391, 'y': 2, 'width': 303, 'height': 568}
+INFO:root:metadata {'nb_frames': '130175', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_202
+INFO:root:VIDEO NUMBER 27:
+INFO:root:Video name: OPD_204.m4v
+INFO:root:crop_dim {'x': 3, 'y': 3, 'width': 361, 'height': 564}
+INFO:root:metadata {'nb_frames': '182475', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_204
+INFO:root:VIDEO NUMBER 28:
+INFO:root:Video name: OPD_205_No.m4v
+INFO:root:crop_dim {'x': 3, 'y': 2, 'width': 341, 'height': 569}
+INFO:root:metadata {'nb_frames': '175347', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_205_No
+INFO:root:VIDEO NUMBER 29:
+INFO:root:Video name: OPD_206.m4v
+INFO:root:crop_dim {'x': 2, 'y': 3, 'width': 348, 'height': 566}
+INFO:root:metadata {'nb_frames': '233760', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_206
+INFO:root:VIDEO NUMBER 30:
+INFO:root:Video name: OPD_206_TEIL1.m4v
+INFO:root:crop_dim {'x': 3, 'y': 1, 'width': 346, 'height': 570}
+INFO:root:metadata {'nb_frames': '149235', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_206_TEIL1
+INFO:root:VIDEO NUMBER 31:
+INFO:root:Video name: OPD_206_TEIL2.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 340, 'height': 569}
+INFO:root:metadata {'nb_frames': '84525', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_206_TEIL2
+INFO:root:VIDEO NUMBER 32:
+INFO:root:Video name: OPD_207.m4v
+INFO:root:crop_dim {'x': 376, 'y': 1, 'width': 316, 'height': 566}
+INFO:root:metadata {'nb_frames': '124025', 'isCropAreaSet': True, 'v_width': 696, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_207
+INFO:root:VIDEO NUMBER 33:
+INFO:root:Video name: OPD_208_No.m4v
+INFO:root:crop_dim {'x': 361, 'y': 3, 'width': 333, 'height': 569}
+INFO:root:metadata {'nb_frames': '202700', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_208_No
+INFO:root:VIDEO NUMBER 34:
+INFO:root:Video name: OPD_209.m4v
+INFO:root:crop_dim {'x': 354, 'y': 2, 'width': 338, 'height': 568}
+INFO:root:metadata {'nb_frames': '145475', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_209
+INFO:root:VIDEO NUMBER 35:
+INFO:root:Video name: OPD_301.m4v
+INFO:root:crop_dim {'x': 3, 'y': 4, 'width': 333, 'height': 565}
+INFO:root:metadata {'nb_frames': '134000', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_301
+INFO:root:VIDEO NUMBER 36:
+INFO:root:Video name: OPD_302.m4v
+INFO:root:crop_dim {'x': 4, 'y': 2, 'width': 331, 'height': 571}
+INFO:root:metadata {'nb_frames': '154950', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_302
+INFO:root:VIDEO NUMBER 37:
+INFO:root:Video name: OPD_303.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 362, 'height': 567}
+INFO:root:metadata {'nb_frames': '120100', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_303
+INFO:root:VIDEO NUMBER 38:
+INFO:root:Video name: OPD_304.m4v
+INFO:root:crop_dim {'x': 345, 'y': 2, 'width': 352, 'height': 570}
+INFO:root:metadata {'nb_frames': '125700', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_304
+INFO:root:VIDEO NUMBER 39:
+INFO:root:Video name: OPD_305.m4v
+INFO:root:crop_dim {'x': 370, 'y': 2, 'width': 322, 'height': 569}
+INFO:root:metadata {'nb_frames': '165125', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_305
+INFO:root:VIDEO NUMBER 40:
+INFO:root:Video name: OPD_306.m4v
+INFO:root:crop_dim {'x': 356, 'y': 1, 'width': 340, 'height': 571}
+INFO:root:metadata {'nb_frames': '93012', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_306
+INFO:root:VIDEO NUMBER 41:
+INFO:root:Video name: OPD_307.m4v
+INFO:root:crop_dim {'x': 0, 'y': 2, 'width': 315, 'height': 570}
+INFO:root:metadata {'nb_frames': '97325', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_307
+INFO:root:VIDEO NUMBER 42:
+INFO:root:Video name: OPD_308.m4v
+INFO:root:crop_dim {'x': 372, 'y': 2, 'width': 324, 'height': 571}
+INFO:root:metadata {'nb_frames': '145925', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_308
+INFO:root:VIDEO NUMBER 43:
+INFO:root:Video name: OPD_309_No.m4v
+INFO:root:crop_dim {'x': 347, 'y': 2, 'width': 348, 'height': 570}
+INFO:root:metadata {'nb_frames': '157050', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_309_No
+INFO:root:VIDEO NUMBER 44:
+INFO:root:Video name: OPD_310.m4v
+INFO:root:crop_dim {'x': 339, 'y': 2, 'width': 356, 'height': 571}
+INFO:root:metadata {'nb_frames': '129975', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_310
+INFO:root:VIDEO NUMBER 45:
+INFO:root:Video name: OPD_311_No.m4v
+INFO:root:crop_dim {'x': 355, 'y': 2, 'width': 339, 'height': 571}
+INFO:root:metadata {'nb_frames': '93975', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_311_No
+INFO:root:VIDEO NUMBER 46:
+INFO:root:Video name: OPD_312_No.m4v
+INFO:root:crop_dim {'x': 360, 'y': 2, 'width': 334, 'height': 569}
+INFO:root:metadata {'nb_frames': '114875', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_312_No
+INFO:root:VIDEO NUMBER 47:
+INFO:root:Video name: OPD_313_No_Delete.m4v
+INFO:root:crop_dim {'x': 346, 'y': 0, 'width': 347, 'height': 574}
+INFO:root:metadata {'nb_frames': '122050', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_313_No_Delete
+INFO:root:VIDEO NUMBER 48:
+INFO:root:Video name: OPD_314.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 336, 'height': 570}
+INFO:root:metadata {'nb_frames': '119800', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_314
+INFO:root:VIDEO NUMBER 49:
+INFO:root:Video name: OPD_316.m4v
+INFO:root:crop_dim {'x': 350, 'y': 1, 'width': 343, 'height': 570}
+INFO:root:metadata {'nb_frames': '122625', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_316
+INFO:root:VIDEO NUMBER 50:
+INFO:root:Video name: OPD_401.m4v
+INFO:root:crop_dim {'x': 3, 'y': 2, 'width': 329, 'height': 568}
+INFO:root:metadata {'nb_frames': '119125', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_401
+INFO:root:VIDEO NUMBER 51:
+INFO:root:Video name: OPD_402.m4v
+INFO:root:crop_dim {'x': 365, 'y': 1, 'width': 329, 'height': 569}
+INFO:root:metadata {'nb_frames': '122600', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_402
+INFO:root:VIDEO NUMBER 52:
+INFO:root:Video name: OPD_403.m4v
+INFO:root:crop_dim {'x': 356, 'y': 1, 'width': 340, 'height': 569}
+INFO:root:metadata {'nb_frames': '168800', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_403
+INFO:root:VIDEO NUMBER 53:
+INFO:root:Video name: OPD_404.m4v
+INFO:root:crop_dim {'x': 364, 'y': 3, 'width': 329, 'height': 568}
+INFO:root:metadata {'nb_frames': '136475', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_404
+INFO:root:VIDEO NUMBER 54:
+INFO:root:Video name: OPD_405.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 331, 'height': 567}
+INFO:root:metadata {'nb_frames': '134175', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_405
+INFO:root:VIDEO NUMBER 55:
+INFO:root:Video name: OPD_406.m4v
+INFO:root:crop_dim {'x': 345, 'y': 1, 'width': 348, 'height': 570}
+INFO:root:metadata {'nb_frames': '146575', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_406
+INFO:root:VIDEO NUMBER 56:
+INFO:root:Video name: OPD_407_No.m4v
+INFO:root:crop_dim {'x': 2, 'y': 1, 'width': 344, 'height': 569}
+INFO:root:metadata {'nb_frames': '158575', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_407_No
+INFO:root:VIDEO NUMBER 57:
+INFO:root:Video name: OPD_408_No.m4v
+INFO:root:crop_dim {'x': 366, 'y': 3, 'width': 325, 'height': 568}
+INFO:root:metadata {'nb_frames': '105050', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_408_No
+INFO:root:VIDEO NUMBER 58:
+INFO:root:Video name: OPD_409.m4v
+INFO:root:crop_dim {'x': 345, 'y': 1, 'width': 350, 'height': 570}
+INFO:root:metadata {'nb_frames': '149400', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_409
+INFO:root:VIDEO NUMBER 59:
+INFO:root:Video name: OPD_410.m4v
+INFO:root:crop_dim {'x': 3, 'y': 2, 'width': 344, 'height': 571}
+INFO:root:metadata {'nb_frames': '130675', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_410
+INFO:root:VIDEO NUMBER 60:
+INFO:root:Video name: OPD_411_No.m4v
+INFO:root:crop_dim {'x': 359, 'y': 1, 'width': 335, 'height': 571}
+INFO:root:metadata {'nb_frames': '109075', 'isCropAreaSet': True, 'v_width': 700, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_411_No
+INFO:root:VIDEO NUMBER 61:
+INFO:root:Video name: OPD_412.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 331, 'height': 569}
+INFO:root:metadata {'nb_frames': '143900', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_412
+INFO:root:VIDEO NUMBER 62:
+INFO:root:Video name: OPD_413.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 347, 'height': 570}
+INFO:root:metadata {'nb_frames': '94100', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_413
+INFO:root:VIDEO NUMBER 63:
+INFO:root:Video name: OPD_414.m4v
+INFO:root:crop_dim {'x': 1, 'y': 3, 'width': 337, 'height': 568}
+INFO:root:metadata {'nb_frames': '130850', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_414
+INFO:root:VIDEO NUMBER 64:
+INFO:root:Video name: OPD_415_No.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 356, 'height': 570}
+INFO:root:metadata {'nb_frames': '106900', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_415_No
+INFO:root:VIDEO NUMBER 65:
+INFO:root:Video name: OPD_416.m4v
+INFO:root:crop_dim {'x': 2, 'y': 3, 'width': 326, 'height': 570}
+INFO:root:metadata {'nb_frames': '127100', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_416
+INFO:root:VIDEO NUMBER 66:
+INFO:root:Video name: OPD_416_v2.m4v
+INFO:root:crop_dim {'x': 2, 'y': 1, 'width': 325, 'height': 571}
+INFO:root:metadata {'nb_frames': '127174', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_416_v2
+INFO:root:VIDEO NUMBER 67:
+INFO:root:Video name: OPD_417.m4v
+INFO:root:crop_dim {'x': 2, 'y': 3, 'width': 357, 'height': 569}
+INFO:root:metadata {'nb_frames': '121200', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_417
+INFO:root:VIDEO NUMBER 68:
+INFO:root:Video name: OPD_418.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 337, 'height': 569}
+INFO:root:metadata {'nb_frames': '196625', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_418
+INFO:root:VIDEO NUMBER 69:
+INFO:root:Video name: OPD_419.m4v
+INFO:root:crop_dim {'x': 334, 'y': 2, 'width': 360, 'height': 571}
+INFO:root:metadata {'nb_frames': '206975', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_419
+INFO:root:VIDEO NUMBER 70:
+INFO:root:Video name: OPD_420.m4v
+INFO:root:crop_dim {'x': 349, 'y': 1, 'width': 346, 'height': 572}
+INFO:root:metadata {'nb_frames': '90025', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_420
+INFO:root:VIDEO NUMBER 71:
+INFO:root:Video name: OPD_421.m4v
+INFO:root:crop_dim {'x': 1, 'y': 1, 'width': 338, 'height': 570}
+INFO:root:metadata {'nb_frames': '150000', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_421
+INFO:root:VIDEO NUMBER 72:
+INFO:root:Video name: OPD_422.m4v
+INFO:root:crop_dim {'x': 359, 'y': 0, 'width': 334, 'height': 570}
+INFO:root:metadata {'nb_frames': '84186', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_422
+INFO:root:VIDEO NUMBER 73:
+INFO:root:Video name: OPD_423.m4v
+INFO:root:crop_dim {'x': 358, 'y': 2, 'width': 336, 'height': 571}
+INFO:root:metadata {'nb_frames': '80640', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_423
+INFO:root:VIDEO NUMBER 74:
+INFO:root:Video name: OPD_424.m4v
+INFO:root:crop_dim {'x': 346, 'y': 1, 'width': 348, 'height': 571}
+INFO:root:metadata {'nb_frames': '124825', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_424
+INFO:root:VIDEO NUMBER 75:
+INFO:root:Video name: OPD_425.m4v
+INFO:root:crop_dim {'x': 352, 'y': 1, 'width': 342, 'height': 570}
+INFO:root:metadata {'nb_frames': '136300', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_425
+INFO:root:VIDEO NUMBER 76:
+INFO:root:Video name: OPD_502_No.m4v
+INFO:root:crop_dim {'x': 1, 'y': 3, 'width': 332, 'height': 568}
+INFO:root:metadata {'nb_frames': '144925', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_502_No
+INFO:root:VIDEO NUMBER 77:
+INFO:root:Video name: OPD_503.m4v
+INFO:root:crop_dim {'x': 346, 'y': 2, 'width': 348, 'height': 566}
+INFO:root:metadata {'nb_frames': '144250', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 572, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_503
+INFO:root:VIDEO NUMBER 78:
+INFO:root:Video name: OPD_505.m4v
+INFO:root:crop_dim {'x': 317, 'y': 1, 'width': 378, 'height': 570}
+INFO:root:metadata {'nb_frames': '107625', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_505
+INFO:root:VIDEO NUMBER 79:
+INFO:root:Video name: OPD_506.m4v
+INFO:root:crop_dim {'x': 377, 'y': 2, 'width': 337, 'height': 567}
+INFO:root:metadata {'nb_frames': '156775', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_506
+INFO:root:VIDEO NUMBER 80:
+INFO:root:Video name: OPD_508.m4v
+INFO:root:crop_dim {'x': 383, 'y': 0, 'width': 309, 'height': 571}
+INFO:root:metadata {'nb_frames': '147375', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_508
+INFO:root:VIDEO NUMBER 81:
+INFO:root:Video name: OPD_509.m4v
+INFO:root:crop_dim {'x': 1, 'y': 0, 'width': 324, 'height': 573}
+INFO:root:metadata {'nb_frames': '144875', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_509
+INFO:root:VIDEO NUMBER 82:
+INFO:root:Video name: OPD_510_No.m4v
+INFO:root:crop_dim {'x': 2, 'y': 3, 'width': 337, 'height': 566}
+INFO:root:metadata {'nb_frames': '88668', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_510_No
+INFO:root:VIDEO NUMBER 83:
+INFO:root:Video name: OPD_511.m4v
+INFO:root:crop_dim {'x': 359, 'y': 1, 'width': 335, 'height': 570}
+INFO:root:metadata {'nb_frames': '136200', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_511
+INFO:root:VIDEO NUMBER 84:
+INFO:root:Video name: OPD_512.m4v
+INFO:root:crop_dim {'x': 343, 'y': 0, 'width': 349, 'height': 571}
+INFO:root:metadata {'nb_frames': '130175', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_512
+INFO:root:VIDEO NUMBER 85:
+INFO:root:Video name: OPD_513.m4v
+INFO:root:crop_dim {'x': 349, 'y': 2, 'width': 345, 'height': 569}
+INFO:root:metadata {'nb_frames': '178500', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_513
+INFO:root:VIDEO NUMBER 86:
+INFO:root:Video name: OPD_514.m4v
+INFO:root:crop_dim {'x': 342, 'y': 1, 'width': 351, 'height': 570}
+INFO:root:metadata {'nb_frames': '147025', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_514
+INFO:root:VIDEO NUMBER 87:
+INFO:root:Video name: OPD_515.m4v
+INFO:root:crop_dim {'x': 356, 'y': 2, 'width': 339, 'height': 568}
+INFO:root:metadata {'nb_frames': '150850', 'isCropAreaSet': True, 'v_width': 698, 'v_height': 574, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_515
+INFO:root:VIDEO NUMBER 88:
+INFO:root:Video name: OPD_601.m4v
+INFO:root:crop_dim {'x': 367, 'y': 1, 'width': 347, 'height': 570}
+INFO:root:metadata {'nb_frames': '130008', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_601
+INFO:root:VIDEO NUMBER 89:
+INFO:root:Video name: OPD_602.m4v
+INFO:root:crop_dim {'x': 388, 'y': 2, 'width': 327, 'height': 570}
+INFO:root:metadata {'nb_frames': '93534', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+WARNING:root:Directory already exist C:\Daksitha Workspace\ODP\Cropped_v1\OPD_602
+INFO:root:VIDEO NUMBER 90:
+INFO:root:Video name: OPD_603.m4v
+INFO:root:crop_dim {'x': 384, 'y': 1, 'width': 330, 'height': 571}
+INFO:root:metadata {'nb_frames': '116749', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_603
+INFO:root:VIDEO NUMBER 91:
+INFO:root:Video name: OPD_604.m4v
+INFO:root:crop_dim {'x': 343, 'y': 1, 'width': 370, 'height': 568}
+INFO:root:metadata {'nb_frames': '115550', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_604
+INFO:root:VIDEO NUMBER 92:
+INFO:root:Video name: OPD_605.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 355, 'height': 570}
+INFO:root:metadata {'nb_frames': '122768', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_605
+INFO:root:VIDEO NUMBER 93:
+INFO:root:Video name: OPD_606.m4v
+INFO:root:crop_dim {'x': 3, 'y': 1, 'width': 359, 'height': 571}
+INFO:root:metadata {'nb_frames': '121637', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_606
+INFO:root:VIDEO NUMBER 94:
+INFO:root:Video name: OPD_607.m4v
+INFO:root:crop_dim {'x': 2, 'y': 0, 'width': 376, 'height': 571}
+INFO:root:metadata {'nb_frames': '99504', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_607
+INFO:root:VIDEO NUMBER 95:
+INFO:root:Video name: OPD_608.m4v
+INFO:root:crop_dim {'x': 2, 'y': 1, 'width': 374, 'height': 569}
+INFO:root:metadata {'nb_frames': '107796', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_608
+INFO:root:VIDEO NUMBER 96:
+INFO:root:Video name: OPD_609.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 381, 'height': 566}
+INFO:root:metadata {'nb_frames': '132959', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_609
+INFO:root:VIDEO NUMBER 97:
+INFO:root:Video name: OPD_610.m4v
+INFO:root:crop_dim {'x': 372, 'y': 0, 'width': 341, 'height': 571}
+INFO:root:metadata {'nb_frames': '93609', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_610
+INFO:root:VIDEO NUMBER 98:
+INFO:root:Video name: OPD_611.m4v
+INFO:root:crop_dim {'x': 360, 'y': 1, 'width': 356, 'height': 567}
+INFO:root:metadata {'nb_frames': '95500', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_611
+INFO:root:VIDEO NUMBER 99:
+INFO:root:Video name: OPD_612.m4v
+INFO:root:crop_dim {'x': 1, 'y': 1, 'width': 372, 'height': 569}
+INFO:root:metadata {'nb_frames': '110431', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_612
+INFO:root:VIDEO NUMBER 100:
+INFO:root:Video name: OPD_613.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 372, 'height': 569}
+INFO:root:metadata {'nb_frames': '161025', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_613
+INFO:root:VIDEO NUMBER 101:
+INFO:root:Video name: OPD_614.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 351, 'height': 572}
+INFO:root:metadata {'nb_frames': '99225', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_614
+INFO:root:VIDEO NUMBER 102:
+INFO:root:Video name: OPD_615.m4v
+INFO:root:crop_dim {'x': 1, 'y': 3, 'width': 327, 'height': 568}
+INFO:root:metadata {'nb_frames': '66700', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_615
+INFO:root:VIDEO NUMBER 103:
+INFO:root:Video name: OPD_616.m4v
+INFO:root:crop_dim {'x': 2, 'y': 1, 'width': 363, 'height': 571}
+INFO:root:metadata {'nb_frames': '85025', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_616
+INFO:root:VIDEO NUMBER 104:
+INFO:root:Video name: OPD_617.m4v
+INFO:root:crop_dim {'x': 2, 'y': 1, 'width': 339, 'height': 570}
+INFO:root:metadata {'nb_frames': '57675', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_617
+INFO:root:VIDEO NUMBER 105:
+INFO:root:Video name: OPD_618.m4v
+INFO:root:crop_dim {'x': 1, 'y': 0, 'width': 343, 'height': 571}
+INFO:root:metadata {'nb_frames': '132325', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_618
+INFO:root:VIDEO NUMBER 106:
+INFO:root:Video name: OPD_619.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 334, 'height': 567}
+INFO:root:metadata {'nb_frames': '40825', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_619
+INFO:root:VIDEO NUMBER 107:
+INFO:root:Video name: OPD_620.m4v
+INFO:root:crop_dim {'x': 1, 'y': 0, 'width': 321, 'height': 572}
+INFO:root:metadata {'nb_frames': '65375', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_620
+INFO:root:VIDEO NUMBER 108:
+INFO:root:Video name: OPD_621.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 340, 'height': 569}
+INFO:root:metadata {'nb_frames': '76150', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_621
+INFO:root:VIDEO NUMBER 109:
+INFO:root:Video name: OPD_701.m4v
+INFO:root:crop_dim {'x': 375, 'y': 0, 'width': 341, 'height': 570}
+INFO:root:metadata {'nb_frames': '108325', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_701
+INFO:root:VIDEO NUMBER 110:
+INFO:root:Video name: OPD_702_sound_prob_28m-37m.m4v
+INFO:root:crop_dim {'x': 375, 'y': 1, 'width': 336, 'height': 571}
+INFO:root:metadata {'nb_frames': '153450', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_702_sound_prob_28m-37m
+INFO:root:VIDEO NUMBER 111:
+INFO:root:Video name: OPD_704.m4v
+INFO:root:crop_dim {'x': 384, 'y': 2, 'width': 332, 'height': 570}
+INFO:root:metadata {'nb_frames': '106875', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_704
+INFO:root:VIDEO NUMBER 112:
+INFO:root:Video name: OPD_705.m4v
+INFO:root:crop_dim {'x': 1, 'y': 1, 'width': 363, 'height': 571}
+INFO:root:metadata {'nb_frames': '56975', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_705
+INFO:root:VIDEO NUMBER 113:
+INFO:root:Video name: OPD_706.m4v
+INFO:root:crop_dim {'x': 368, 'y': 3, 'width': 345, 'height': 566}
+INFO:root:metadata {'nb_frames': '71925', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_706
+INFO:root:VIDEO NUMBER 114:
+INFO:root:Video name: OPD_707_No.m4v
+INFO:root:crop_dim {'x': 2, 'y': 2, 'width': 365, 'height': 567}
+INFO:root:metadata {'nb_frames': '90400', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_707_No
+INFO:root:VIDEO NUMBER 115:
+INFO:root:Video name: OPD_708.m4v
+INFO:root:crop_dim {'x': 4, 'y': 3, 'width': 364, 'height': 565}
+INFO:root:metadata {'nb_frames': '92325', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_708
+INFO:root:VIDEO NUMBER 116:
+INFO:root:Video name: OPD_709.m4v
+INFO:root:crop_dim {'x': 2, 'y': 0, 'width': 333, 'height': 572}
+INFO:root:metadata {'nb_frames': '89675', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_709
+INFO:root:VIDEO NUMBER 117:
+INFO:root:Video name: OPD_710.m4v
+INFO:root:crop_dim {'x': 3, 'y': 4, 'width': 342, 'height': 567}
+INFO:root:metadata {'nb_frames': '52425', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_710
+INFO:root:VIDEO NUMBER 118:
+INFO:root:Video name: OPD_711.m4v
+INFO:root:crop_dim {'x': 391, 'y': 3, 'width': 323, 'height': 567}
+INFO:root:metadata {'nb_frames': '86050', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_711
+INFO:root:VIDEO NUMBER 119:
+INFO:root:Video name: OPD_712.m4v
+INFO:root:crop_dim {'x': 391, 'y': 2, 'width': 326, 'height': 568}
+INFO:root:metadata {'nb_frames': '114025', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_712
+INFO:root:VIDEO NUMBER 120:
+INFO:root:Video name: OPD_713.m4v
+INFO:root:crop_dim {'x': 393, 'y': 2, 'width': 322, 'height': 567}
+INFO:root:metadata {'nb_frames': '46175', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_713
+INFO:root:VIDEO NUMBER 121:
+INFO:root:Video name: OPD_714.m4v
+INFO:root:crop_dim {'x': 394, 'y': 2, 'width': 323, 'height': 567}
+INFO:root:metadata {'nb_frames': '103475', 'isCropAreaSet': True, 'v_width': 720, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_714
+INFO:root:VIDEO NUMBER 122:
+INFO:root:Video name: OPD_716.m4v
+INFO:root:crop_dim {'x': 377, 'y': 2, 'width': 336, 'height': 571}
+INFO:root:metadata {'nb_frames': '79950', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_716
+INFO:root:VIDEO NUMBER 123:
+INFO:root:Video name: OPD_717.m4v
+INFO:root:crop_dim {'x': 384, 'y': 1, 'width': 329, 'height': 569}
+INFO:root:metadata {'nb_frames': '75275', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_717
+INFO:root:VIDEO NUMBER 124:
+INFO:root:Video name: OPD_718.m4v
+INFO:root:crop_dim {'x': 381, 'y': 1, 'width': 333, 'height': 569}
+INFO:root:metadata {'nb_frames': '94700', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_718
+INFO:root:VIDEO NUMBER 125:
+INFO:root:Video name: OPD_719.m4v
+INFO:root:crop_dim {'x': 381, 'y': 2, 'width': 333, 'height': 567}
+INFO:root:metadata {'nb_frames': '145300', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_719
+INFO:root:VIDEO NUMBER 126:
+INFO:root:Video name: OPD_720.m4v
+INFO:root:crop_dim {'x': 376, 'y': 4, 'width': 337, 'height': 566}
+INFO:root:metadata {'nb_frames': '142648', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_720
+INFO:root:VIDEO NUMBER 127:
+INFO:root:Video name: OPD_721.m4v
+INFO:root:crop_dim {'x': 368, 'y': 2, 'width': 345, 'height': 570}
+INFO:root:metadata {'nb_frames': '74150', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_721
+INFO:root:VIDEO NUMBER 128:
+INFO:root:Video name: OPD_722.m4v
+INFO:root:crop_dim {'x': 359, 'y': 0, 'width': 354, 'height': 571}
+INFO:root:metadata {'nb_frames': '136650', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_722
+INFO:root:VIDEO NUMBER 129:
+INFO:root:Video name: OPD_723.m4v
+INFO:root:crop_dim {'x': 384, 'y': 2, 'width': 327, 'height': 569}
+INFO:root:metadata {'nb_frames': '114100', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_723
+INFO:root:VIDEO NUMBER 130:
+INFO:root:Video name: OPD_724.m4v
+INFO:root:crop_dim {'x': 369, 'y': 4, 'width': 343, 'height': 565}
+INFO:root:metadata {'nb_frames': '105200', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_724
+INFO:root:VIDEO NUMBER 131:
+INFO:root:Video name: OPD_725.m4v
+INFO:root:crop_dim {'x': 385, 'y': 2, 'width': 328, 'height': 568}
+INFO:root:metadata {'nb_frames': '68375', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_725
+INFO:root:VIDEO NUMBER 132:
+INFO:root:Video name: OPD_726.m4v
+INFO:root:crop_dim {'x': 3, 'y': 3, 'width': 342, 'height': 562}
+INFO:root:metadata {'nb_frames': '80916', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_726
+INFO:root:VIDEO NUMBER 133:
+INFO:root:Video name: OPD_727.m4v
+INFO:root:crop_dim {'x': 352, 'y': 4, 'width': 358, 'height': 566}
+INFO:root:metadata {'nb_frames': '100450', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_727
+INFO:root:VIDEO NUMBER 134:
+INFO:root:Video name: OPD_728.m4v
+INFO:root:crop_dim {'x': 0, 'y': 4, 'width': 346, 'height': 568}
+INFO:root:metadata {'nb_frames': '110675', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_728
+INFO:root:VIDEO NUMBER 135:
+INFO:root:Video name: OPD_729.m4v
+INFO:root:crop_dim {'x': 4, 'y': 0, 'width': 360, 'height': 571}
+INFO:root:metadata {'nb_frames': '88750', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_729
+INFO:root:VIDEO NUMBER 136:
+INFO:root:Video name: OPD_730.m4v
+INFO:root:crop_dim {'x': 1, 'y': 1, 'width': 362, 'height': 569}
+INFO:root:metadata {'nb_frames': '94872', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_730
+INFO:root:VIDEO NUMBER 137:
+INFO:root:Video name: OPD_731.m4v
+INFO:root:crop_dim {'x': 0, 'y': 1, 'width': 374, 'height': 570}
+INFO:root:metadata {'nb_frames': '86648', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_731
+INFO:root:VIDEO NUMBER 138:
+INFO:root:Video name: OPD_732.m4v
+INFO:root:crop_dim {'x': 2, 'y': 3, 'width': 359, 'height': 569}
+INFO:root:metadata {'nb_frames': '116425', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 574, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD_732
+INFO:root:VIDEO NUMBER 139:
+INFO:root:Video name: OPD__Extra_112_612.m4v
+INFO:root:crop_dim {'x': 1, 'y': 2, 'width': 375, 'height': 569}
+INFO:root:metadata {'nb_frames': '110431', 'isCropAreaSet': True, 'v_width': 718, 'v_height': 576, 'r_frame_rate': '25/1'}
+INFO:root:Creating dir C:\Daksitha Workspace\ODP\Cropped_v1\OPD__Extra_112_612
+INFO:root:=============== End at 2021-09-27 23:00:56.484987 ==================
