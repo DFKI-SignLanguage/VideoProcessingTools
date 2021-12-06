@@ -5,6 +5,7 @@ import numpy as np
 import ffmpeg
 
 from typing import List
+from typing import Tuple
 
 # Code to overlay the face mesh point taken from https://google.github.io/mediapipe/solutions/holistic.html
 mp_drawing = mp.solutions.drawing_utils
@@ -39,11 +40,63 @@ def vec_len(a: np.ndarray) -> float:
     return a.item()
 
 
-def normalize_face_landmarks(landmarks: List[List[float]], frame_width_px: int, frame_height_px: int) -> List[List[float]]:
+def normalize_face_landmarks(landmarks: List[List[float]], frame_width_px: int, frame_height_px: int,
+                             nose_translation: np.ndarray, rot_mat: np.ndarray, scale: float) -> List[List[float]]:
     """Performs a normalizatiopn of the orientation of the Mediapipe face landmarks using forehead and lateral
      keypoints to build a rigid reference system
      """
 
+    # This is the proportion between the H and W of the input frame.
+    # This is needed because the frame coordinates are normalized in range [0,1] for both width and height.
+    # It means that plain x,y landmark coordinates are not using the same scale
+    # We will scale along the y axis in order to go back to an orthogonal system
+    # Scale along the y axis to go to an orthogonal system
+    y_ratio = 1.0 * frame_height_px / frame_width_px
+
+    # Finally, rotate all vertices to the new system
+    # TODO - If we store the landmarks list as numpy array, we can vectorize also the following transformation
+    out = []
+    for i, lm in enumerate(landmarks):
+        lm_column_vec = np.asarray(a=lm, dtype=np.float32)
+
+        # translate the nose tip to 0,0,0
+        lm_centered = lm_column_vec - nose_translation
+        # Scale along y to make the system orthogonal
+        lm_centered[1] *= y_ratio
+        # Apply the rotation
+        lm_rotated = np.matmul(rot_mat, lm_centered)
+        # re-scale to the original y proportions
+        lm_rotated[1] /= y_ratio
+        # Scale to normalize the head size
+        lm_rotated *= scale
+        # Re-center with nose tip to 0.5, 0.5, 0.5
+        lm_recentered = lm_rotated + 0.5  # Adds the offsets to recenter the nose tip to the camera center
+
+        out.append(lm_recentered.tolist())
+
+    assert len(landmarks) == len(out)
+
+    return out
+
+
+def compute_normalization_params(landmarks: List[List[float]],
+                                 frame_width_px: int,
+                                 frame_height_px: int) -> Tuple[np.ndarray, np.ndarray, float]:
+    """
+    Compute the normalization parameters.
+
+    :param landmarks: List of 3D landmarks
+    :param frame_width_px: video frame width
+    :param frame_height_px: video frame height
+    :return: The (3D position of the nose tip, 3x3 matrix transforming the face into a normalized pose,
+     scaling factor to fix the size of the head.
+    """
+
+    #
+    # Take the position of the tip of the nose to build the centering vector
+    nose_tip = np.asarray(a=landmarks[VERTEX_ID_NOSE_TIP], dtype=np.float32)
+
+    #
     # This is the proportion between the H and W of the input frame.
     y_ratio = 1.0 * frame_height_px / frame_width_px
     # This is needed because the frame coordinates are normalized in range [0,1] for both width and height.
@@ -87,45 +140,28 @@ def normalize_face_landmarks(landmarks: List[List[float]], frame_width_px: int, 
     new_z = np.cross(new_x, new_y)
 
     # Compose the 3D transformation matrix able to align the "face coordinate system" back with the reference XYZ system
-    mat = np.asarray(a=[
+    R = np.asarray(a=[
         [new_x[0], new_x[1], new_x[2]],
         [new_y[0], new_y[1], new_y[2]],
         [new_z[0], new_z[1], new_z[2]]
     ], dtype=np.float32)  # type: np.ndarray
-    assert mat.shape == (3, 3)
+    assert R.shape == (3, 3)
 
     # # Debug variables:
-    # should_be_I = mat.T @ mat
+    # should_be_I = R.T @ R
     # # cos of the angle between the new reference axes
     # should_be_zero = new_x.dot(new_y) / (len3D(new_x) * len3D(new_y))
 
     # Check through the determinant if this matrix is really orthogonal and invertible
-    det = np.linalg.det(mat)
+    det = np.linalg.det(R)
     if np.abs(1 - det) > 0.01:
-        raise Exception("Rotation matrix determinant deviates too much from 1 ({:06f}). Probably the computed landmarks are too distorted.".format(det))
+        raise Exception("Rotation matrix determinant deviates too much from 1 ({:06f})."
+                        " Probably the computed landmarks are too distorted.".format(det))
 
-    # Take the position of the tip of the nose to build the centering vector
-    nose_tip = np.asarray(a=landmarks[VERTEX_ID_NOSE_TIP], dtype=np.float32)
+    # A factor to normalize Y size so that: |Y| * k = 0.1
+    scale = 0.1 / vec_len(Y)
 
-    # Finally, rotate all vertices to the new system
-    # TODO - If we store the landmarks list as numpy array, we can vectorize also the following transformation
-    out = []
-    for i, lm in enumerate(landmarks):
-        lm_column_vec = np.asarray(a=lm, dtype=np.float32)
-
-        # translate the nose tip to 0,0,0
-        lm_centered = lm_column_vec - nose_tip
-        # Apply the rotation
-        lm_rotated = np.matmul(mat, lm_centered)
-        # re-scale to the original y proportions
-        lm_rotated[1] /= y_ratio
-        # Re-center with nose tip to 0.5, 0.5, 0.5
-        lm_recentered = lm_rotated + 0.5  # Adds the offsets to recenter the nose tip to the camera center
-        out.append(lm_recentered.tolist())
-
-    assert len(landmarks) == len(out)
-
-    return out
+    return nose_tip, R, scale
 
 
 def extract_face_data(videofilename: str,
@@ -149,10 +185,11 @@ def extract_face_data(videofilename: str,
 
     composite_video_out_process = None
 
+    # Will store the H and W of the input video frame
     width = None
     height = None
 
-    frames = []
+    out_landmarks = []
     frame_num = 0
     while cap.isOpened():
         success, image = cap.read()
@@ -175,6 +212,7 @@ def extract_face_data(videofilename: str,
         results = face_mesh.process(rgb_image)
 
         if results.multi_face_landmarks is None:
+            # TODO -- here, we should just fill in the data with NaNs
             continue
             # raise Exception("Face couldn't be recognized in frame {}".format(frame_num))
 
@@ -185,11 +223,16 @@ def extract_face_data(videofilename: str,
         lm_list = list(map(lambda l: [l.x, l.y, l.z], landmarks.landmark))
         assert len(lm_list) == 468
 
+        nose_tip, R, scale = compute_normalization_params(landmarks=lm_list, frame_width_px=width, frame_height_px=height)
+
+        # TODO -- if requested, store the transformation data
+
         if normalize_landmarks:
-            lm_list = normalize_face_landmarks(lm_list, width, height)
+            lm_list = normalize_face_landmarks(landmarks=lm_list, frame_width_px=width, frame_height_px=height,
+                                               nose_translation=nose_tip, rot_mat=R, scale=scale)
 
         # Append to frames container
-        frames.append(lm_list)
+        out_landmarks.append(lm_list)
 
         #
         # Manage composite video output
@@ -256,7 +299,7 @@ def extract_face_data(videofilename: str,
         composite_video_out_process.stdin.close()
         composite_video_out_process.wait()
 
-    out_array = np.asarray(frames, dtype=np.float32)
+    out_array = np.asarray(out_landmarks, dtype=np.float32)
     return out_array
 
 
@@ -284,10 +327,10 @@ if __name__ == '__main__':
                         help='Path to a (optional) videofile with the same resolution and frames of the original video,'
                              ' plus the overlay of the face landmarks',
                         required=False)
-    parser.add_argument('--no-head-movement',
-                        help='If specified, neutralizes the head movement,'
-                             ' i.e., at each frame a counter-rotation is applied in order to have the'
-                             ' person\'s nose facing the front, in the direction of the camera, and the face vertical.',
+    parser.add_argument('--normalize-landmarks',
+                        help='If specified, neutralizes the head translation, rotation, and zoom.'
+                             ' At each frame, a counter -rotation, -translation, and -scaling are applied in order to have:'
+                             ' face nose facing the camera and head-up, nose tip at the center of the frame, head of the same size.',
                         required=False)
 
     #
