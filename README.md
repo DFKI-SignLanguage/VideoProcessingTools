@@ -80,41 +80,73 @@ _Warning!!!_ The resolution of the output video might differ from the width/heig
 ### Extract Face Mesh
 
 ```
-python -m dfki_sl_videotools.extract_face_mesh --help
-usage: extract_face_mesh.py [-h] --invideo INVIDEO --outfaceanimation
-                            OUTFACEANIMATION
-                            [--outheadanimation OUTHEADANIMATION]
+python -m dfki_sl_videotools.extract_face_data --help
+usage: extract_face_data.py [-h] --invideo INVIDEO --outlandmarks OUTLANDMARKS
+                            [--outnosetipposition OUTNOSETIPPOSITION]
+                            [--outfacerotation OUTFACEROTATION]
+                            [--outfacescale OUTFACESCALE]
                             [--outcompositevideo OUTCOMPOSITEVIDEO]
-                            [--no-head-movement NO_HEAD_MOVEMENT]
+                            [--normalize-landmarks]
 
 Uses mediapipe to extract the face mesh data from the frames of a video.
 
 optional arguments:
   -h, --help            show this help message and exit
   --invideo INVIDEO     Path to a videofile containing the face of a person.
-  --outfaceanimation OUTFACEANIMATION
+  --outlandmarks OUTLANDMARKS
                         Path to the output numpy array of size [N][468][3],
                         where N is the number of video frames, 468 are the
                         number of landmarks of the
                         [MediaPipe](https://mediapipe.dev) face mesh, and 3 is
-                        to store <x,y,z> 3D coords.
-  --outheadanimation OUTHEADANIMATION
-                        Path to the output numpy array of size [N][6] with the
-                        movement of the head in space. N is the number of
-                        video frames and 6 (3+3) are the 3-tuple translation
-                        and 3-tuple angles moving and rotating the face in
-                        space. TODO: check, maybe the rotation can be a
-                        quaternion.
+                        to store <x,y,z> 3D coords. If no faces are detected,
+                        all values are NaN! If more faces are detected, only
+                        the first in the mediapipe list is used.
+  --outnosetipposition OUTNOSETIPPOSITION
+                        Path to an output numpy array of shape [N][3] with the
+                        x,y,z movement of the nose tip in space. N is the
+                        number of video frames As for MediaPipe, X and Y
+                        coordinates are normalized in the range [0,1] in the
+                        frame size.
+  --outfacerotation OUTFACEROTATION
+                        Path to an output numpy array of shape [N][3][3] with
+                        the 3x3 rotation of the face. N is the number of video
+                        frames
+  --outfacescale OUTFACESCALE
+                        Path to the output numpy array of shape [N] with the
+                        scaling of the face. N is the number of video frames.
+                        The scaling factor needed to resize the vertical
+                        distance within ear and jaw-base into 10 percent of
+                        the height of the frame.
   --outcompositevideo OUTCOMPOSITEVIDEO
                         Path to a (optional) videofile with the same
                         resolution and frames of the original video, plus the
-                        overlay of the face landmarks
-  --no-head-movement NO_HEAD_MOVEMENT
-                        TODO -- If specified, neutralizes the head movement,
-                        i.e., the face mandmarks are saved without translation
-                        and rotation, as if the person's nose is always facing
-                        the front, in the direction of the camera
+                        overlay of the face landmarks. The red landmarks are
+                        printed by mediapipe. The blue landmarks, possibly
+                        normalized, printed in the upper-left quadrant, are
+                        the outputted values
+  --normalize-landmarks
+                        If specified, neutralizes the head translation,
+                        rotation, and zoom. At each frame, a counter
+                        -rotation, -translation, and -scaling are applied in
+                        order to have: face nose facing the camera and head-
+                        up, nose tip at the center of the frame, head of the
+                        same size.
 ```
+
+This scripts is able to give an estimation of the transformation of the face with respect to a reference _normalized_ position where:
+
+* the nose tip is at the center of the screen;
+* the head is vertical and the nose is pointing to the camera;
+* the distance between the ears and the jaw base is at 10% of the height of the frame.
+
+All of those transformations can be saved as numpy arrays.
+If the normalization flag is active, reverse-transformations are applied and the landmarks are saved as normalized.
+
+The normalization is performed assuming that some of the points at the border of the face have no (or very limited) deformation during the execution of facial expressions.
+Hence, those points are used to compute a "rigid" orthogonal system. The advantage is that we don't need any other MediaPipe module to estimate the rotation of the head.
+The following pic shows the vectors used for the normalization process. It helps understanding the implementation of the `compute_normalization_params()` function.
+
+![Vectors used for the face landmarks normalization](images/face_normalization_notes.png)
 
 ### Trim Video
 

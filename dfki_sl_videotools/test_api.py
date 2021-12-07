@@ -10,7 +10,7 @@ from .extract_face_data import extract_face_data
 from .common import video_info
 
 
-TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo2.mp4")
+TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mp4")
 
 
 def test_trimming(tmp_path):
@@ -77,14 +77,33 @@ def test_face_data_extraction(tmp_path):
     # Fetch video info
     video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
-    face_data = extract_face_data(videofilename=TEST_VIDEO_PATH,
-                                  outcompositevideo=os.path.join(tmp_path, "mediapipe_face_landmarks.mp4"),
-                                  normalize_landmarks=True)
+    landmarks_data, nosetip_data, facerotation_data, facescale_data = extract_face_data(
+        videofilename=TEST_VIDEO_PATH,
+        out_composite_video_path=os.path.join(tmp_path, "landmarks_composite.mp4"),
+        normalize_landmarks=True)
 
-    assert type(face_data) == np.ndarray
+    assert type(landmarks_data) == np.ndarray
+    assert type(nosetip_data) == np.ndarray
+    assert type(facerotation_data) == np.ndarray
+    assert type(facescale_data) == np.ndarray
 
-    data_n_frames, data_n_landmarks, data_n_coords = face_data.shape
+    assert len(landmarks_data.shape) == 3
+    assert landmarks_data.shape[0] == n_frames
+    assert landmarks_data.shape[1] == 468
+    assert landmarks_data.shape[2] == 3
+    assert landmarks_data.dtype == np.float32
 
-    assert data_n_frames == n_frames
-    assert data_n_landmarks == 468
-    assert data_n_coords == 3
+    assert len(nosetip_data.shape) == 2
+    assert nosetip_data.shape[0] == n_frames
+    assert nosetip_data.shape[1] == 3
+    assert nosetip_data.dtype == np.float32
+
+    assert len(facerotation_data.shape) == 3
+    assert facerotation_data.shape[0] == n_frames
+    assert facerotation_data.shape[1] == 3
+    assert facerotation_data.shape[2] == 3
+    assert facerotation_data.dtype == np.float32
+
+    assert len(facescale_data.shape) == 1
+    assert facescale_data.shape[0] == n_frames
+    assert facescale_data.dtype == np.float32
