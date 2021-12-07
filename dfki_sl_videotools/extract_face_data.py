@@ -1,8 +1,9 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-
 import ffmpeg
+
+import math
 
 from typing import List
 from typing import Tuple
@@ -211,25 +212,35 @@ def extract_face_data(videofilename: str,
         rgb_image.flags.writeable = False
         results = face_mesh.process(rgb_image)
 
+        # Check if at least one face is available
         if results.multi_face_landmarks is None:
-            # TODO -- here, we should just fill in the data with NaNs
-            continue
-            # raise Exception("Face couldn't be recognized in frame {}".format(frame_num))
+            landmarks = None
+            # We just fill in the data with NaNs
+            lm_list = [[float('nan')] * 3] * 468
+            nose_tip = np.asarray([float('nan')] * 3, dtype=np.float32)
+            R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3,3)
+            scale = float('nan')
+        else:
 
-        # Assume there is only one face
-        landmarks = results.multi_face_landmarks[0]
+            # Assume there is only one face
+            landmarks = results.multi_face_landmarks[0]
 
-        # Map the list of landmarks into a bi-dimensional array (and convert it into a list)
-        lm_list = list(map(lambda l: [l.x, l.y, l.z], landmarks.landmark))
+            # Map the list of landmarks into a bi-dimensional array (and convert it into a list)
+            lm_list = list(map(lambda l: [l.x, l.y, l.z], landmarks.landmark))
+
+            nose_tip, R, scale = compute_normalization_params(landmarks=lm_list, frame_width_px=width, frame_height_px=height)
+
+            if normalize_landmarks:
+                lm_list = normalize_face_landmarks(landmarks=lm_list, frame_width_px=width, frame_height_px=height,
+                                                   nose_translation=nose_tip, rot_mat=R, scale=scale)
+
+        assert type(lm_list) == list
         assert len(lm_list) == 468
-
-        nose_tip, R, scale = compute_normalization_params(landmarks=lm_list, frame_width_px=width, frame_height_px=height)
+        assert type(R) == np.ndarray
+        assert R.shape == (3, 3)
+        assert type(scale) == float
 
         # TODO -- if requested, store the transformation data
-
-        if normalize_landmarks:
-            lm_list = normalize_face_landmarks(landmarks=lm_list, frame_width_px=width, frame_height_px=height,
-                                               nose_translation=nose_tip, rot_mat=R, scale=scale)
 
         # Append to frames container
         out_landmarks.append(lm_list)
@@ -250,41 +261,48 @@ def extract_face_data(videofilename: str,
 
             # Print and draw face mesh landmarks on the image.
             annotated_image = image.copy()
-            # print('face_landmarks:', face_landmarks)
-            mp_drawing.draw_landmarks(
-                image=annotated_image,
-                landmark_list=landmarks)
+
+            if landmarks is not None:
+                # print('face_landmarks:', face_landmarks)
+                mp_drawing.draw_landmarks(
+                    image=annotated_image,
+                    landmark_list=landmarks)
+
+                #
+                # DEBUG: save the landmarks to a file
+                # import pickle
+                # with open("landmarks-{:010d}.pck".format(frame_num), "wb") as outfile:
+                #     pickle.dump(obj=lm_list, file=outfile)
+
+                #
+                # Print landmarks with custom routine
+                # Fill the upper left quarter of the image using a orthographic projection (i.e., use only x and y)
+                # and we use the depth to modulate the color intensity.
+
+                # First compute the dynamic range of the z coordinate among all points
+                zs = [p[2] for p in lm_list]
+                z_min = min(zs)
+                z_max = max(zs)
+                z_range = z_max - z_min
+
+                # Draw the landmarks
+                for i, lm in enumerate(lm_list):
+                    lm_x, lm_y, lm_z = lm[:]
+
+                    if math.isnan(lm_x):
+                        continue
+
+                    # As the landmarks are already normalized in a range [0,1],
+                    # bring them to the half of the output frame resolution
+
+                    lm_x *= width / 2
+                    lm_y *= height / 2
+                    norm_z = 1 - ((lm_z - z_min) / z_range)
+
+                    cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=3,
+                               color=(int(255 * norm_z), 20, 20), thickness=2)
 
             #
-            # DEBUG: save the landmarks to a file
-            # import pickle
-            # with open("landmarks-{:010d}.pck".format(frame_num), "wb") as outfile:
-            #     pickle.dump(obj=lm_list, file=outfile)
-
-            #
-            # Print landmarks with custom routine
-            # Fill the upper left quarter of the image using a orthographic projection (i.e., use only x and y)
-            # and we use the depth to modulate the color intensity.
-
-            # First compute the dynamic range of the z coordinate among all points
-            zs = [p[2] for p in lm_list]
-            z_min = min(zs)
-            z_max = max(zs)
-            z_range = z_max - z_min
-
-            # Draw the landmarks
-            for i, lm in enumerate(lm_list):
-                lm_x, lm_y, lm_z = lm[:]
-                # As the landmarks are already normalized in a range [0,1],
-                # bring them to the half of the output frame resolution
-
-                lm_x *= width / 2
-                lm_y *= height / 2
-                norm_z = 1 - ((lm_z - z_min) / z_range)
-
-                cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=3,
-                           color=(int(254 * norm_z), 20, 20), thickness=2)
-
             # Finally, write the annotated frame to the output video
             annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
             composite_video_out_process.stdin.write(
@@ -311,11 +329,13 @@ if __name__ == '__main__':
     parser.add_argument('--invideo',
                         help='Path to a videofile containing the face of a person.',
                         required=True)
-    parser.add_argument('--outfaceanimation',
+    parser.add_argument('--outlandmarks',
                         help='Path to the output numpy array of size [N][468][3],'
                              ' where N is the number of video frames,'
                              ' 468 are the number of landmarks of the [MediaPipe](https://mediapipe.dev) face mesh,'
-                             ' and 3 is to store <x,y,z> 3D coords.',
+                             ' and 3 is to store <x,y,z> 3D coords.'
+                             ' If no faces are detected, all values are NaN!' 
+                             ' If more faces are detected, only the first in the mediapipe list is used.',
                         required=True)
     parser.add_argument('--outheadanimation',
                         help='TODO -- Path to the output numpy array of size [N][6] with the movement of the head in space.'
@@ -325,7 +345,10 @@ if __name__ == '__main__':
                         required=False)
     parser.add_argument('--outcompositevideo',
                         help='Path to a (optional) videofile with the same resolution and frames of the original video,'
-                             ' plus the overlay of the face landmarks',
+                             ' plus the overlay of the face landmarks.'
+                             ' The red landmarks are printed by mediapipe.'
+                             ' The blue landmarks, possibly normalized, printed in the upper-left quadrant,'
+                             ' are the outputted values',
                         required=False)
     parser.add_argument('--normalize-landmarks',
                         help='If specified, neutralizes the head translation, rotation, and zoom.'
