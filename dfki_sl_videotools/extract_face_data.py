@@ -331,7 +331,8 @@ if __name__ == '__main__':
                         help='If specified, neutralizes the head translation, rotation, and zoom.'
                              ' At each frame, a counter -rotation, -translation, and -scaling are applied in order to have:'
                              ' face nose facing the camera and head-up, nose tip at the center of the frame, head of the same size.',
-                        required=False)
+                        required=False,
+                        action='store_true')
 
     #
     # Extract arguments
@@ -340,7 +341,7 @@ if __name__ == '__main__':
     video_filename = args.invideo
     faceanimation_filename = args.outfaceanimation
     outcompositevideo = args.outcompositevideo
-    normalize_landmarks = args.no_head_movement
+    normalize_landmarks = args.normalize_landmarks
     # TODO -- consider also the other parameters:
     # outheadanimation
 
