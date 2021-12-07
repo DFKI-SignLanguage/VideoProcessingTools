@@ -1,28 +1,22 @@
-import ffmpeg
-
 import pkg_resources
+import os
+import json
 
 from .trim_video import trim_video
 from .extract_face_bounds import extract_face_bounds
 from .crop_video import crop_video
 from .extract_face_data import extract_face_data
 
-import os
-
-TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mp4")
+from .common import video_info
 
 
-def test_face_pipeline(tmp_path):
+TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo2.mp4")
 
+
+def test_trimming(tmp_path):
     #
     # Fetch video info
-    info = ffmpeg.probe(TEST_VIDEO_PATH)
-    # retrieve the first stream of type 'video'
-    info_video = [stream for stream in info['streams'] if stream['codec_type'] == 'video'][0]
-
-    video_w = info_video['width']
-    video_h = info_video['height']
-    n_frames = int(info_video['nb_frames'])
+    video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
     #
     # Trim the video
@@ -35,14 +29,23 @@ def test_face_pipeline(tmp_path):
                start_frame=sframe,
                end_frame=eframe)
 
-    info_trimmed_video = ffmpeg.probe(trimmed_video_path)
-    info_trimmed_video = [stream for stream in info_trimmed_video['streams'] if stream['codec_type'] == 'video'][0]
-    trimmed_n_frames = int(info_trimmed_video['nb_frames'])
+    trimmed_w, trimmed_h, trimmed_n_frames = video_info(trimmed_video_path)
+    assert trimmed_w == video_w
+    assert trimmed_h == video_h
     assert trimmed_n_frames == eframe - sframe + 1
+
+
+def test_cropping_pipeline(tmp_path):
+
+    #
+    # Fetch video info
+    video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
     #
     # Extract face bounds
-    bounds = extract_face_bounds(input_video_path=str(trimmed_video_path))
+    bounds = extract_face_bounds(input_video_path=str(TEST_VIDEO_PATH))
+    with open(os.path.join(tmp_path, "bounds.json"), "w") as boundsfile:
+        json.dump(obj=bounds, fp=boundsfile, indent=4)
     bounds_x, bounds_y, bounds_w, bounds_h = bounds
 
     assert 0 <= bounds_x < video_w  # x
@@ -58,17 +61,10 @@ def test_face_pipeline(tmp_path):
                bounds_tuple=bounds,
                output_video_path=str(cropped_video_path))
 
-    info_cropped_video = ffmpeg.probe(cropped_video_path)
-    for stream in info_cropped_video['streams']:
-        if stream['codec_type'] == 'video':
-            # The resolution of the cropped video might not be exactly the one of the crop request:
-            # it depends of the codec restrictions.
-            cropped_video_w = stream['width']
-            cropped_video_h = stream['height']
-            assert cropped_video_w - 2 < bounds_w < cropped_video_w + 2
-            assert cropped_video_h - 2 < bounds_h < cropped_video_h + 2
-
-    pass
+    cropped_w, cropped_h, cropped_n_frames = video_info(cropped_video_path)
+    assert cropped_w - 2 < bounds_w < cropped_w + 2
+    assert cropped_h - 2 < bounds_h < cropped_h + 2
+    assert cropped_n_frames == n_frames
 
 
 def test_face_data_extraction(tmp_path):
@@ -79,13 +75,7 @@ def test_face_data_extraction(tmp_path):
 
     #
     # Fetch video info
-    info = ffmpeg.probe(TEST_VIDEO_PATH)
-    # retrieve the first stream of type 'video'
-    info_video = [stream for stream in info['streams'] if stream['codec_type'] == 'video'][0]
-
-    video_w = info_video['width']
-    video_h = info_video['height']
-    n_frames = int(info_video['nb_frames'])
+    video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
     face_data = extract_face_data(videofilename=TEST_VIDEO_PATH,
                                   outcompositevideo=os.path.join(tmp_path, "mediapipe_face_landmarks.mp4"),
