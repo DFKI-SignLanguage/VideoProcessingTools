@@ -8,3 +8,5 @@
 First10/
 # MacOS stuff
 .DS_Store
+
+venv
