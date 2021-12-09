@@ -1,10 +1,17 @@
 # DFKI - Sign Language - Video Processing Tools
 
-This is a repository of a set of command-line tools to preprocess videos for sign language analysis.
+This project aggregates a set of video analysis libraries and picks the best of their features for analysing human body movement with the goal of extracting relevant information for **sign language analysis** (i.e.: hands, fingers, face, lips, head, upper-body).
 
-These scripts rely on a number of body/face analysis libraries (e.g., MediaPipe, OpenPose, ...) to analyse and extract information of the body parts incolved in sign language utterances. For example, identifying the location of hands/face, cropping at specified bounds, extracting landmarks, ...and the like.
+The outcome is a set of command-line tools and procedures taking a video as input, and producing as output other videos or a stream of numerical features.
+The scripts are architected to be chained with dependency tools like Make.
 
-The scripts are heavily based on the [kkroening ffmpeg python](https://kkroening.github.io/ffmpeg-python/) bindings.
+The code relies on a number of body/face analysis libraries:
+
+* [MediaPipe](https://mediapipe.dev) -- to extract body and face landmarks
+* [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), ...) -- for full body 3D landmarks extraction
+* [kkroening ffmpeg python](https://kkroening.github.io/ffmpeg-python/) -- to en/decode videos
+* ... more to come
+
 
 ## Installation
 
