@@ -3,7 +3,7 @@
 This project aggregates a set of video analysis libraries and picks the best of their features for analysing human body movement with the goal of extracting relevant information for **sign language analysis** (i.e.: hands, fingers, face, lips, head, upper-body).
 
 The outcome is a set of command-line tools and procedures taking a video as input, and producing as output other videos or a stream of numerical features.
-The scripts are architected to be chained with dependency tools like Make.
+The scripts are architected to be chained with dependency tools like [Make](https://www.gnu.org/software/make/).
 
 The code relies on a number of body/face analysis libraries:
 
