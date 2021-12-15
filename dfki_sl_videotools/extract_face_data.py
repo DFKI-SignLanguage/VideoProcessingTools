@@ -406,12 +406,14 @@ if __name__ == '__main__':
                           out_composite_video_path=compositevideopath,
                           normalize_landmarks=normalize_landmarks)
     # Save numpy arrays to a file
-    for filepath, data in [(landmarkspath, landmarksdata),
-                       (nosetippositionpath, nosetipdata),
-                       (facerotationpath, facerotdata),
-                       (facescalepath, facescaledata)]:
+    for filepath, data in\
+            [(landmarkspath, landmarksdata),
+             (nosetippositionpath, nosetipdata),
+             (facerotationpath, facerotdata),
+             (facescalepath, facescaledata)]:
+
         if filepath is not None:
             print("Saving numpy array to '{}'".format(filepath))
-            data.dump(file=filepath)
+            np.save(file=filepath, arr=data, allow_pickle=False)
 
     print("Done.")
