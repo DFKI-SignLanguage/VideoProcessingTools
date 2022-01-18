@@ -32,15 +32,6 @@ def video_info(video_path: str) -> Tuple[int, int, int]:
     return video_w, video_h, n_frames
 
 
-# https://stackoverflow.com/questions/41976245/crop-rectangle-in-opencv-python
-def crop_bbox(image, x, y, w, h):
-    """ 
-        Crop an image from a bbox
-    
-    """
-    return image[y:y+h, x:x+w]
-
-
 # https://en.wikipedia.org/wiki/Point_reflection
 def reflect(c, P):
     """ 
@@ -105,22 +96,3 @@ def format_json_bbox(x) -> str:
     bbox["height"] = int(x[3])
 
     return json.dumps(bbox)
-
-
-def get_bbox_from_json(input_json_path):
-    """ 
-        Read bounding box coords from json file
-
-        Args:
-            input_json_path : path to the json file
-        
-        Returns:
-        x,y,w,h = bbox["x"],bbox["y"],bbox["width"],bbox["height"]
-    """
-    file_in = open(input_json_path, "r")
-    line = file_in.readlines()[0]
-    bbox = json.loads(line)
-    file_in.close
-    x, y, w, h = bbox["x"], bbox["y"], bbox["width"], bbox["height"]
-
-    return x, y, w, h
