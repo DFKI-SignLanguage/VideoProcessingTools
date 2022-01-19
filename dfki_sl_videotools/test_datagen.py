@@ -3,6 +3,11 @@ from .datagen import VideoFrameProducer
 from .datagen import ImageDirFrameConsumer
 from .datagen import VideoFrameConsumer
 
+from .datagen import FrameProducer
+from .datagen import FrameConsumer
+from .datagen import create_frame_producer
+from .datagen import create_frame_consumer
+
 from .common import video_info
 
 import pkg_resources
@@ -18,7 +23,7 @@ def test_image_files_production(tmp_path):
 
     print("Generating frames in path " + str(tmp_path))
 
-    with ImageDirFrameProducer(directory_path=TEST_FRAMES_PATH) as prod,\
+    with ImageDirFrameProducer(source_dir=TEST_FRAMES_PATH) as prod,\
          ImageDirFrameConsumer(dest_dir=str(tmp_path)) as cons:
 
         # For each frame on the producer
@@ -40,8 +45,8 @@ def test_video_frames_production(tmp_path):
 
     w, h, n_frames = video_info(TEST_VIDEO_PATH)
 
-    with VideoFrameProducer(videofile_path=TEST_VIDEO_PATH) as prod,\
-         VideoFrameConsumer(video_path=video_path) as cons:
+    with VideoFrameProducer(video_in=TEST_VIDEO_PATH) as prod,\
+         VideoFrameConsumer(video_out=video_path) as cons:
 
         frame_count = 0
         for frame in prod.frames():
@@ -62,3 +67,18 @@ def test_video_frames_production(tmp_path):
     assert w == w2
     assert h == h2
     assert n_frames == n_frames2
+
+
+def test_factory_methods():
+
+    dir_prod = create_frame_producer(dir_or_video=TEST_FRAMES_PATH)
+    assert isinstance(dir_prod, FrameProducer)
+
+    video_prod = create_frame_producer(dir_or_video=TEST_VIDEO_PATH)
+    assert isinstance(video_prod, FrameProducer)
+
+    dir_cons = create_frame_consumer(dir_or_video=TEST_FRAMES_PATH)
+    assert isinstance(dir_cons, FrameConsumer)
+
+    video_cons = create_frame_consumer(dir_or_video=TEST_VIDEO_PATH)
+    assert isinstance(video_cons, FrameConsumer)

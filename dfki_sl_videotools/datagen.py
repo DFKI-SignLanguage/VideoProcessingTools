@@ -13,6 +13,7 @@ from typing import List
 
 import os
 
+
 #
 # PRODUCERS
 #
@@ -43,15 +44,15 @@ class ImageDirFrameProducer(FrameProducer):
     The scanning is NOT recursive. Alpha channel is dropped. Only recognized image formats are processed.
     If an unrecognized image format is found, an exception is raised."""
 
-    def __init__(self, directory_path: str):
+    def __init__(self, source_dir: str):
 
-        if not os.path.exists(directory_path):
+        if not os.path.exists(source_dir):
             raise Exception("Path {} doesn't exist")
 
-        if not os.path.isdir(directory_path):
+        if not os.path.isdir(source_dir):
             raise Exception("Path {} is not a directory")
 
-        self.dir_path: str = directory_path
+        self.dir_path: str = source_dir
 
         # Take the list of all files in the directory and sort them alphabetically
         self.dir_filenames: List[str] = sorted(os.listdir(self.dir_path))
@@ -98,21 +99,21 @@ class ImageDirFrameProducer(FrameProducer):
 class VideoFrameProducer(FrameProducer):
     """A concrete frame producer getting frames from a video file"""
 
-    def __init__(self, videofile_path: str):
+    def __init__(self, video_in: str):
 
         from .common import video_info
 
-        if not os.path.exists(videofile_path):
-            raise Exception("File {} doesn't exist".format(videofile_path))
+        if not os.path.exists(video_in):
+            raise Exception("File {} doesn't exist".format(video_in))
 
-        if not os.path.isfile(videofile_path):
-            raise Exception("Path {} is not a file".format(videofile_path))
+        if not os.path.isfile(video_in):
+            raise Exception("Path {} is not a file".format(video_in))
 
-        self._video_w, self._video_h, _ = video_info(videofile_path)
+        self._video_w, self._video_h, _ = video_info(video_in)
 
         self._ffmpeg_read_process = (
             ffmpeg
-            .input(videofile_path)
+            .input(video_in)
             .output('pipe:', format='rawvideo', pix_fmt='rgb24')
             .run_async(pipe_stdout=True)
         )
@@ -193,9 +194,9 @@ class ImageDirFrameConsumer(FrameConsumer):
 
 class VideoFrameConsumer(FrameConsumer):
 
-    def __init__(self, video_path: str):
+    def __init__(self, video_out: str):
 
-        self._target_video_path = video_path
+        self._target_video_path = video_out
 
         # There will be a lazy initialization as soon as we know the frame size
         self._ffmpeg_video_out_process = None
@@ -225,3 +226,33 @@ class VideoFrameConsumer(FrameConsumer):
         if self._ffmpeg_video_out_process is not None:
             self._ffmpeg_video_out_process.stdin.close()
             self._ffmpeg_video_out_process.wait()
+
+
+#
+# FACTORY METHODS
+#
+# These methods automagically instantiate a frame producer (or consumer) by checking if the provided path exists
+# and represents a file or a directory.
+
+def create_frame_producer(dir_or_video: str) -> FrameProducer:
+    if not os.path.exists(dir_or_video):
+        raise Exception("Path {} doesn't exist".format(dir_or_video))
+
+    if os.path.isdir(dir_or_video):
+        return ImageDirFrameProducer(source_dir=dir_or_video)
+    elif os.path.isfile(dir_or_video):
+        return VideoFrameProducer(video_in=dir_or_video)
+    else:
+        raise Exception("Path {} is neither a file nor a directory!".format(dir_or_video))
+
+
+def create_frame_consumer(dir_or_video: str) -> FrameConsumer:
+    if not os.path.exists(dir_or_video):
+        raise Exception("Path {} doesn't exist".format(dir_or_video))
+
+    if os.path.isdir(dir_or_video):
+        return ImageDirFrameConsumer(dest_dir=dir_or_video)
+    elif os.path.isfile(dir_or_video):
+        return VideoFrameConsumer(video_out=dir_or_video)
+    else:
+        raise Exception("Path {} is neither a file nor a directory!".format(dir_or_video))
