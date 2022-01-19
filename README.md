@@ -185,3 +185,72 @@ After setting up the python environment, open a terminal and...
     cd .../VideoProcessingTools
     pytest -s
     # The -s option allows printing some informative stdout on the console.
+
+## Software details
+
+### Frame production and consumption
+
+The framework has a unified interface to process frames coming either from a videofile or from a directory.
+Function and classes are defined in the `datagen` module.
+
+The production of frames is based on a top-level abstract class `FrameProducer` exposing a method `frames`
+The `frames()` method is a generator that returns instances of numpy `ndarray` containing RGB images. 
+
+```
+class FrameProducer(ABC):
+
+    @abstractmethod
+    def frames(self) -> np.ndarray:
+        [...]
+```
+
+It has two subclasses:
+
+```
+FrameProducer
+|- ImageDirFrameProducer  # produces frames from files in a directory
+|- VideoFrameProducer     # produces frames from a video
+```
+
+Similarly, the "consumption" of frames can end in writing files in a directory, or building a videofile
+
+```
+FrameConsumer(ABC):
+
+    @abstractmethod
+    def consume(self, frame: np.ndarray):
+
+|- ImageDirFrameConsumer  # saves frames as image files in a directory
+|- VideoFrameConsumer     # adds frames to a video
+```
+
+In addition, both `FrameProducer`s and `FrameConsumer`s implement the `__enter__()` and `__exit__()` methods, so to be used in `with` contexts.
+
+With this scheme, the transformation and transfer of frames can be implemented with a recipe like this:
+
+```python
+    with ImageDirFrameProducer(source_dir="my/frames/") as prod,\
+         VideoFrameConsumer(video_out="my_final_video.mp4") as cons:
+
+        # For each frame in the directory
+        for frame in prod.frames():
+
+            assert type(frame) == np.ndarray
+            width, height, _ = frame.shape
+            # Transform the frame the way you want
+            # [...]
+
+            # Feed the frame to output video
+            cons.consume(frame=frame)
+```
+
+or course, any of combination of _image_dir_ or _video_ can be used for input or output.
+
+There are also a couple of factory methods, automatically determining if the source, or destination is a directory or a video file.
+For example:
+
+```python
+    with create_frame_producer(dir_or_video="my/frames/") as prod,\
+         create_frame_consumer(dir_or_video="my_final_video.mp4") as cons:
+            [...]
+```
