@@ -13,6 +13,10 @@ from typing import List
 
 import os
 
+#
+# PRODUCERS
+#
+
 # Set of image extensions supported while reading frames from image files
 IMAGE_FORMATS = {'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG'}
 
@@ -34,7 +38,7 @@ class FrameProducer(ABC):
         pass
 
 
-class ImageFileProducer(FrameProducer):
+class ImageDirFrameProducer(FrameProducer):
     """A concrete frame producer getting image files from a directory. The files are processed in alphabetical order.
     The scanning is NOT recursive. Alpha channel is dropped. Only recognized image formats are processed.
     If an unrecognized image format is found, an exception is raised."""
@@ -129,3 +133,95 @@ class VideoFrameProducer(FrameProducer):
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         self._ffmpeg_read_process.wait()
+
+
+#
+# CONSUMERS
+#
+
+class FrameConsumer(ABC):
+
+    @abstractmethod
+    def consume(self, frame: np.ndarray):
+        """Process a new frame and store it."""
+        pass
+
+    def __enter__(self):
+        """Allow the object to be used in a context with a 'with' statement"""
+        return self
+
+    @abstractmethod
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        """Clean up resources when exiting a context"""
+        pass
+
+
+class ImageDirFrameConsumer(FrameConsumer):
+
+    def __init__(self, dest_dir, base_frame_name: str = "frame-", img_ext: str = "png"):
+
+        if not os.path.exists(dest_dir):
+            raise Exception("Destination directory {} doesn't exist".format(dest_dir))
+
+        if not os.path.isdir(dest_dir):
+            raise Exception("Destination path {} is not a directory".format(dest_dir))
+
+        self._dest_dir = dest_dir
+        self._frame_name = base_frame_name
+        self._img_ext = img_ext
+
+        # Will be used as incremental frame number
+        self._img_counter = 0
+
+    def consume(self, frame: np.ndarray):
+
+        # Convert into PIL Image
+        img: Image = PIL.Image.fromarray(frame, 'RGB')
+
+        # Compose name and seve
+        img_filename = self._frame_name + "{:06d}.{}".format(self._img_counter, self._img_ext)
+        img_path = os.path.join(self._dest_dir, img_filename)
+        img.save(img_path)
+
+        # Increment counter
+        self._img_counter += 1
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        # Nothing to be freed when saving single frames
+        pass
+
+
+class VideoFrameConsumer(FrameConsumer):
+
+    def __init__(self, video_path: str):
+
+        self._target_video_path = video_path
+
+        # There will be a lazy initialization as soon as we know the frame size
+        self._ffmpeg_video_out_process = None
+
+    def consume(self, frame: np.ndarray):
+
+        if self._ffmpeg_video_out_process is None:
+            # Initialize the ffmpeg consumer process using the resolution of the first frame that we receive
+
+            width = frame.shape[0]
+            height = frame.shape[1]
+
+            self._ffmpeg_video_out_process = (
+                ffmpeg
+                .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height))
+                .output(self._target_video_path, pix_fmt='yuv420p')
+                .overwrite_output()
+                .run_async(pipe_stdin=True)
+            )
+
+        # Send the frame to the ffmpeg process
+        self._ffmpeg_video_out_process.stdin.write(
+            frame.tobytes()
+        )
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        if self._ffmpeg_video_out_process is not None:
+            self._ffmpeg_video_out_process.stdin.close()
+            self._ffmpeg_video_out_process.wait()
