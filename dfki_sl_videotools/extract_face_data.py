@@ -317,7 +317,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Uses mediapipe to extract the face mesh data from the frames of a video.")
     parser.add_argument('--inframes', '--invideo',
-                        help='Path to a vide or image directory containing the face of a person.',
+                        help='Path to a video or image directory providing the frames with the face of a person.',
                         required=True, type=str)
     parser.add_argument('--outlandmarks',
                         help='Path to the output numpy array of size [N][468][3],'
@@ -342,16 +342,16 @@ if __name__ == '__main__':
                              ' The scaling factor needed to resize the vertical distance within ear and jaw-base into 10 percent of the height of the frame.',
                         required=False, type=str)
     parser.add_argument('--outcompositeframes', '--outcompositevideo',
-                        help='Path to a videofile or directory for image files. Will have the same resolution of the video,'
+                        help='Path to a videofile or directory for image files. Will have the same resolution and content of the input frames,'
                              ' plus the overlay of the face landmarks.'
-                             ' The red landmarks are printed by mediapipe.'
-                             ' The blue landmarks, possibly normalized, printed in the upper-left quadrant,'
+                             ' The blue landmarks are printed by mediapipe.'
+                             ' The red landmarks, possibly normalized, and printed in the upper-left quadrant,'
                              ' are the outputted values',
                         required=False, type=str)
     parser.add_argument('--normalize-landmarks',
                         action='store_true',
                         help='If specified, neutralizes the head translation, rotation, and zoom.'
-                             ' At each frame, a counter -rotation, -translation, and -scaling are applied in order to have:'
+                             ' At each frame, a counter-rotation, -translation, and -scaling are applied in order to have:'
                              ' face nose facing the camera and head-up, nose tip at the center of the frame, head of the same size.',
                         required=False)
 
