@@ -60,9 +60,12 @@ def test_cropping_pipeline(tmp_path):
     # Crop the video
     cropped_video_path = tmp_path / "cropped_video.mp4"
 
-    crop_video(input_video_path=TEST_VIDEO_PATH,
-               bounds_tuple=bounds,
-               output_video_path=str(cropped_video_path))
+    with create_frame_producer(TEST_VIDEO_PATH) as prod,\
+        create_frame_consumer(str(cropped_video_path)) as cons:
+
+        crop_video(frames_producer=prod,
+                   bounds_tuple=bounds,
+                   frames_consumer=cons)
 
     cropped_w, cropped_h, cropped_n_frames = video_info(cropped_video_path)
     assert cropped_w - 2 < bounds_w < cropped_w + 2
