@@ -21,6 +21,9 @@ import os
 # Set of image extensions supported while reading frames from image files
 IMAGE_FORMATS = {'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG'}
 
+# Set of video extensions supported while writing to a video
+VIDEO_FORMATS = {'mp4', 'mov'}
+
 
 class FrameProducer(ABC):
 
@@ -247,12 +250,12 @@ def create_frame_producer(dir_or_video: str) -> FrameProducer:
 
 
 def create_frame_consumer(dir_or_video: str) -> FrameConsumer:
-    if not os.path.exists(dir_or_video):
-        raise Exception("Path {} doesn't exist".format(dir_or_video))
 
     if os.path.isdir(dir_or_video):
         return ImageDirFrameConsumer(dest_dir=dir_or_video)
-    elif os.path.isfile(dir_or_video):
-        return VideoFrameConsumer(video_out=dir_or_video)
     else:
-        raise Exception("Path {} is neither a file nor a directory!".format(dir_or_video))
+        ext = dir_or_video.split('.')[-1]
+        if ext not in VIDEO_FORMATS:
+            raise Exception("Video format {} not supported".format(ext))
+        else:
+            return VideoFrameConsumer(video_out=dir_or_video)

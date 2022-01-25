@@ -88,18 +88,21 @@ _Warning!!!_ The resolution of the output video might differ from the width/heig
 
 ```
 python -m dfki_sl_videotools.extract_face_data --help
-usage: extract_face_data.py [-h] --invideo INVIDEO --outlandmarks OUTLANDMARKS
+usage: extract_face_data.py [-h] --inframes INFRAMES --outlandmarks
+                            OUTLANDMARKS
                             [--outnosetipposition OUTNOSETIPPOSITION]
                             [--outfacerotation OUTFACEROTATION]
                             [--outfacescale OUTFACESCALE]
-                            [--outcompositevideo OUTCOMPOSITEVIDEO]
+                            [--outcompositeframes OUTCOMPOSITEFRAMES]
                             [--normalize-landmarks]
 
 Uses mediapipe to extract the face mesh data from the frames of a video.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --invideo INVIDEO     Path to a videofile containing the face of a person.
+  --inframes INFRAMES, --invideo INFRAMES
+                        Path to a vide or image directory containing the face
+                        of a person.
   --outlandmarks OUTLANDMARKS
                         Path to the output numpy array of size [N][468][3],
                         where N is the number of video frames, 468 are the
@@ -124,9 +127,9 @@ optional arguments:
                         The scaling factor needed to resize the vertical
                         distance within ear and jaw-base into 10 percent of
                         the height of the frame.
-  --outcompositevideo OUTCOMPOSITEVIDEO
-                        Path to a (optional) videofile with the same
-                        resolution and frames of the original video, plus the
+  --outcompositeframes OUTCOMPOSITEFRAMES, --outcompositevideo OUTCOMPOSITEFRAMES
+                        Path to a videofile or directory for image files. Will
+                        have the same resolution of the video, plus the
                         overlay of the face landmarks. The red landmarks are
                         printed by mediapipe. The blue landmarks, possibly
                         normalized, printed in the upper-left quadrant, are
@@ -229,19 +232,22 @@ In addition, both `FrameProducer`s and `FrameConsumer`s implement the `__enter__
 With this scheme, the transformation and transfer of frames can be implemented with a recipe like this:
 
 ```python
-    with ImageDirFrameProducer(source_dir="my/frames/") as prod,\
-         VideoFrameConsumer(video_out="my_final_video.mp4") as cons:
+from dfki_sl_videotools.datagen import ImageDirFrameProducer, VideoFrameConsumer
+import numpy as np
 
-        # For each frame in the directory
-        for frame in prod.frames():
+with ImageDirFrameProducer(source_dir="my/frames/") as prod,\
+     VideoFrameConsumer(video_out="my_final_video.mp4") as cons:
 
-            assert type(frame) == np.ndarray
-            width, height, _ = frame.shape
-            # Transform the frame the way you want
-            # [...]
+    # For each frame in the directory
+    for frame in prod.frames():
 
-            # Feed the frame to output video
-            cons.consume(frame=frame)
+        assert type(frame) == np.ndarray
+        width, height, _ = frame.shape
+        # Transform the frame the way you want
+        # [...]
+
+        # Feed the frame to output video
+        cons.consume(frame=frame)
 ```
 
 or course, any of combination of _image_dir_ or _video_ can be used for input or output.
@@ -250,7 +256,10 @@ There are also a couple of factory methods, automatically determining if the sou
 For example:
 
 ```python
-    with create_frame_producer(dir_or_video="my/frames/") as prod,\
-         create_frame_consumer(dir_or_video="my_final_video.mp4") as cons:
-            [...]
+from dfki_sl_videotools.datagen import create_frame_producer, create_frame_consumer
+
+with create_frame_producer(dir_or_video="my/frames/") as prod,\
+     create_frame_consumer(dir_or_video="my_final_video.mp4") as cons:
+        # [...]
+        pass
 ```

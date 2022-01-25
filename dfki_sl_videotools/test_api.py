@@ -9,6 +9,9 @@ from .extract_face_data import extract_face_data
 
 from .common import video_info
 
+from .datagen import create_frame_consumer
+from .datagen import create_frame_producer
+
 
 TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mp4")
 
@@ -77,10 +80,13 @@ def test_face_data_extraction(tmp_path):
     # Fetch video info
     video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
-    landmarks_data, nosetip_data, facerotation_data, facescale_data = extract_face_data(
-        videofilename=TEST_VIDEO_PATH,
-        out_composite_video_path=os.path.join(tmp_path, "landmarks_composite.mp4"),
-        normalize_landmarks=True)
+    with create_frame_producer(dir_or_video=TEST_VIDEO_PATH) as frame_prod,\
+            create_frame_consumer(dir_or_video=os.path.join(tmp_path, "landmarks_composite.mp4")) as frame_cons:
+
+        landmarks_data, nosetip_data, facerotation_data, facescale_data = extract_face_data(
+            frames_in=frame_prod,
+            composite_frames_out=frame_cons,
+            normalize_landmarks=True)
 
     assert type(landmarks_data) == np.ndarray
     assert type(nosetip_data) == np.ndarray
