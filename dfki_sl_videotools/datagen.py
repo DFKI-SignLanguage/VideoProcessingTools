@@ -130,7 +130,7 @@ class VideoFrameProducer(FrameProducer):
             in_frame = (
                 np
                 .frombuffer(in_bytes, np.uint8)
-                .reshape([self._video_w, self._video_h, 3])
+                .reshape([self._video_h, self._video_w, 3])
                        )
 
             yield in_frame
@@ -209,8 +209,8 @@ class VideoFrameConsumer(FrameConsumer):
         if self._ffmpeg_video_out_process is None:
             # Initialize the ffmpeg consumer process using the resolution of the first frame that we receive
 
-            width = frame.shape[0]
-            height = frame.shape[1]
+            height = frame.shape[0]
+            width = frame.shape[1]
 
             self._ffmpeg_video_out_process = (
                 ffmpeg

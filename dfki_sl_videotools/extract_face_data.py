@@ -207,8 +207,6 @@ def extract_face_data(frames_in: VideoFrameProducer,
             width = rgb_image.shape[1]
             height = rgb_image.shape[0]
 
-        # Flip the image horizontally for a later selfie-view display
-        # image = cv2.flip(image, 1)
         # To improve performance, optionally mark the image as not writeable to pass by reference.
         rgb_image.flags.writeable = False
         results = face_mesh.process(rgb_image)
@@ -219,7 +217,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
             # We just fill in the data with NaNs
             lm_list = [[float('nan')] * 3] * 468
             nose_tip = np.asarray([float('nan')] * 3, dtype=np.float32)
-            R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3,3)
+            R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3, 3)
             scale = float('nan')
         else:
 

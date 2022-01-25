@@ -51,8 +51,8 @@ def test_video_frames_production(tmp_path):
         frame_count = 0
         for frame in prod.frames():
             assert type(frame) == np.ndarray
-            assert frame.shape[0] == w
-            assert frame.shape[1] == h
+            assert frame.shape[0] == h
+            assert frame.shape[1] == w
             assert frame.shape[2] == 3
             assert frame.dtype == np.uint8
 
