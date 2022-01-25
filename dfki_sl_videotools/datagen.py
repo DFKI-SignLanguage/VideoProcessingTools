@@ -252,6 +252,7 @@ def create_frame_producer(dir_or_video: str) -> FrameProducer:
 def create_frame_consumer(dir_or_video: str) -> FrameConsumer:
 
     if os.path.isdir(dir_or_video):
+        # Exists and it is a directory
         return ImageDirFrameConsumer(dest_dir=dir_or_video)
     else:
         ext = dir_or_video.split('.')[-1]
