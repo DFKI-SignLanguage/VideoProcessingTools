@@ -32,14 +32,17 @@ class FrameProducer(ABC):
         """Generator. Returns, one-by-one, all of the available frames."""
         pass
 
+    @abstractmethod
+    def close(self):
+        pass
+
     def __enter__(self):
         """Allow the object to be used in a context with a 'with' statement"""
         return self
 
-    @abstractmethod
     def __exit__(self, exc_type, exc_value, exc_tb):
         """Clean up resources when exiting a context"""
-        pass
+        self.close()
 
 
 class ImageDirFrameProducer(FrameProducer):
@@ -94,7 +97,7 @@ class ImageDirFrameProducer(FrameProducer):
 
             yield img_np
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def close(self):
         # Nothing to be closed when processing a directory
         pass
 
@@ -135,7 +138,7 @@ class VideoFrameProducer(FrameProducer):
 
             yield in_frame
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def close(self):
         self._ffmpeg_read_process.wait()
 
 
@@ -150,14 +153,17 @@ class FrameConsumer(ABC):
         """Process a new frame and store it."""
         pass
 
+    @abstractmethod
+    def close(self):
+        pass
+
     def __enter__(self):
         """Allow the object to be used in a context with a 'with' statement"""
         return self
 
-    @abstractmethod
     def __exit__(self, exc_type, exc_value, exc_tb):
         """Clean up resources when exiting a context"""
-        pass
+        self.close()
 
 
 class ImageDirFrameConsumer(FrameConsumer):
@@ -190,7 +196,7 @@ class ImageDirFrameConsumer(FrameConsumer):
         # Increment counter
         self._img_counter += 1
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def close(self):
         # Nothing to be freed when saving single frames
         pass
 
@@ -225,7 +231,7 @@ class VideoFrameConsumer(FrameConsumer):
             frame.tobytes()
         )
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def close(self):
         if self._ffmpeg_video_out_process is not None:
             self._ffmpeg_video_out_process.stdin.close()
             self._ffmpeg_video_out_process.wait()
