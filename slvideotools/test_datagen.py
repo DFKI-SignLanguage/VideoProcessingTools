@@ -14,8 +14,8 @@ import pkg_resources
 
 import numpy as np
 
-TEST_FRAMES_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "frames")
-TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mp4")
+TEST_FRAMES_PATH = pkg_resources.resource_filename("slvideotools.data", "frames")
+TEST_VIDEO_PATH = pkg_resources.resource_filename("slvideotools.data", "testvideo.mp4")
 
 
 def test_image_files_production(tmp_path):

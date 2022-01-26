@@ -13,7 +13,7 @@ from .datagen import create_frame_consumer
 from .datagen import create_frame_producer
 
 
-TEST_VIDEO_PATH = pkg_resources.resource_filename("dfki_sl_videotools.data", "testvideo.mp4")
+TEST_VIDEO_PATH = pkg_resources.resource_filename("slvideotools.data", "testvideo.mp4")
 
 
 def test_trimming(tmp_path):
@@ -25,8 +25,8 @@ def test_trimming(tmp_path):
     # Trim the video
     trimmed_video_path = tmp_path / "trimmed_video.mp4"
     # Take approximately 80% of the central part of the video
-    sframe = int(n_frames * 0.1)
-    eframe = sframe + int(n_frames * 0.8)
+    sframe = int(n_frames * 0.4)
+    eframe = sframe + int(n_frames * 0.2)
     trim_video(input_path=TEST_VIDEO_PATH,
                output_path=str(trimmed_video_path),
                start_frame=sframe,
@@ -45,8 +45,12 @@ def test_cropping_pipeline(tmp_path):
     video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
     #
+    # Path to video with composite rectangle
+    bbox_video_path = tmp_path / "bbox_video.mp4"
+
+    #
     # Extract face bounds
-    bounds = extract_face_bounds(input_video_path=str(TEST_VIDEO_PATH))
+    bounds = extract_face_bounds(input_video_path=str(TEST_VIDEO_PATH), output_video_path=str(bbox_video_path))
     with open(os.path.join(tmp_path, "bounds.json"), "w") as boundsfile:
         json.dump(obj=bounds, fp=boundsfile, indent=4)
     bounds_x, bounds_y, bounds_w, bounds_h = bounds
