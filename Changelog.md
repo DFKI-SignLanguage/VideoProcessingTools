@@ -16,8 +16,11 @@ Types of changes:
 
 ### Added
 
+- Framework to "produce" and "consume" frames from either videos or directories of images
+
+
+## [0.1] - 2022-01-26
+
 - First release with command lines for face movement detection, crop, trim, facemesh extraction
 - Added this Changelog :-)
 - Face extraction tool can save save landmarks and includes a "normalization" option to transform the landmark to a camera-facing neutral position.
-
-## [1.0.0] - 2021-MM-DD
