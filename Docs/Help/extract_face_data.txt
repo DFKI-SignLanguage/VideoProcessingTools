@@ -1,0 +1,52 @@
+usage: extract_face_data.py [-h] --inframes INFRAMES --outlandmarks
+                            OUTLANDMARKS
+                            [--outnosetipposition OUTNOSETIPPOSITION]
+                            [--outfacerotation OUTFACEROTATION]
+                            [--outfacescale OUTFACESCALE]
+                            [--outcompositeframes OUTCOMPOSITEFRAMES]
+                            [--normalize-landmarks]
+
+Uses mediapipe to extract the face mesh data from the frames of a video.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --inframes INFRAMES, --invideo INFRAMES
+                        Path to a video or image directory providing the
+                        frames with the face of a person.
+  --outlandmarks OUTLANDMARKS
+                        Path to the output numpy array of size [N][468][3],
+                        where N is the number of video frames, 468 are the
+                        number of landmarks of the
+                        [MediaPipe](https://mediapipe.dev) face mesh, and 3 is
+                        to store <x,y,z> 3D coords. If no faces are detected,
+                        all values are NaN! If more faces are detected, only
+                        the first in the mediapipe list is used.
+  --outnosetipposition OUTNOSETIPPOSITION
+                        Path to an output numpy array of shape [N][3] with the
+                        x,y,z movement of the nose tip in space. N is the
+                        number of video frames As for MediaPipe, X and Y
+                        coordinates are normalized in the range [0,1] in the
+                        frame size.
+  --outfacerotation OUTFACEROTATION
+                        Path to an output numpy array of shape [N][3][3] with
+                        the 3x3 rotation of the face. N is the number of video
+                        frames
+  --outfacescale OUTFACESCALE
+                        Path to the output numpy array of shape [N] with the
+                        scaling of the face. N is the number of video frames.
+                        The scaling factor needed to resize the vertical
+                        distance within ear and jaw-base into 10 percent of
+                        the height of the frame.
+  --outcompositeframes OUTCOMPOSITEFRAMES, --outcompositevideo OUTCOMPOSITEFRAMES
+                        Path to a videofile or directory for image files. Will
+                        have the same resolution and content of the input
+                        frames, plus the overlay of the face landmarks. The
+                        blue landmarks are printed by mediapipe. The red
+                        landmarks, possibly normalized, and printed in the
+                        upper-left quadrant, are the outputted values
+  --normalize-landmarks
+                        If specified, neutralizes the head translation,
+                        rotation, and zoom. At each frame, a counter-rotation,
+                        -translation, and -scaling are applied in order to
+                        have: face nose facing the camera and head-up, nose
+                        tip at the center of the frame, head of the same size.

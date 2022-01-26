@@ -41,6 +41,9 @@ It is useful on videos showing the full body of the interpreter because some sof
 python -m slvideotools.extract_face_bounds --help
 ```
 
+Watch here the [extract_face_bound help text](Docs/Help/extract_face_bounds.txt)
+
+
 <img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area">
 ==>
 JSON [x, y, width, height]
@@ -56,6 +59,7 @@ JSON [x, y, width, height]
 ```
 
 
+
 ### Crop Video
 
 Takes as input a video and a bounding rectangle description (as JSON file).
@@ -64,6 +68,9 @@ Outputs a cropped video.
 ```
 python -m slvideotools.crop_video --help
 ```
+
+Watch here the [crop_video help text](Docs/Help/crop_video.txt)
+
 
 <img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area">
 ==>
@@ -79,6 +86,9 @@ Finds a face in the video and uses MediaPipe to extract landmarks and other head
 ```
 python -m slvideotools.extract_face_data --help
 ```
+
+Watch here the [extract_face_data help text](Docs/Help/extract_face_data.txt)
+
 
 <img src="Docs/Pics/video-original.png" width="30%" alt="Original Video">
 ==>
@@ -106,6 +116,9 @@ Trims a video, i.e., retains only a subrange of frames.
 ```
 python -m slvideotools.trim_video --help                                      
 ```
+
+Watch here the [trim_video help text](Docs/Help/trim_video.txt)
+
 
 ## Examples
 
