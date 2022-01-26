@@ -1,9 +1,11 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import ffmpeg
 
 import math
+
+from .datagen import create_frame_producer, create_frame_consumer
+from .datagen import VideoFrameProducer, VideoFrameConsumer
 
 from typing import List
 from typing import Tuple
@@ -165,14 +167,14 @@ def compute_normalization_params(landmarks: List[List[float]],
     return nose_tip, R, scale
 
 
-def extract_face_data(videofilename: str,
-                      out_composite_video_path: str = None,
+def extract_face_data(frames_in: VideoFrameProducer,
+                      composite_frames_out: VideoFrameConsumer = None,
                       normalize_landmarks: bool = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Extract the MediaPipe face mesh data from the specified videofile.
 
-    :param videofilename: Path to a video containing a face.
-    :param out_composite_video_path: If provided, the landmark information are overlayed to the original frames and save here.
+    :param frames_in: A FrameProducer of some video material containing a face.
+    :param composite_frames_out: If provided, the landmark information are overlayed to the original frames and saved here.
     :param normalize_landmarks: If set, the output landmarks are normalized.
     :return: a 4-tuple of numpy ndarrasys:
       1) ndarray with the face landmark data in shape [N][468][3];
@@ -186,12 +188,6 @@ def extract_face_data(videofilename: str,
     mp_face_mesh = mp.solutions.face_mesh
     face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.7, min_tracking_confidence=0.5,
                                       static_image_mode=False, refine_landmarks=False)
-    cap = cv2.VideoCapture(videofilename)
-
-    if not cap.isOpened():
-        raise Exception("Couldn't open video file '{}'".format(videofilename))
-
-    composite_video_out_process = None
 
     # Will store the H and W of the input video frame
     width = None
@@ -204,22 +200,13 @@ def extract_face_data(videofilename: str,
     out_scales = np.ndarray(shape=(0,), dtype=np.float32)
 
     frame_num = 0
-    while cap.isOpened():
-        success, image = cap.read()
-
-        if not success:
-            # The video is finished
-            break
+    for rgb_image in frames_in.frames():
 
         # Store the size of the input frames.
         if width is None:
-            width = image.shape[1]
-            height = image.shape[0]
+            width = rgb_image.shape[1]
+            height = rgb_image.shape[0]
 
-        # Flip the image horizontally for a later selfie-view display
-        # image = cv2.flip(image, 1)
-        # Convert the BGR image to RGB
-        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # To improve performance, optionally mark the image as not writeable to pass by reference.
         rgb_image.flags.writeable = False
         results = face_mesh.process(rgb_image)
@@ -230,7 +217,7 @@ def extract_face_data(videofilename: str,
             # We just fill in the data with NaNs
             lm_list = [[float('nan')] * 3] * 468
             nose_tip = np.asarray([float('nan')] * 3, dtype=np.float32)
-            R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3,3)
+            R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3, 3)
             scale = float('nan')
         else:
 
@@ -259,26 +246,15 @@ def extract_face_data(videofilename: str,
         out_Rs = np.append(out_Rs, [R], axis=0)
         out_scales = np.append(out_scales, [np.float32(scale)], axis=0)
 
-
         # Append to frames container
         out_landmarks_list.append(lm_list)
 
         #
         # Manage composite video output
-        if out_composite_video_path is not None:
-
-            if composite_video_out_process is None:
-
-                composite_video_out_process = (
-                    ffmpeg
-                        .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height))
-                        .output(out_composite_video_path, pix_fmt='yuv420p')
-                        .overwrite_output()
-                        .run_async(pipe_stdin=True)
-                )
+        if composite_frames_out is not None:
 
             # Print and draw face mesh landmarks on the image.
-            annotated_image = image.copy()
+            annotated_image = rgb_image.copy()
 
             if landmarks is not None:
                 # print('face_landmarks:', face_landmarks)
@@ -307,6 +283,7 @@ def extract_face_data(videofilename: str,
                 for i, lm in enumerate(lm_list):
                     lm_x, lm_y, lm_z = lm[:]
 
+                    # If a coordinate is NaN, it's because the face was not found
                     if math.isnan(lm_x):
                         continue
 
@@ -322,18 +299,9 @@ def extract_face_data(videofilename: str,
 
             #
             # Finally, write the annotated frame to the output video
-            annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
-            composite_video_out_process.stdin.write(
-                annotated_image.astype(np.uint8).tobytes()
-            )
+            composite_frames_out.consume(annotated_image)
 
         frame_num += 1
-
-    cap.release()
-
-    if composite_video_out_process is not None:
-        composite_video_out_process.stdin.close()
-        composite_video_out_process.wait()
 
     out_landmarks = np.asarray(out_landmarks_list, dtype=np.float32)
 
@@ -348,8 +316,8 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
         description="Uses mediapipe to extract the face mesh data from the frames of a video.")
-    parser.add_argument('--invideo',
-                        help='Path to a videofile containing the face of a person.',
+    parser.add_argument('--inframes', '--invideo',
+                        help='Path to a video or image directory providing the frames with the face of a person.',
                         required=True, type=str)
     parser.add_argument('--outlandmarks',
                         help='Path to the output numpy array of size [N][468][3],'
@@ -373,17 +341,17 @@ if __name__ == '__main__':
                              ' N is the number of video frames.'
                              ' The scaling factor needed to resize the vertical distance within ear and jaw-base into 10 percent of the height of the frame.',
                         required=False, type=str)
-    parser.add_argument('--outcompositevideo',
-                        help='Path to a (optional) videofile with the same resolution and frames of the original video,'
+    parser.add_argument('--outcompositeframes', '--outcompositevideo',
+                        help='Path to a videofile or directory for image files. Will have the same resolution and content of the input frames,'
                              ' plus the overlay of the face landmarks.'
-                             ' The red landmarks are printed by mediapipe.'
-                             ' The blue landmarks, possibly normalized, printed in the upper-left quadrant,'
+                             ' The blue landmarks are printed by mediapipe.'
+                             ' The red landmarks, possibly normalized, and printed in the upper-left quadrant,'
                              ' are the outputted values',
                         required=False, type=str)
     parser.add_argument('--normalize-landmarks',
                         action='store_true',
                         help='If specified, neutralizes the head translation, rotation, and zoom.'
-                             ' At each frame, a counter -rotation, -translation, and -scaling are applied in order to have:'
+                             ' At each frame, a counter-rotation, -translation, and -scaling are applied in order to have:'
                              ' face nose facing the camera and head-up, nose tip at the center of the frame, head of the same size.',
                         required=False)
 
@@ -391,20 +359,22 @@ if __name__ == '__main__':
     # Extract arguments
     args = parser.parse_args()
 
-    video_filename = args.invideo
+    source_path = args.inframes
     landmarkspath = args.outlandmarks
     nosetippositionpath = args.outnosetipposition
     facerotationpath = args.outfacerotation
     facescalepath = args.outfacescale
-    compositevideopath = args.outcompositevideo
+    compositeoutpath = args.outcompositeframes
     normalize_landmarks = args.normalize_landmarks
 
     #
-    print("Extracting face landmarks from '{}' and save into '{}'...".format(video_filename, landmarkspath))
-    landmarksdata, nosetipdata, facerotdata, facescaledata =\
-        extract_face_data(videofilename=video_filename,
-                          out_composite_video_path=compositevideopath,
-                          normalize_landmarks=normalize_landmarks)
+    print("Extracting face landmarks from '{}' and save into '{}'...".format(source_path, landmarkspath))
+    with create_frame_producer(source_path) as frames_prod, \
+            create_frame_consumer(compositeoutpath) if compositeoutpath is not None else None as frames_cons:
+        landmarksdata, nosetipdata, facerotdata, facescaledata =\
+            extract_face_data(frames_in=frames_prod,
+                              composite_frames_out=frames_cons,
+                              normalize_landmarks=normalize_landmarks)
     # Save numpy arrays to a file
     for filepath, data in\
             [(landmarkspath, landmarksdata),

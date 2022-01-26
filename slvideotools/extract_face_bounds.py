@@ -79,7 +79,8 @@ def extract_face_bounds(input_video_path: str, output_video_path: str = None, he
                 pts = get_bbox_pts(nose, rshoulder)
                 # print(pts)
                 x, y, w, h = cv2.boundingRect(pts.astype(int))
-                image = crop_bbox(image, x, y, w, h)
+                # crop the bbox
+                image = image[y:y+h, x:x+w]
 
             # Convert the BGR image to RGB and process it with MediaPipe Face Detection.
             results = face_detection.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
