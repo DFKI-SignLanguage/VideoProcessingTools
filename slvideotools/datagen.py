@@ -33,7 +33,7 @@ class FrameProducer(ABC):
         pass
 
     @abstractmethod
-    def close(self):
+    def close(self) -> None:
         pass
 
     def __enter__(self):
@@ -154,7 +154,7 @@ class FrameConsumer(ABC):
         pass
 
     @abstractmethod
-    def close(self):
+    def close(self) -> None:
         pass
 
     def __enter__(self):
