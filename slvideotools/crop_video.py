@@ -20,11 +20,6 @@ def crop_video(frames_producer: FrameProducer, bounds_tuple: Tuple[int, int, int
 
     x, y, w, h = bounds_tuple
 
-    # If the number is odd. Reduce by 1 unit.
-    # It is a requirement for many encoders and video formats, otherwise ffmpeg will crash
-    if w % 2 != 0:
-        w -= 1
-
     for frame in frames_producer.frames():
 
         cropped_frame = frame[y:y+h, x:x+w, :]

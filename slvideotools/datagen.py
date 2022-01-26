@@ -218,6 +218,11 @@ class VideoFrameConsumer(FrameConsumer):
             height = frame.shape[0]
             width = frame.shape[1]
 
+            # If the number is odd. Reduce by 1 unit.
+            # It is a requirement for many encoders and video formats, otherwise ffmpeg will crash
+            if width % 2 != 0:
+                width -= 1
+
             self._ffmpeg_video_out_process = (
                 ffmpeg
                 .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height))
