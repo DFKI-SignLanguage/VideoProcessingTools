@@ -33,13 +33,27 @@ In general, all the scripts are designed to be executed as modules, but their co
 
 ### Extract Face Bounds
 
-This scripts analyse a video in order to identify the rectangle containing the face of the person throughout the whole video.
+This scripts analyse a video in order to identify the rectangle containing the face of the person _throughout the whole video_. Hence, by cropping this area you will have the face always visible in the video area, without moving backgorund.
+
 It is useful on videos showing the full body of the interpreter because some software, like MediaPipe, do not work well when the face occupies only a small portion of the video.
 
 ```
-python -m videotools.extract_face_bounds --help
+python -m slvideotools.extract_face_bounds --help
 ```
-TODO -- add screenshot
+
+<img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area">
+==>
+JSON [x, y, width, height]
+
+```
+
+[
+    227,
+    200,
+    741,
+    442
+]
+```
 
 
 ### Crop Video
@@ -51,17 +65,24 @@ Outputs a cropped video.
 python -m slvideotools.crop_video --help
 ```
 
+<img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area">
+==>
+<img src="Docs/Pics/video-cropped.png" width="30%" alt="Cropped video">
+
+
 _Warning!!!_ The resolution of the output video might differ from the width/height specified in the JSON file. This is due to limitations of some codecs.
 
 ### Extract Face Mesh
 
-Finds a face in the video and extract landmark and other head transformation data.
-
-TODO --  add screenshot
+Finds a face in the video and uses MediaPipe to extract landmarks and other head transformation data.
 
 ```
 python -m slvideotools.extract_face_data --help
 ```
+
+<img src="Docs/Pics/video-original.png" width="30%" alt="Original Video">
+==>
+<img src="Docs/Pics/video-facedata.png" width="30%" alt="Face Data Overlay. Blue dots: MediaPipe landmarks. Red dots: normalized landmarks">
 
 This scripts is able to give an estimation of the transformation of the face with respect to a reference _normalized_ position where:
 
@@ -76,7 +97,7 @@ The normalization is performed assuming that some of the points at the border of
 Hence, those points are used to compute a "rigid" orthogonal system. The advantage is that we don't need any other MediaPipe module to estimate the rotation of the head.
 The following pic shows the vectors used for the normalization process. It helps understanding the implementation of the `compute_normalization_params()` function.
 
-![Vectors used for the face landmarks normalization](images/face_normalization_notes.png)
+![Vectors used for the face landmarks normalization](Docs/Pics/face_normalization_notes.png)
 
 ### Trim Video
 
@@ -109,29 +130,39 @@ Function and classes are defined in the `datagen` module.
 The production of frames is based on a top-level abstract class `FrameProducer` exposing a method `frames`
 The `frames()` method is a generator that returns instances of numpy `ndarray` containing RGB images. 
 
-```
+```python
 class FrameProducer(ABC):
 
     @abstractmethod
     def frames(self) -> np.ndarray:
-        [...]
+        pass
+
+    @abstractmethod
+    def close() -> None:
+        pass    
 ```
 
 It has two subclasses:
 
-```
+```python
 FrameProducer
-|- ImageDirFrameProducer  # produces frames from files in a directory
+|- ImageDirFrameProducer # produces frames from files in a directory
 |- VideoFrameProducer     # produces frames from a video
 ```
 
 Similarly, the "consumption" of frames can end in writing files in a directory, or building a videofile
 
-```
+```python
 FrameConsumer(ABC):
 
     @abstractmethod
     def consume(self, frame: np.ndarray):
+        pass
+
+    @abstractmethod
+    def close() -> None:
+        pass    
+
 
 |- ImageDirFrameConsumer  # saves frames as image files in a directory
 |- VideoFrameConsumer     # adds frames to a video
@@ -139,7 +170,7 @@ FrameConsumer(ABC):
 
 In addition, both `FrameProducer`s and `FrameConsumer`s implement the `__enter__()` and `__exit__()` methods, so to be used in `with` contexts.
 
-With this scheme, the transformation and transfer of frames can be implemented with a recipe like this:
+The transformation and transfer of frames can be implemented with a recipe like this:
 
 ```python
 from slvideotools.datagen import ImageDirFrameProducer, VideoFrameConsumer
@@ -152,7 +183,8 @@ with ImageDirFrameProducer(source_dir="my/frames/") as prod,\
     for frame in prod.frames():
 
         assert type(frame) == np.ndarray
-        width, height, _ = frame.shape
+        width, height, depth = frame.shape
+        assert depth == 3
         # Transform the frame the way you want
         # [...]
 
@@ -160,7 +192,7 @@ with ImageDirFrameProducer(source_dir="my/frames/") as prod,\
         cons.consume(frame=frame)
 ```
 
-or course, any of combination of _image_dir_ or _video_ can be used for input or output.
+of course, any of combination of _image_dir_ or _video_ can be used for input or output.
 
 There are also a couple of factory methods, automatically determining if the source, or destination is a directory or a video file.
 For example:
@@ -170,6 +202,12 @@ from slvideotools.datagen import create_frame_producer, create_frame_consumer
 
 with create_frame_producer(dir_or_video="my/frames/") as prod,\
      create_frame_consumer(dir_or_video="my_final_video.mp4") as cons:
-        # [...]
-        pass
+        
+        for frame in prod.frames():
+            # [...]
 ```
+
+## Links
+
+* This software is supported by the [German Research Center for Artificial Intelligence (DFKI)](https://www.dfki.de).
+* Development partially supported by the BMBF (German Federal Ministry of Educationand Research) in the project SOCIALWEAR (Socially Interactive Smart Fashion, DFKI Kst 22132).
