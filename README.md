@@ -8,7 +8,7 @@ The scripts are architected to be chained with dependency tools like [Make](http
 The code relies on a number of body/face analysis libraries:
 
 * [MediaPipe](https://mediapipe.dev) -- to extract body and face landmarks
-* [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), ...) -- for full body 3D landmarks extraction
+* [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) -- for full body 3D landmarks extraction
 * [kkroening ffmpeg python](https://kkroening.github.io/ffmpeg-python/) -- to en/decode videos
 * ... more to come
 

@@ -40,6 +40,8 @@ def test_trimming(tmp_path):
 
 def test_cropping_pipeline(tmp_path):
 
+    print("Cropping test output: " + str(tmp_path))
+
     #
     # Fetch video info
     video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
@@ -50,15 +52,20 @@ def test_cropping_pipeline(tmp_path):
 
     #
     # Extract face bounds
-    bounds = extract_face_bounds(input_video_path=str(TEST_VIDEO_PATH), output_video_path=str(bbox_video_path))
-    with open(os.path.join(tmp_path, "bounds.json"), "w") as boundsfile:
-        json.dump(obj=bounds, fp=boundsfile, indent=4)
-    bounds_x, bounds_y, bounds_w, bounds_h = bounds
+    with create_frame_producer(TEST_VIDEO_PATH) as frame_prod:
+        bounds = extract_face_bounds(frames_in=frame_prod)
+        with open(os.path.join(tmp_path, "bounds.json"), "w") as boundsfile:
+            json.dump(obj=bounds, fp=boundsfile, indent=4)
+        bounds_x, bounds_y, bounds_w, bounds_h = bounds
 
     assert 0 <= bounds_x < video_w  # x
     assert 0 <= bounds_y < video_h  # y
     assert bounds_x + bounds_w <= video_w  # width
     assert bounds_y + bounds_h <= video_h  # height
+
+    #
+    # TODO -- test creation of video with bbox
+    # output_video_path = str(bbox_video_path)
 
     #
     # Crop the video

@@ -18,6 +18,7 @@ Types of changes:
 
 - Framework to "produce" and "consume" frames from either videos or directories of images
 - Renamed package from `dfki_sl_videotools` to `slvideotools`
+- Removed option --outvideo from the face detection script. Bounds can be overlayed in another dedicated script.
 
 ## [0.1] - 2022-01-26
 
