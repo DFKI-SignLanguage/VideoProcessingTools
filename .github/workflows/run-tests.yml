@@ -1,7 +1,7 @@
 name: run-tests
 on: [push]
 jobs:
-  check-bats-version:
+  pytester:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
