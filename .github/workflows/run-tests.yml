@@ -1,0 +1,13 @@
+name: run-tests
+on: [push]
+jobs:
+  pytester:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 -m venv p3env-videotools
+      - run: source p3env-videotools/bin/activate
+      #- run: cd VideoProcessingTools
+      - run: sudo apt update && sudo apt install ffmpeg
+      - run: pip install -r requirements.txt
+      - run: pytest

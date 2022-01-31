@@ -41,6 +41,7 @@ dependencies:
    - pytz==2021.1
    - requests==2.25.1
    - six==1.16.0
+   - testresources==2.0.1
    - toml==0.10.2
    - tqdm==4.60.0
    - typing-extensions==3.10.0.0
