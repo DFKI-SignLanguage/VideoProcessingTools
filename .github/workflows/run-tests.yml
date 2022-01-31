@@ -1,2 +1,12 @@
 name: run-tests
 on: [push]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 -m venv p3env-videotools
+      - run: source p3env-videotools/bin/activate
+      - run: cd VideoProcessingTools
+      - run: pip install -r requirements.txt
+      - run: pytest -s
