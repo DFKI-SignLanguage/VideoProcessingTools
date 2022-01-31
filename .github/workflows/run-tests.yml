@@ -7,6 +7,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: python3 -m venv p3env-videotools
       - run: source p3env-videotools/bin/activate
-      - run: cd VideoProcessingTools
+      #- run: cd VideoProcessingTools
       - run: pip install -r requirements.txt
       - run: pytest -s
