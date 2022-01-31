@@ -78,16 +78,14 @@ def get_bbox_pts(nose, rshoulder):
 """
 
 
-# https://stackoverflow.com/questions/23110383/how-to-dynamically-build-a-json-object-with-python
-def format_json_bbox(x) -> str:
+def bbox_to_dict(x: Tuple[int, int, int, int]) -> dict:
     """
         Format the numpy array bbox to json
 
         Args:
             x : numpy array bbox
 
-        Returns:
-            json(bbox) : bounding box
+        :returns a dictionary with keys "x", "y", "width", "height"
     """
     bbox = dict()
     bbox["x"] = int(x[0])
@@ -95,4 +93,9 @@ def format_json_bbox(x) -> str:
     bbox["width"] = int(x[2])
     bbox["height"] = int(x[3])
 
-    return json.dumps(bbox)
+    return bbox
+
+
+def bbox_from_dict(bounds_dict: dict) -> Tuple[int, int, int, int]:
+
+    return bounds_dict["x"], bounds_dict["y"], bounds_dict["width"], bounds_dict["height"]

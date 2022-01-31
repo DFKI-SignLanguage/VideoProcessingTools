@@ -4,10 +4,12 @@ import json
 
 from .trim_video import trim_video
 from .extract_face_bounds import extract_face_bounds
+from .draw_bbox import draw_bbox
 from .crop_video import crop_video
 from .extract_face_data import extract_face_data
 
 from .common import video_info
+from .common import bbox_to_dict
 
 from .datagen import create_frame_consumer
 from .datagen import create_frame_producer
@@ -47,16 +49,12 @@ def test_cropping_pipeline(tmp_path):
     video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
     #
-    # Path to video with composite rectangle
-    bbox_video_path = tmp_path / "bbox_video.mp4"
-
-    #
     # Extract face bounds
     with create_frame_producer(TEST_VIDEO_PATH) as frame_prod:
-        bounds = extract_face_bounds(frames_in=frame_prod)
+        face_bounds = extract_face_bounds(frames_in=frame_prod)
         with open(os.path.join(tmp_path, "bounds.json"), "w") as boundsfile:
-            json.dump(obj=bounds, fp=boundsfile, indent=4)
-        bounds_x, bounds_y, bounds_w, bounds_h = bounds
+            json.dump(obj=bbox_to_dict(face_bounds), fp=boundsfile, indent=4)
+        bounds_x, bounds_y, bounds_w, bounds_h = face_bounds
 
     assert 0 <= bounds_x < video_w  # x
     assert 0 <= bounds_y < video_h  # y
@@ -64,8 +62,13 @@ def test_cropping_pipeline(tmp_path):
     assert bounds_y + bounds_h <= video_h  # height
 
     #
-    # TODO -- test creation of video with bbox
-    # output_video_path = str(bbox_video_path)
+    # Test the creation of video with bbox
+    bbox_video_path = tmp_path / "bbox_video.mp4"
+
+    with create_frame_producer(TEST_VIDEO_PATH) as frame_prod,\
+        create_frame_consumer(str(bbox_video_path)) as frame_cons:
+
+        draw_bbox(frames_in=frame_prod, bbox=face_bounds, frames_out=frame_cons)
 
     #
     # Crop the video
@@ -75,7 +78,7 @@ def test_cropping_pipeline(tmp_path):
         create_frame_consumer(str(cropped_video_path)) as cons:
 
         crop_video(frames_producer=prod,
-                   bounds_tuple=bounds,
+                   bounds_tuple=face_bounds,
                    frames_consumer=cons)
 
     cropped_w, cropped_h, cropped_n_frames = video_info(cropped_video_path)

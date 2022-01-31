@@ -5,6 +5,7 @@ from .common import *
 from .datagen import FrameProducer
 from .datagen import create_frame_producer
 
+import json
 from typing import Tuple
 
 mp_face_detection = mp.solutions.face_detection
@@ -12,7 +13,7 @@ mp_pose = mp.solutions.pose
 mp_holistic = mp.solutions.holistic
 
 
-def _get_head_region_cv2(image):
+def _get_head_region_info_cv2(image):
     """
         Find the ROI containing the face from an input image
 
@@ -37,7 +38,7 @@ def _get_head_region_cv2(image):
         if not results.pose_landmarks:
             raise RuntimeError("no body roi detected")
 
-        # Selectiong the necessary part from landmarks
+        # Selection of the necessary part from landmarks
         nose = np.array([results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].x * image_width,
                          results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].y * image_height])
         rshoulder = np.array([results.pose_landmarks.landmark[mp_holistic.PoseLandmark.RIGHT_SHOULDER].x * image_width,
@@ -69,7 +70,7 @@ def extract_face_bounds(frames_in: FrameProducer, head_focus: bool = False)\
             h, w, _ = image.shape
             x, y = 0, 0
             if head_focus:
-                nose, rshoulder, _ = _get_head_region_cv2(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+                nose, rshoulder, _ = _get_head_region_info_cv2(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
                 # print("nose,rshoulder",nose,rshoulder)
                 pts = get_bbox_pts(nose, rshoulder)
                 # print(pts)
@@ -130,6 +131,6 @@ if __name__ == '__main__':
     # Extract the bounds and save them
     with create_frame_producer(args.invideo) as frames_in:
         bounds = extract_face_bounds(frames_in=frames_in, head_focus=args.head_focus)
-        bounds_json = format_json_bbox(bounds)
+        bounds_dict = bbox_to_dict(bounds)
         with open(args.outbounds, "w", encoding="utf-8") as outfile:
-            print(bounds_json, file=outfile)
+            json.dump(bounds_dict)
