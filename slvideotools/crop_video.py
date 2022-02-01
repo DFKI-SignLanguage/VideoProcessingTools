@@ -31,14 +31,14 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Crop a video at a specified rectangular area.')
-    parser.add_argument('--inframes',
+    parser.add_argument('--inframes', '--invideo',
                         help='Path to the input videofile o directory',
                         required=True)
     parser.add_argument('--inbounds',
                         help='Path to a JSON file containing the bounds information for cropping.'
                              ' Format is: { "x": int, "y": int, "width": int, "height": int}',
                         required=True)
-    parser.add_argument('--outframes',
+    parser.add_argument('--outframes', '--outvideo',
                         help='Path for the output videofile or directory',
                         required=True)
 

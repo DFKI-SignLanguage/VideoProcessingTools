@@ -12,7 +12,6 @@ outvideofiles := $(subst $(INDIR)/,$(OUTDIR)/,$(invideofiles))
 boundfiles := $(subst .mp4,.bounds,$(outvideofiles))
 
 
-
 all: $(outvideofiles)
 	@echo "Cropped the face of video files..."
 
@@ -26,3 +25,6 @@ $(boundfiles): $(OUTDIR)/%.bounds: $(INDIR)/%.mp4 | $(OUTDIR)
 
 $(OUTDIR):
 	mkdir -p $@
+
+clean:
+	rm -rf $(OUTDIR)

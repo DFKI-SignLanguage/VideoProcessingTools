@@ -109,7 +109,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Get the bounding box of the face throughout a video')
-    parser.add_argument('--inframes',
+    parser.add_argument('--inframes', '--invideo',
                         help='Path to a video or directory showing a sign language interpreter.'
                              ' Hence, we assume that there is a face always present and visible.',
                         required=True)
@@ -129,8 +129,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Extract the bounds and save them
-    with create_frame_producer(args.invideo) as frames_in:
+    with create_frame_producer(args.inframes) as frames_in:
         bounds = extract_face_bounds(frames_in=frames_in, head_focus=args.head_focus)
         bounds_dict = bbox_to_dict(bounds)
         with open(args.outbounds, "w", encoding="utf-8") as outfile:
-            json.dump(bounds_dict)
+            json.dump(obj=bounds_dict, fp=outfile)
