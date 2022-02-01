@@ -128,20 +128,14 @@ python -m slvideotools.trim_video --help
 Watch here the [trim_video help text](Docs/Help/trim_video.txt)
 
 
-## Examples
+## CLI and Make Examples
 
 There examples in the `Examples` directory. Some test videos are in this same package under `slvideotools/data`.
 
-## Testing
 
-Test modules/functions are implemented using [pytest](https://docs.pytest.org/).
-After setting up the python environment, open a terminal and... 
+## Module usage
 
-    cd .../VideoProcessingTools
-    pytest -s
-    # The -s option allows printing some informative stdout on the console.
-
-## Software details
+Some more details for developers wanting to use the functionalities as module functions rather than CLI.
 
 ### Frame production and consumption
 
@@ -228,7 +222,30 @@ with create_frame_producer(dir_or_video="my/frames/") as prod,\
             # [...]
 ```
 
+## Development
+
+### Documentation update
+
+There is a script helping in automatically updating the documentation.
+
+Every time you update the _Help_ description of a command, or if you add or remove commands, please invoke:
+
+    bash ./update_docs.sh
+
+This will update the documentation with each command `--help` output.
+
+### Testing
+
+Test modules/functions are implemented using [pytest](https://docs.pytest.org/).
+After setting up the python environment, open a terminal and... 
+
+    cd .../VideoProcessingTools
+    pytest -s
+    # The -s option allows printing some informative stdout on the console.
+
+
 ## Links
 
 * This software is supported by the [German Research Center for Artificial Intelligence (DFKI)](https://www.dfki.de).
 * Development partially supported by the BMBF (German Federal Ministry of Educationand Research) in the project SOCIALWEAR (Socially Interactive Smart Fashion, DFKI Kst 22132).
+* Development partially supported by the EU Horizon 2020 program within the [EASIER project](https://www.project-easier.eu) (Grant agreement ID: 101016982).

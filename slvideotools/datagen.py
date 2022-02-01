@@ -34,6 +34,7 @@ class FrameProducer(ABC):
 
     @abstractmethod
     def close(self) -> None:
+        """Subclassers must free all the resources."""
         pass
 
     def __enter__(self):
@@ -139,7 +140,10 @@ class VideoFrameProducer(FrameProducer):
             yield in_frame
 
     def close(self):
-        self._ffmpeg_read_process.wait()
+        if self._ffmpeg_read_process is not None:
+            self._ffmpeg_read_process.stdout.close()
+            self._ffmpeg_read_process.wait()
+            self._ffmpeg_read_process = None
 
 
 #
@@ -243,6 +247,7 @@ class VideoFrameConsumer(FrameConsumer):
         if self._ffmpeg_video_out_process is not None:
             self._ffmpeg_video_out_process.stdin.close()
             self._ffmpeg_video_out_process.wait()
+            self._ffmpeg_video_out_process = None
 
 
 #

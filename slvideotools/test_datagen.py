@@ -73,12 +73,16 @@ def test_factory_methods():
 
     dir_prod = create_frame_producer(dir_or_video=TEST_FRAMES_PATH)
     assert isinstance(dir_prod, FrameProducer)
+    dir_prod.close()
 
     video_prod = create_frame_producer(dir_or_video=TEST_VIDEO_PATH)
     assert isinstance(video_prod, FrameProducer)
+    video_prod.close()
 
     dir_cons = create_frame_consumer(dir_or_video=TEST_FRAMES_PATH)
     assert isinstance(dir_cons, FrameConsumer)
+    dir_cons.close()
 
     video_cons = create_frame_consumer(dir_or_video=TEST_VIDEO_PATH)
     assert isinstance(video_cons, FrameConsumer)
+    video_cons.close()
