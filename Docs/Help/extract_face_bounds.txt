@@ -5,7 +5,8 @@ Get the bounding box of the face throughout a video
 
 optional arguments:
   -h, --help            show this help message and exit
-  --inframes INFRAMES   Path to a video or directory showing a sign language
+  --inframes INFRAMES, --invideo INFRAMES
+                        Path to a video or directory showing a sign language
                         interpreter. Hence, we assume that there is a face
                         always present and visible.
   --outbounds OUTBOUNDS
