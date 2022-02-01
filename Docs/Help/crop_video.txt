@@ -5,9 +5,10 @@ Crop a video at a specified rectangular area.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --inframes INFRAMES   Path to the input videofile o directory
+  --inframes INFRAMES, --invideo INFRAMES
+                        Path to the input videofile o directory
   --inbounds INBOUNDS   Path to a JSON file containing the bounds information
                         for cropping. Format is: { "x": int, "y": int,
                         "width": int, "height": int}
-  --outframes OUTFRAMES
+  --outframes OUTFRAMES, --outvideo OUTFRAMES
                         Path for the output videofile or directory

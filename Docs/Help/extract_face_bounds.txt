@@ -1,12 +1,12 @@
-<span style="display:block">
-usage: extract_face_bounds.py [-h] --invideo INVIDEO --outbounds OUTBOUNDS
-                              [--outvideo OUTVIDEO] [--head-focus]
+usage: extract_face_bounds.py [-h] --inframes INFRAMES --outbounds OUTBOUNDS
+                              [--head-focus]
 
 Get the bounding box of the face throughout a video
 
 optional arguments:
   -h, --help            show this help message and exit
-  --invideo INVIDEO     Path to a video file showing a sign language
+  --inframes INFRAMES, --invideo INFRAMES
+                        Path to a video or directory showing a sign language
                         interpreter. Hence, we assume that there is a face
                         always present and visible.
   --outbounds OUTBOUNDS
@@ -17,10 +17,7 @@ optional arguments:
                         proportions of the original video (e.g.: 4:3, 16:9).
                         Output has the format: { "x": int, "y": int, "width":
                         int, "height": int}.
-  --outvideo OUTVIDEO   Path for an (optional) videofile showing the original
-                        videoand an overlay of the region selected as bounds.
   --head-focus          Before trying to recognize the face, try to recognize
                         the head zone of a full body. Useful when the face is
                         too small but the body is visible. However, body
                         recognition is much slower.
-</span>

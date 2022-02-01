@@ -8,7 +8,7 @@ The scripts are architected to be chained with dependency tools like [Make](http
 The code relies on a number of body/face analysis libraries:
 
 * [MediaPipe](https://mediapipe.dev) -- to extract body and face landmarks
-* [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), ...) -- for full body 3D landmarks extraction
+* [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) -- for full body 3D landmarks extraction
 * [kkroening ffmpeg python](https://kkroening.github.io/ffmpeg-python/) -- to en/decode videos
 * ... more to come
 
@@ -33,7 +33,7 @@ In general, all the scripts are designed to be executed as modules, but their co
 
 ### Extract Face Bounds
 
-This scripts analyse a video in order to identify the rectangle containing the face of the person _throughout the whole video_. Hence, by cropping this area you will have the face always visible in the video area, without moving backgorund.
+This scripts analyse a video in order to identify the rectangle containing the face of the person _throughout the whole video_. Hence, by cropping this area you will have the face always visible in the video area, without moving background.
 
 It is useful on videos showing the full body of the interpreter because some software, like MediaPipe, do not work well when the face occupies only a small portion of the video.
 
@@ -44,20 +44,28 @@ python -m slvideotools.extract_face_bounds --help
 Watch here the [extract_face_bound help text](Docs/Help/extract_face_bounds.txt)
 
 
-<img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area">
+<img src="Docs/Pics/video-original.png" width="30%" alt="Cropping area">
 ==>
-JSON [x, y, width, height]
+Bounding Box JSON dictionary
 
 ```
-
-[
-    227,
-    200,
-    741,
-    442
-]
+{
+    "x": 227,
+    "y": 200,
+    "width": 741,
+    "height": 442
+}
 ```
 
+### Draw BBox
+
+Draws a rectangle as overlay of an input frame sequence
+
+Watch here the [draw_bbox help text](Docs/Help/draw_bbox.txt)
+
+<img src="Docs/Pics/video-original.png" width="20%" alt="Cropping area"> + bbox {"x": 227, "y": 200, "width": 741, "height": 442 }
+==>
+<img src="Docs/Pics/video-bboxarea.png" width="20%" alt="Cropping area">
 
 
 ### Crop Video
