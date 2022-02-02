@@ -33,7 +33,7 @@ def video_info(video_path: str) -> Tuple[int, int, int]:
 
 
 # https://en.wikipedia.org/wiki/Point_reflection
-def reflect(c, P):
+def reflect(c: Tuple[float, float], P: Tuple[float, float]) -> Tuple[float, float]:
     """ 
         Make a reflection of a point P according to the center c
 
@@ -48,34 +48,7 @@ def reflect(c, P):
     P_x_prime = 2*c[0] - P[0]
     P_y_prime = 2*c[1] - P[1]
 
-    return np.array([P_x_prime, P_y_prime]).astype(int)
-
-
-def get_bbox_pts(nose, rshoulder):
-    """ 
-        Get the upper left and the lower right of the ROI
-
-        Args:
-            nose : nose coordinates
-            rshoulder : a shoulders coordinates, can be either left or right
-        Returns: 
-            bbox : a numpy array containing the upper left corner and the lower right corner coordinates
-
-    """
-
-    pt1 = reflect(nose, rshoulder)
-    pt2 = rshoulder 
-
-    return np.array([pt1, pt2])
-
-
-"""def expand_bbox(x,y,w,h):
-    pt1 = np.array([x,y])
-    pt2 = np.array([x,y+h])
-    pt3 = np.array([x+w,y])
-    pt4 = np.array([x+w,y+h])
-    return np.array([pt1,pt2,pt3,pt4])
-"""
+    return P_x_prime, P_y_prime
 
 
 def bbox_to_dict(x: Tuple[int, int, int, int]) -> dict:
