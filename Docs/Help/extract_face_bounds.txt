@@ -1,5 +1,5 @@
 usage: extract_face_bounds.py [-h] --inframes INFRAMES --outbounds OUTBOUNDS
-                              [--head-focus]
+                              [--method METHOD] [--head-focus]
 
 Get the bounding box of the face throughout a video
 
@@ -17,7 +17,10 @@ optional arguments:
                         proportions of the original video (e.g.: 4:3, 16:9).
                         Output has the format: { "x": int, "y": int, "width":
                         int, "height": int}.
-  --head-focus          Before trying to recognize the face, try to recognize
-                        the head zone of a full body. Useful when the face is
-                        too small but the body is visible. However, body
-                        recognition is much slower.
+  --method METHOD       Select the framework used to extract the face
+                        boundaries. Possible values: "mediapipe", "mtcnn"
+  --head-focus          Used only with the "mediapipe" method. Before trying
+                        to recognize the face, try to recognize the head zone
+                        of a full body. Useful when the face is too small but
+                        the body is visible. However, body recognition is much
+                        slower.
