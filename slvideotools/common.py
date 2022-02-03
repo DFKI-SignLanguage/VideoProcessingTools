@@ -6,6 +6,11 @@ import ffmpeg
 from typing import Tuple
 
 
+def clamp(x, lo, hi):
+    """clamp x to the [lo,hi] range"""
+    return lo if x < lo else hi if x > hi else x
+
+
 def video_info(video_path: str) -> Tuple[int, int, int]:
     """
     Uses the ffmpeg.probe function to retrieve information about a video file.
