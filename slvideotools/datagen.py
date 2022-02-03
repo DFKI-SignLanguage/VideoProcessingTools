@@ -219,13 +219,19 @@ class VideoFrameConsumer(FrameConsumer):
         height = frame.shape[0]
         width = frame.shape[1]
 
-        # If the number is odd. Reduce by 1 unit.
+        # If the width or the height are odd, reduce by 1 pixel.
         # It is a requirement for many encoders and video formats, otherwise ffmpeg will crash
+        recrop = False
         if width % 2 != 0:
             width -= 1
-            # keep the number of rows and the depth,
-            # but remove the last column
-            frame = frame[:, :width, :]
+            recrop = True
+        if height % 2 != 0:
+            height -= 1
+            recrop = True
+
+        if recrop:
+            # Remove the last column, or also the last line, but keep the depth
+            frame = frame[:height, :width, :]
 
         if self._ffmpeg_video_out_process is None:
             # Initialize the ffmpeg consumer process using the resolution of the first frame that we receive
