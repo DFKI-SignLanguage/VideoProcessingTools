@@ -1,3 +1,5 @@
+import pytest
+
 import pkg_resources
 import os
 import json
@@ -40,9 +42,16 @@ def test_trimming(tmp_path):
     assert trimmed_n_frames == eframe - sframe + 1
 
 
-def test_cropping_pipeline(tmp_path):
+#
+# Generates all face detection methods
+@pytest.fixture(params=["mediapipe", "mtcnn"])
+def face_extraction_method(request) -> str:
+    return request.param
 
-    print("Cropping test output: " + str(tmp_path))
+
+def test_face_detection_pipeline(tmp_path, face_extraction_method):
+
+    print("Face detection test output: " + str(tmp_path))
 
     #
     # Fetch video info
@@ -51,10 +60,13 @@ def test_cropping_pipeline(tmp_path):
     #
     # Extract face bounds
     with create_frame_producer(TEST_VIDEO_PATH) as frame_prod:
-        face_bounds = extract_face_bounds(frames_in=frame_prod)
-        with open(os.path.join(tmp_path, "bounds.json"), "w") as boundsfile:
+
+        face_bounds = extract_face_bounds(frames_in=frame_prod, head_focus=True, method=face_extraction_method)
+
+        with open(os.path.join(tmp_path, "bounds-{}.json".format(face_extraction_method)), "w") as boundsfile:
             json.dump(obj=bbox_to_dict(face_bounds), fp=boundsfile, indent=4)
-        bounds_x, bounds_y, bounds_w, bounds_h = face_bounds
+
+    bounds_x, bounds_y, bounds_w, bounds_h = face_bounds
 
     assert 0 <= bounds_x < video_w  # x
     assert 0 <= bounds_y < video_h  # y
@@ -63,28 +75,50 @@ def test_cropping_pipeline(tmp_path):
 
     #
     # Test the creation of video with bbox
-    bbox_video_path = tmp_path / "bbox_video.mp4"
+    bbox_video_path = tmp_path / "bbox_video-{}.mp4".format(face_extraction_method)
 
     with create_frame_producer(TEST_VIDEO_PATH) as frame_prod,\
         create_frame_consumer(str(bbox_video_path)) as frame_cons:
 
         draw_bbox(frames_in=frame_prod, bbox=face_bounds, frames_out=frame_cons)
 
+
+def test_cropping(tmp_path):
+
     #
-    # Crop the video
-    cropped_video_path = tmp_path / "cropped_video.mp4"
+    # Fetch video info
+    video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
-    with create_frame_producer(TEST_VIDEO_PATH) as prod,\
-        create_frame_consumer(str(cropped_video_path)) as cons:
+    # Set an initial bounding box
+    x = int(video_w * 0.25)
+    y = int(video_h * 0.23)
+    w = x + int(video_w * 0.5)
+    h = y + int(video_h * 0.45)
 
-        crop_video(frames_producer=prod,
-                   bounds_tuple=face_bounds,
-                   frames_consumer=cons)
+    # Try several cropping sizes (to test stability on even sizes)
+    for i in range(4):
 
-    cropped_w, cropped_h, cropped_n_frames = video_info(cropped_video_path)
-    assert cropped_w - 2 < bounds_w < cropped_w + 2
-    assert cropped_h - 2 < bounds_h < cropped_h + 2
-    assert cropped_n_frames == n_frames
+        bounds = x, y, w, h
+
+        #
+        # Crop the video
+        cropped_video_path = tmp_path / "cropped_video-{}.mov".format(i)
+
+        with create_frame_producer(TEST_VIDEO_PATH) as prod,\
+            create_frame_consumer(str(cropped_video_path)) as cons:
+
+            crop_video(frames_producer=prod,
+                       bounds_tuple=bounds,
+                       frames_consumer=cons)
+
+        cropped_w, cropped_h, cropped_n_frames = video_info(cropped_video_path)
+        assert w-1 <= cropped_w <= w
+        assert h-1 <= cropped_h <= h
+        assert cropped_n_frames == n_frames
+
+        # reduce the cropping size
+        w -= 1
+        h -= 1
 
 
 def test_face_data_extraction(tmp_path):
