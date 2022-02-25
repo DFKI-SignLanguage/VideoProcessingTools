@@ -20,6 +20,8 @@ def trim_video(input_path: str, output_path: str, start_frame: int, end_frame: i
     stream = ffmpeg.filter(stream, 'setpts', expr='PTS-STARTPTS')
 
     stream = ffmpeg.output(stream, output_path)
+    stream = ffmpeg.overwrite_output(stream)  # <-- OVERWRITE OPTION!!!
+
     ffmpeg.run(stream)
 
 
