@@ -13,6 +13,8 @@ from typing import Tuple
 # Code to overlay the face mesh point taken from https://google.github.io/mediapipe/solutions/holistic.html
 mp_drawing = mp.solutions.drawing_utils
 
+MEDIAPIPE_FACE_LANDMARKS_COUNT = 468
+
 # Vertices numbers derived from uv texture or from FBX model.
 # Vertices on the front. Will be usd to compute the reference horizontal vector
 VERTEX_ID_FRONT_TOP_RIGHT = 54
@@ -215,7 +217,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
         if results.multi_face_landmarks is None:
             landmarks = None
             # We just fill in the data with NaNs
-            lm_list = [[float('nan')] * 3] * 468
+            lm_list = [[float('nan')] * 3] * MEDIAPIPE_FACE_LANDMARKS_COUNT
             nose_tip = np.asarray([float('nan')] * 3, dtype=np.float32)
             R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3, 3)
             scale = float('nan')
@@ -234,7 +236,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
                                                    nose_translation=nose_tip, rot_mat=R, scale=scale)
 
         assert type(lm_list) == list
-        assert len(lm_list) == 468
+        assert len(lm_list) == MEDIAPIPE_FACE_LANDMARKS_COUNT
         assert type(nose_tip) == np.ndarray
         assert nose_tip.shape == (3,)
         assert type(R) == np.ndarray
