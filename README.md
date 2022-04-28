@@ -103,6 +103,8 @@ Watch here the [extract_face_data help text](Docs/Help/extract_face_data.txt)
 ==>
 <img src="Docs/Pics/video-facedata.png" width="30%" alt="Face Data Overlay. Blue dots: MediaPipe landmarks. Red dots: normalized landmarks">
 
+For a reference about the landmark ID and its location on the face, please see the official MediaPipe docs [Here](https://raw.githubusercontent.com/google/mediapipe/master/mediapipe/modules/face_geometry/data/canonical_face_model_uv_visualization.png).
+
 This scripts is able to give an estimation of the transformation of the face with respect to a reference _normalized_ position where:
 
 * the nose tip is at the center of the screen;
