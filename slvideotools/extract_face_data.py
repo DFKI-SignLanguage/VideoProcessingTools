@@ -371,12 +371,24 @@ if __name__ == '__main__':
 
     #
     print("Extracting face landmarks from '{}' and save into '{}'...".format(source_path, landmarkspath))
-    with create_frame_producer(source_path) as frames_prod, \
-            create_frame_consumer(compositeoutpath) if compositeoutpath is not None else None as frames_cons:
-        landmarksdata, nosetipdata, facerotdata, facescaledata =\
-            extract_face_data(frames_in=frames_prod,
-                              composite_frames_out=frames_cons,
-                              normalize_landmarks=normalize_landmarks)
+    with create_frame_producer(source_path) as frames_prod:
+
+        # Instantiate the frame consumer for the overlay video, if requested
+        frames_cons = create_frame_consumer(compositeoutpath) if compositeoutpath is not None else None
+
+        try:
+            landmarksdata, nosetipdata, facerotdata, facescaledata =\
+                extract_face_data(frames_in=frames_prod,
+                                  composite_frames_out=frames_cons,
+                                  normalize_landmarks=normalize_landmarks)
+        except Exception as e:
+            # Just forward the exception
+            raise e
+        finally:
+            # Remember to close the frame consumer, if specified.
+            if frames_cons is not None:
+                frames_cons.close()
+
     # Save numpy arrays to a file
     for filepath, data in\
             [(landmarkspath, landmarksdata),
