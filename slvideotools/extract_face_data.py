@@ -163,7 +163,7 @@ def compute_normalization_params(landmarks: List[List[float]],
         raise Exception("Rotation matrix determinant deviates too much from 1 ({:06f})."
                         " Probably the computed landmarks are too distorted.".format(det))
 
-    # A factor comparingnhow much the Y length increases with respect to 10% of the heigh, so that: |Y| / k = 0.1
+    # A factor comparing how much the Y length increases with respect to 10% of the height, so that: |Y| / k = 0.1
     scale = vec_len(Y) / 0.1
 
     return nose_tip, R, scale
@@ -255,14 +255,27 @@ def extract_face_data(frames_in: VideoFrameProducer,
         # Manage composite video output
         if composite_frames_out is not None:
 
-            # Print and draw face mesh landmarks on the image.
+            # Prepare the overlay image
             annotated_image = rgb_image.copy()
 
+            # Draw face mesh landmarks on the overlay image.
             if landmarks is not None:
+
+                # Let's use 1 pixel radius every 500 pixels of video. Can be 0, but it is OK.
+                norm_landmark_radius = int(width / 500)
+                # Set the thickness as the same as the radius.
+                norm_landmark_thickness = norm_landmark_radius
+                # Drawing specifications for MediaPipe
+                drawing_specs = mp_drawing.DrawingSpec(color=mp_drawing.RED_COLOR,
+                                                       circle_radius=norm_landmark_radius,
+                                                       thickness=norm_landmark_thickness)
+
                 # print('face_landmarks:', face_landmarks)
                 mp_drawing.draw_landmarks(
                     image=annotated_image,
-                    landmark_list=landmarks)
+                    landmark_list=landmarks,
+                    landmark_drawing_spec=drawing_specs
+                )
 
                 #
                 # DEBUG: save the landmarks to a file
@@ -296,8 +309,8 @@ def extract_face_data(frames_in: VideoFrameProducer,
                     lm_y *= height / 2
                     norm_z = 1 - ((lm_z - z_min) / z_range)
 
-                    cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=3,
-                               color=(int(255 * norm_z), 20, 20), thickness=2)
+                    cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=norm_landmark_radius,
+                               color=(int(255 * norm_z), 20, 20), thickness=norm_landmark_thickness)
 
             #
             # Finally, write the annotated frame to the output video
