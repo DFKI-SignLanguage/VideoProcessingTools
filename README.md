@@ -248,7 +248,7 @@ After setting up the python environment, open a terminal and...
 
 ## Cite as ...
 
-Nunnari, F. A software toolkit for pre-processing sign language video streams. in Seventh International Workshop on Sign Language Translation and Avatar Technology (SLTAT) (2022).
+Nunnari, F., 2022. A software toolkit for pre-processing sign language video streams, in: Seventh International Workshop on Sign Language Translation and Avatar Technology (SLTAT). Marseille, France.
 
 ```
 @inproceedings{nunnari2022VideoProcTools,
