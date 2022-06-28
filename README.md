@@ -246,6 +246,22 @@ After setting up the python environment, open a terminal and...
     pytest -s
     # The -s option allows printing some informative stdout on the console.
 
+## Cite as ...
+
+Nunnari, F. A software toolkit for pre-processing sign language video streams. in Seventh International Workshop on Sign Language Translation and Avatar Technology (SLTAT) (2022).
+
+```
+@inproceedings{nunnari2022VideoProcTools,
+	address = {Marseille, France},
+	title = {A software toolkit for pre-processing sign language video streams},
+	booktitle = {Seventh {International} {Workshop} on {Sign} {Language} {Translation} and {Avatar} {Technology} ({SLTAT})},
+	author = {Nunnari, Fabrizio},
+	month = jun,
+	year = {2022},
+	keywords = {open source toolkit, sign language, software engineering, video pre-processing},
+}
+```
+
 
 ## Links
 
