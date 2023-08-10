@@ -26,3 +26,7 @@ def test_cli_trim_video():
     exit_status = os.system('python -m slvideotools.trim_video --help')
     assert exit_status == 0
 
+
+def test_cli_compute_motion_energy():
+    exit_status = os.system('python -m slvideotools.compute_motion_energy --help')
+    assert exit_status == 0

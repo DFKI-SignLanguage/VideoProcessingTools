@@ -9,6 +9,7 @@ from .extract_face_bounds import extract_face_bounds
 from .draw_bbox import draw_bbox
 from .crop_video import crop_video
 from .extract_face_data import extract_face_data
+from .compute_motion_energy import compute_motion_energy
 
 from .common import video_info
 from .common import bbox_to_dict
@@ -164,3 +165,43 @@ def test_face_data_extraction(tmp_path):
     assert len(facescale_data.shape) == 1
     assert facescale_data.shape[0] == n_frames
     assert facescale_data.dtype == np.float32
+
+
+def test_motion_energy_computation(tmp_path):
+
+    import numpy as np
+
+    print("Writing face extraction data to ", tmp_path)
+
+    #
+    # Fetch video info
+    video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
+
+    FRAME_START = 10
+    FRAME_END = 20
+
+    with create_frame_producer(dir_or_video=TEST_VIDEO_PATH) as frame_prod:
+
+        out_video_path = os.path.join(tmp_path, "motion_energy.mp4")
+
+        motion_curve = compute_motion_energy(
+            frames_in=frame_prod,
+            frame_start=FRAME_START,
+            frame_end=FRAME_END,
+            out_video_path=out_video_path,
+            normalize=True
+        )
+
+        assert len(motion_curve) > 0
+        assert type(motion_curve) == np.ndarray
+        assert type(motion_curve[0]) == np.float64
+
+        assert np.max(motion_curve) == 1.0
+
+        assert len(motion_curve) == FRAME_END - FRAME_START - 1
+
+        out_video_w, out_video_h, out_video_n_frames = video_info(out_video_path)
+
+        assert out_video_w == video_w
+        assert out_video_h == video_h
+        assert out_video_n_frames == len(motion_curve)

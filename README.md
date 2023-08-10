@@ -130,6 +130,24 @@ python -m slvideotools.trim_video --help
 
 Watch here the [trim_video help text](Docs/Help/trim_video.txt)
 
+### Compute Motion Energy
+
+Calculates the "motion energy" of the input frame sequence.
+
+```
+python -m slvideotools.compute_motion_energy --help
+```
+
+Watch here the [compute_motion_energy help text](Docs/Help/compute_motion_energy.txt)
+
+The motion energy is a mono-dimensional curve.
+Each sample is calculated by first computing the optical flow between consecutive frames and then summing up the magnitude of each flow vector.
+
+<img src="Docs/Pics/video_motion_energy_original.png" width="30%" alt="Video with moving face">
+==>
+<img src="Docs/Pics/video_motion_energy_computed.png" width="30%" alt="Computed motion energy">
+
+
 
 ## CLI and Make Examples
 
