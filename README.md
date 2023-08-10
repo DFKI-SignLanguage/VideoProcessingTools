@@ -64,9 +64,7 @@ Draws a rectangle as overlay of an input frame sequence
 
 Watch here the [draw_bbox help text](Docs/Help/draw_bbox.txt)
 
-<img src="Docs/Pics/video-original.png" width="20%" alt="Cropping area"> + bbox {"x": 227, "y": 200, "width": 741, "height": 442 }
-==>
-<img src="Docs/Pics/video-bboxarea.png" width="20%" alt="Cropping area">
+<img src="Docs/Pics/video-original.png" width="20%" alt="Cropping area"> + bbox {"x": 227, "y": 200, "width": 741, "height": 442 } ==> <img src="Docs/Pics/video-bboxarea.png" width="20%" alt="Cropping area">
 
 
 ### Crop Video
@@ -81,9 +79,7 @@ python -m slvideotools.crop_video --help
 Watch here the [crop_video help text](Docs/Help/crop_video.txt)
 
 
-<img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area">
-==>
-<img src="Docs/Pics/video-cropped.png" width="30%" alt="Cropped video">
+<img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area"> ==> <img src="Docs/Pics/video-cropped.png" width="30%" alt="Cropped video">
 
 
 _Warning!!!_ The resolution of the output video might differ from the width/height specified in the JSON file. This is due to limitations of some codecs.
@@ -99,9 +95,7 @@ python -m slvideotools.extract_face_data --help
 Watch here the [extract_face_data help text](Docs/Help/extract_face_data.txt)
 
 
-<img src="Docs/Pics/video-original.png" width="30%" alt="Original Video">
-==>
-<img src="Docs/Pics/video-facedata.png" width="30%" alt="Face Data Overlay. Blue dots: MediaPipe landmarks. Red dots: normalized landmarks">
+<img src="Docs/Pics/video-original.png" width="30%" alt="Original Video">==><img src="Docs/Pics/video-facedata.png" width="30%" alt="Face Data Overlay. Blue dots: MediaPipe landmarks. Red dots: normalized landmarks">
 
 For a reference about the landmark ID and its location on the face, please see the official MediaPipe docs [Here](https://raw.githubusercontent.com/google/mediapipe/master/mediapipe/modules/face_geometry/data/canonical_face_model_uv_visualization.png).
 
@@ -143,9 +137,7 @@ Watch here the [compute_motion_energy help text](Docs/Help/compute_motion_energy
 The motion energy is a mono-dimensional curve.
 Each sample is calculated by first computing the optical flow between consecutive frames and then summing up the magnitude of each flow vector.
 
-<img src="Docs/Pics/video_motion_energy_original.png" width="30%" alt="Video with moving face">
-==>
-<img src="Docs/Pics/video_motion_energy_computed.png" width="30%" alt="Computed motion energy">
+<img src="Docs/Pics/video_motion_energy_original.png" width="30%" alt="Video with moving face">==><img src="Docs/Pics/video_motion_energy_computed.png" width="30%" alt="Computed motion energy">
 
 
 

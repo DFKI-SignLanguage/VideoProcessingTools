@@ -1,0 +1,28 @@
+usage: compute_motion_energy.py [-h] --invideo INVIDEO --outmotioncurve
+                                OUTMOTIONCURVE [--normalize]
+                                [--frame-start FRAME_START]
+                                [--frame-end FRAME_END]
+                                [--output-video OUTPUT_VIDEO]
+
+Calculates the 'motion energy' of the input frame sequence. The motion energy
+is a mono-dimensional curve. Each sample is calculated by first computing the
+optical flow between consecutive frames and the summing up the magnitude of
+each flow vector. The resulting motion curve contains one frame less than the
+input sequences.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --invideo INVIDEO, -i INVIDEO
+                        Input video.
+  --outmotioncurve OUTMOTIONCURVE, -o OUTMOTIONCURVE
+                        Path to the output motion energy data.
+  --normalize           If specified, normalizes the energy curve in the range
+                        [0,1] before saving it.
+  --frame-start FRAME_START
+                        Start frame included in the motion energy computation
+                        (default 0: first frame).
+  --frame-end FRAME_END
+                        End frame (excluded) in the motion energy computation
+                        (default: last frame of the video).
+  --output-video OUTPUT_VIDEO, -ov OUTPUT_VIDEO
+                        Video output of the file.
