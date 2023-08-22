@@ -272,6 +272,19 @@ Nunnari, F., 2022. A software toolkit for pre-processing sign language video str
 }
 ```
 
+The use of video motion energy to align with motion capture data is described in a SLTAT 2023 paper: https://ieeexplore.ieee.org/document/10193528
+
+```
+@INPROCEEDINGS{nunnari23SLTAT-VideoAlignment,
+  author={Nunnari, Fabrizio and Ameli, Mina and Mishra, Shailesh},
+  booktitle={2023 IEEE International Conference on Acoustics, Speech, and Signal Processing Workshops (ICASSPW)}, 
+  title={Automatic Alignment Between Sign Language Videos And Motion Capture Data: A Motion Energy-Based Approach}, 
+  year={2023},
+  pages={1-5},
+  doi={10.1109/ICASSPW59220.2023.10193528}}
+```
+
+
 
 ## Links
 
