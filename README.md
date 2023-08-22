@@ -141,9 +141,9 @@ Each sample is calculated by first computing the optical flow between consecutiv
 
 
 
-## CLI and Make Examples
+## Command Line Interface (CLI) and Make Examples
 
-There examples in the `Examples` directory. Some test videos are in this same package under `slvideotools/data`.
+There are examples in the `Examples` directory. Some test videos are in this same package under `slvideotools/data`.
 
 
 ## Module usage
@@ -214,15 +214,15 @@ with ImageDirFrameProducer(source_dir="my/frames/") as prod,\
         width, height, depth = frame.shape
         assert depth == 3
         # Transform the frame the way you want
-        # [...]
+        # new_frame = [...]
 
         # Feed the frame to output video
-        cons.consume(frame=frame)
+        cons.consume(frame=new_frame)
 ```
 
-of course, any of combination of _image_dir_ or _video_ can be used for input or output.
+of course, any combination of _image_dir_ or _video_ can be used for input or output.
 
-There are also a couple of factory methods, automatically determining if the source, or destination is a directory or a video file.
+There are also a couple of factory methods, automatically determining if the source, or destination, is a directory or a video file.
 For example:
 
 ```python
