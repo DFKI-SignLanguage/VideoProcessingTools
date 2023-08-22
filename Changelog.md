@@ -20,6 +20,7 @@ Types of changes:
 - Renamed package from `dfki_sl_videotools` to `slvideotools`
 - Removed option --outvideo from the face detection script. Bounds can be overlayed in dedicated script `draw_bbox`
 - Added more methods for face detection: in script `extract_face_bounds`, parameter `--method` can be either `mediapipe` or `mtcnn`
+- Added a script to extract video motion energy using Optical Flow.
 
 ## [0.1] - 2022-01-26
 
