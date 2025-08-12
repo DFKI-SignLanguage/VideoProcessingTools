@@ -12,15 +12,26 @@ Types of changes:
 * `Security` in case of vulnerabilities.
 
 
+## [Planned]
+
+- Switch to MediaPipe 0.10.x (from 0.8.9: API changes)
+- Update MTCNN to 1.0.0
+
+
 ## [Unreleased]
 
 ### Added
 
-- Framework to "produce" and "consume" frames from either videos or directories of images
+...
+
+## [0.2] - 2025-08-12
+
 - Renamed package from `dfki_sl_videotools` to `slvideotools`
-- Removed option --outvideo from the face detection script. Bounds can be overlayed in dedicated script `draw_bbox`
 - Added more methods for face detection: in script `extract_face_bounds`, parameter `--method` can be either `mediapipe` or `mtcnn`
 - Added a script to extract video motion energy using Optical Flow.
+- Removed option --outvideo from the face detection script. Bounds can be overlayed in dedicated script `draw_bbox`
+- Framework to "produce" and "consume" frames from either videos or directories of images
+
 
 ## [0.1] - 2022-01-26
 
