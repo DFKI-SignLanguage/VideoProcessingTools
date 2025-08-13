@@ -1,4 +1,3 @@
-import cv2
 import mediapipe as mp
 from mtcnn import MTCNN
 import numpy as np
