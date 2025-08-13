@@ -9,14 +9,13 @@ The code relies on a number of body/face analysis libraries:
 
 * [MediaPipe](https://mediapipe.dev) -- to extract body and face landmarks
 * [MTCNN](https://github.com/ipazc/mtcnn) -- to extract face bounds
-* [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) -- for full body 3D landmarks extraction
 * [kkroening ffmpeg python](https://kkroening.github.io/ffmpeg-python/) -- to en/decode videos
 * ... more to come
 
 
 ## Installation
 
-Clone the repository and setup a python environment for it (Tested with v3.7).
+Clone the repository and setup a python environment for it (Tested with v3.11).
 
 ```sh
 python3 -m venv p3env-videotools
@@ -64,7 +63,7 @@ Draws a rectangle as overlay of an input frame sequence
 
 Watch here the [draw_bbox help text](Docs/Help/draw_bbox.txt)
 
-<img src="Docs/Pics/video-original.png" width="20%" alt="Cropping area"> + bbox {"x": 227, "y": 200, "width": 741, "height": 442 } ==> <img src="Docs/Pics/video-bboxarea.png" width="20%" alt="Cropping area">
+<img src="Docs/Pics/video-original.png" width="20%" alt="Cropping area"> + `{"x": 227, "y": 200, "width": 741, "height": 442 }` ==> <img src="Docs/Pics/video-bboxarea.png" width="20%" alt="Cropping area">
 
 
 ### Crop Video
@@ -79,7 +78,7 @@ python -m slvideotools.crop_video --help
 Watch here the [crop_video help text](Docs/Help/crop_video.txt)
 
 
-<img src="Docs/Pics/video-bboxarea.png" width="30%" alt="Cropping area"> ==> <img src="Docs/Pics/video-cropped.png" width="30%" alt="Cropped video">
+<img src="Docs/Pics/video-original.png" width="20%" alt="Cropping area"> + `{"x": 227, "y": 200, "width": 741, "height": 442 }` ==> <img src="Docs/Pics/video-cropped.png" width="20%" alt="Cropped video">
 
 
 _Warning!!!_ The resolution of the output video might differ from the width/height specified in the JSON file. This is due to limitations of some codecs.
@@ -95,7 +94,7 @@ python -m slvideotools.extract_face_data --help
 Watch here the [extract_face_data help text](Docs/Help/extract_face_data.txt)
 
 
-<img src="Docs/Pics/video-original.png" width="30%" alt="Original Video">==><img src="Docs/Pics/video-facedata.png" width="30%" alt="Face Data Overlay. Blue dots: MediaPipe landmarks. Red dots: normalized landmarks">
+<img src="Docs/Pics/video-original.png" width="30%" alt="Original Video"> ==> <img src="Docs/Pics/video-facedata.png" width="30%" alt="Face Data Overlay. Blue dots: MediaPipe landmarks. Red dots: normalized landmarks">
 
 For a reference about the landmark ID and its location on the face, please see the official MediaPipe docs [Here](https://raw.githubusercontent.com/google/mediapipe/master/mediapipe/modules/face_geometry/data/canonical_face_model_uv_visualization.png).
 
@@ -239,26 +238,26 @@ with create_frame_producer(dir_or_video="my/frames/") as prod,\
 
 ### Environment preparation
 
-# numpy-2.3.2
-# numpy==2.2.6
-# opencv-python-4.12.0.88
-
 Tested with Python 3.11:
 
-pip install the following packages
+Install the frozen requirements:
+
+    pip install -r requirements.txt
+
+OR freshly install the following packages:
 
 ```
-numpy==1.26.4
-pillow==11.3.0
+pip install numpy==1.26.4
+pip install pillow==11.3.0
 
-ffmpeg-python==0.2.0
-opencv-python==4.9.0.80
+pip install ffmpeg-python==0.2.0
+pip install opencv-python==4.9.0.80
 
-mediapipe==0.10.21
-tensorflow==2.19.0
-mtcnn==1.0.0
+pip install mediapipe==0.10.21
+pip install tensorflow==2.19.0
+pip install mtcnn==1.0.0
 
-pytest==8.4.1
+pip install pytest==8.4.1
 ```
 
 To use GPU on a Mac:
