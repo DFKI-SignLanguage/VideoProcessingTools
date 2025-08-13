@@ -20,9 +20,11 @@ Types of changes:
 
 ### Changed
 
+## [0.3] - 2025-08-14
+
 - Switch to MediaPipe 0.10.x (from 0.8.9: API changes)
 - Update MTCNN to 1.0.0
-
+- Compatible with Python 3.11
 
 ## [0.2] - 2025-08-12
 
