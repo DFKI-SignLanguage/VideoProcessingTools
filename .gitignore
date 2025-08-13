@@ -10,3 +10,4 @@ First10/
 .DS_Store
 
 venv
+.venv
