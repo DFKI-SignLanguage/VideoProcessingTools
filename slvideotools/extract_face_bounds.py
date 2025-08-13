@@ -13,6 +13,7 @@ import json
 from typing import List
 from typing import Tuple
 from typing import Union
+from typing import Optional
 
 mp_face_detection = mp.solutions.face_detection
 mp_pose = mp.solutions.pose
@@ -53,7 +54,7 @@ def _get_head_region_info(image: np.ndarray, pose_detector: mp_pose.Pose)\
 def _get_face_bounds_mediapipe(image: np.ndarray,
                                face_detector: mp_face_detection.FaceDetection,
                                head_focus: bool = False,
-                               pose_detector: mp_pose.Pose = None) -> Union[None, Tuple[int, int, int, int]]:
+                               pose_detector: mp_pose.Pose = None) -> Optional[Tuple[int, int, int, int]]:
     """
     Detects the bounds of the face using the mediapipe framework
 
@@ -63,9 +64,6 @@ def _get_face_bounds_mediapipe(image: np.ndarray,
     :param pose_detector: If head_focus if used, this must be an initialized MediaPipe Pose instance
     :return: A 4-tuple with [x, y, width, height] of the bounds containing the face, or None if no face was found.
     """
-
-    # MediaPipe wants images in OpenCV BGR format
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     # Setup original full-frame bounds
     h, w, _ = image.shape
@@ -107,16 +105,16 @@ def _get_face_bounds_mediapipe(image: np.ndarray,
 
     # we assume that there is always at least 1 face
     bbox_face = results.detections[0].location_data.relative_bounding_box
-    # map back to the original pixel space
+    # Map [0,1] bbox_face range to pixel space
     xm, ym, wm, hm = bbox_face.xmin * w, bbox_face.ymin * h, bbox_face.width * w, bbox_face.height * h
-
+    # shift back to the original pixel space
     x += int(xm)
     y += int(ym)
 
     return x, y, int(wm), int(hm)
 
 
-def _get_face_bounds_mtcnn(image: np.ndarray, detector: MTCNN) -> Union[None, Tuple[int, int, int, int]]:
+def _get_face_bounds_mtcnn(image: np.ndarray, detector: MTCNN) -> Optional[Tuple[int, int, int, int]]:
     """
     Detects the bounds of the face using the mediapipe framework
 
@@ -124,7 +122,7 @@ def _get_face_bounds_mtcnn(image: np.ndarray, detector: MTCNN) -> Union[None, Tu
     :return: A 4-tuple with [x, y, width, height] of the bounds containing the face, or None if no face was found.
     """
 
-    face_list = detector.detect_faces(image)
+    face_list = detector.detect_faces(image, threshold_onet=0.85)
     if len(face_list) == 0:
         return None
 
@@ -169,7 +167,7 @@ def extract_face_bounds(frames_in: FrameProducer,
     mtcnn_detector = None
     if method == "mtcnn":
         # See https://github.com/ipazc/mtcnn
-        mtcnn_detector = MTCNN(min_face_size=50)
+        mtcnn_detector = MTCNN()
 
     try:
 

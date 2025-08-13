@@ -75,5 +75,13 @@ def bbox_to_dict(x: Tuple[int, int, int, int]) -> dict:
 
 
 def bbox_from_dict(bounds_dict: dict) -> Tuple[int, int, int, int]:
+    """
+        Convert a dictionary with keys "x", "y", "width", "height" to a tuple
+
+        Args:
+            bounds_dict : dictionary with keys "x", "y", "width", "height"
+
+        :returns a tuple with (x, y, width, height)
+    """
 
     return bounds_dict["x"], bounds_dict["y"], bounds_dict["width"], bounds_dict["height"]

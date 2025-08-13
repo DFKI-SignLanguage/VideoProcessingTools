@@ -177,8 +177,9 @@ def test_motion_energy_computation(tmp_path):
     # Fetch video info
     video_w, video_h, n_frames = video_info(TEST_VIDEO_PATH)
 
+    # Limit to a few keyframes to speed-up the test
     FRAME_START = 10
-    FRAME_END = 20
+    FRAME_END = 100
 
     with create_frame_producer(dir_or_video=TEST_VIDEO_PATH) as frame_prod:
 

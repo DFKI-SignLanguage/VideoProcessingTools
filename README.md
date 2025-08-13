@@ -237,6 +237,36 @@ with create_frame_producer(dir_or_video="my/frames/") as prod,\
 
 ## Development
 
+### Environment preparation
+
+# numpy-2.3.2
+# numpy==2.2.6
+# opencv-python-4.12.0.88
+
+Tested with Python 3.11:
+
+pip install the following packages
+
+```
+numpy==1.26.4
+pillow==11.3.0
+
+ffmpeg-python==0.2.0
+opencv-python==4.9.0.80
+
+mediapipe==0.10.21
+tensorflow==2.19.0
+mtcnn==1.0.0
+
+pytest==8.4.1
+```
+
+To use GPU on a Mac:
+
+```
+python -m pip install tensorflow-metal
+```
+
 ### Documentation update
 
 There is a script helping in automatically updating the documentation.
