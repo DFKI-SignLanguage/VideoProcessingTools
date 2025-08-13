@@ -14,15 +14,15 @@ Types of changes:
 
 ## [Planned]
 
-- Switch to MediaPipe 0.10.x (from 0.8.9: API changes)
-- Update MTCNN to 1.0.0
-
 
 ## [Unreleased]
 
-### Added
 
-...
+### Changed
+
+- Switch to MediaPipe 0.10.x (from 0.8.9: API changes)
+- Update MTCNN to 1.0.0
+
 
 ## [0.2] - 2025-08-12
 
