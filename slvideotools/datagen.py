@@ -190,7 +190,7 @@ class ImageDirFrameConsumer(FrameConsumer):
     def consume(self, frame: np.ndarray):
 
         # Convert into PIL Image
-        img: Image = PIL.Image.fromarray(frame, 'RGB')
+        img: Image = PIL.Image.fromarray(frame)
 
         # Compose name and seve
         img_filename = self._frame_name + "{:06d}.{}".format(self._img_counter, self._img_ext)

@@ -18,7 +18,7 @@ def draw_bbox(frames_in: FrameProducer, bbox: Tuple[int, int, int, int], frames_
 
     for frame in frames_in.frames():
 
-        frame_pil: Image = PIL.Image.fromarray(obj=frame, mode='RGB')
+        frame_pil: Image = PIL.Image.fromarray(obj=frame)
 
         draw = ImageDraw.Draw(frame_pil)
         draw.rectangle(xy=[bbox[0], bbox[1], bbox[0] + bbox[2], bbox[1] + bbox[3]], outline=(220, 10, 10))
