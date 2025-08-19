@@ -3,7 +3,7 @@ usage: draw_bbox.py [-h] --inframes INFRAMES --inbounds INBOUNDS --outframes
 
 Overlay a bounding box rectangle on video frames
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --inframes INFRAMES   Path to a video file or directory of frames.
   --inbounds INBOUNDS   Path to a JSON input file containing the bbox

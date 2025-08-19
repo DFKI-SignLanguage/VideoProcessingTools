@@ -3,7 +3,7 @@ usage: trim_video.py [-h] --invideo INVIDEO --outvideo OUTVIDEO --startframe
 
 Trims a video file.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --invideo INVIDEO     Input video filepath
   --outvideo OUTVIDEO   Output video filepath

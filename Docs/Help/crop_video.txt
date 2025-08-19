@@ -3,7 +3,7 @@ usage: crop_video.py [-h] --inframes INFRAMES --inbounds INBOUNDS --outframes
 
 Crop a video at a specified rectangular area.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --inframes INFRAMES, --invideo INFRAMES
                         Path to the input videofile o directory

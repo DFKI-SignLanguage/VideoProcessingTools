@@ -3,24 +3,26 @@ usage: extract_face_data.py [-h] --inframes INFRAMES --outlandmarks
                             [--outnosetipposition OUTNOSETIPPOSITION]
                             [--outfacerotation OUTFACEROTATION]
                             [--outfacescale OUTFACESCALE]
+                            [--outblendshapes OUTBLENDSHAPES]
                             [--outcompositeframes OUTCOMPOSITEFRAMES]
                             [--normalize-landmarks]
 
 Uses mediapipe to extract the face mesh data from the frames of a video.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --inframes INFRAMES, --invideo INFRAMES
                         Path to a video or image directory providing the
                         frames with the face of a person.
   --outlandmarks OUTLANDMARKS
                         Path to the output numpy array of size [N][468][3],
-                        where N is the number of video frames, 468 are the
+                        where N is the number of video frames, 478 are the
                         number of landmarks of the
                         [MediaPipe](https://mediapipe.dev) face mesh, and 3 is
-                        to store <x,y,z> 3D coords. If no faces are detected,
-                        all values are NaN! If more faces are detected, only
-                        the first in the mediapipe list is used.
+                        to store <x,y,z> 3D coords. Inside a frame, if no
+                        faces are detected, all values are NaN! If more faces
+                        are detected, only the first in the mediapipe list is
+                        used.
   --outnosetipposition OUTNOSETIPPOSITION
                         Path to an output numpy array of shape [N][3] with the
                         x,y,z movement of the nose tip in space. N is the
@@ -37,6 +39,33 @@ optional arguments:
                         The scaling factor needed to resize the vertical
                         distance within ear and jaw-base into 10 percent of
                         the height of the frame.
+  --outblendshapes OUTBLENDSHAPES
+                        Path to the output numpy array of shape [N][52] with
+                        the blendshape activation values. N is the number of
+                        video frames. Inside a frame, if no faces are
+                        detected, all values are NaN! If more faces are
+                        detected, only the first in the mediapipe list is
+                        used. This is the list of blendshapes:
+                        MP_BLENDSHAPES=["_neutral", "browDownLeft",
+                        "browDownRight", "browInnerUp", "browOuterUpLeft",
+                        "browOuterUpRight", "cheekPuff", "cheekSquintLeft",
+                        "cheekSquintRight", "eyeBlinkLeft", "eyeBlinkRight",
+                        "eyeLookDownLeft", "eyeLookDownRight",
+                        "eyeLookInLeft", "eyeLookInRight", "eyeLookOutLeft",
+                        "eyeLookOutRight", "eyeLookUpLeft", "eyeLookUpRight",
+                        "eyeSquintLeft", "eyeSquintRight", "eyeWideLeft",
+                        "eyeWideRight", "jawForward", "jawLeft", "jawOpen",
+                        "jawRight", "mouthClose", "mouthDimpleLeft",
+                        "mouthDimpleRight", "mouthFrownLeft",
+                        "mouthFrownRight", "mouthFunnel", "mouthLeft",
+                        "mouthLowerDownLeft", "mouthLowerDownRight",
+                        "mouthPressLeft", "mouthPressRight", "mouthPucker",
+                        "mouthRight", "mouthRollLower", "mouthRollUpper",
+                        "mouthShrugLower", "mouthShrugUpper",
+                        "mouthSmileLeft", "mouthSmileRight",
+                        "mouthStretchLeft", "mouthStretchRight",
+                        "mouthUpperUpLeft", "mouthUpperUpRight",
+                        "noseSneerLeft", "noseSneerRight", ]
   --outcompositeframes OUTCOMPOSITEFRAMES, --outcompositevideo OUTCOMPOSITEFRAMES
                         Path to a videofile or directory for image files. Will
                         have the same resolution and content of the input

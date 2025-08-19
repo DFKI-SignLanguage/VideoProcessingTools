@@ -3,7 +3,7 @@ usage: extract_face_bounds.py [-h] --inframes INFRAMES --outbounds OUTBOUNDS
 
 Get the bounding box of the face throughout a video
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --inframes INFRAMES, --invideo INFRAMES
                         Path to a video or directory showing a sign language

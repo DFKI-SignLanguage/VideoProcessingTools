@@ -6,11 +6,13 @@ usage: compute_motion_energy.py [-h] --invideo INVIDEO --outmotioncurve
 
 Calculates the 'motion energy' of the input frame sequence. The motion energy
 is a mono-dimensional curve. Each sample is calculated by first computing the
-optical flow between consecutive frames and the summing up the magnitude of
+optical flow between consecutive frames and then summing up the magnitude of
 each flow vector. The resulting motion curve contains one frame less than the
-input sequences.
+input sequences. The output curve is a mono-dimensional numpy array.
+Optionally, a debug video can be generated, with color associated to the
+motion direction and motion magnitude mapped to color intensity.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --invideo INVIDEO, -i INVIDEO
                         Input video.
