@@ -14,6 +14,7 @@ VisionRunningMode = mp.tasks.vision.RunningMode
 from PIL.Image import Image
 import PIL.Image
 from PIL import ImageDraw
+import PIL.ImageFont
 
 from .datagen import create_frame_producer, create_frame_consumer
 from .datagen import VideoFrameProducer, VideoFrameConsumer
@@ -224,6 +225,8 @@ def extract_face_data(frames_in: VideoFrameProducer,
     out_Rs = np.ndarray(shape=(0, 3, 3), dtype=np.float32)
     out_scales = np.ndarray(shape=(0,), dtype=np.float32)
 
+    pil_font = None
+
     frame_num = 0
     for rgb_image in frames_in.frames():
 
@@ -231,6 +234,11 @@ def extract_face_data(frames_in: VideoFrameProducer,
         if width is None:
             width = rgb_image.shape[1]
             height = rgb_image.shape[0]
+
+            # Prepare the font size according to the video resolution
+            font_size = max(10, height // MEDIAPIPE_FACE_BLENDSHAPES_COUNT)
+            font_size = 32 if font_size > 32 else font_size
+            pil_font = PIL.ImageFont.load_default(size=font_size)
 
         #
         # RUN MEDIAPIPE FACE LANDMARKER
@@ -288,11 +296,12 @@ def extract_face_data(frames_in: VideoFrameProducer,
         #
         # Process BLENDSHAPES
         if len(results.face_blendshapes) == 0:
-            frame_bshapes = [float('nan')] * MEDIAPIPE_FACE_BLENDSHAPES_COUNT
+            frame_bshapes = None
+            frame_bshapes_list = [float('nan')] * MEDIAPIPE_FACE_BLENDSHAPES_COUNT
         else:
             # Assume there is only one face
-            frame_bshapes_info = results.face_blendshapes[0]
-            frame_bshapes = [f.score for f in frame_bshapes_info]
+            frame_bshapes = results.face_blendshapes[0]
+            frame_bshapes_list = [f.score for f in frame_bshapes]
             
             # DEBUG code, also to generate the docs
             # print("MP_BLENDSHAPES=[", end="")
@@ -300,10 +309,10 @@ def extract_face_data(frames_in: VideoFrameProducer,
             #     print(f"\"{bshape.category_name}\", ", end="")  # {i} ") # {bshape.score:.3f}")
             # print("]", end="")
 
-        assert type(frame_bshapes) == list
-        assert len(frame_bshapes) == MEDIAPIPE_FACE_BLENDSHAPES_COUNT
+        assert type(frame_bshapes_list) == list
+        assert len(frame_bshapes_list) == MEDIAPIPE_FACE_BLENDSHAPES_COUNT
 
-        out_blendshapes_list.append(frame_bshapes)
+        out_blendshapes_list.append(frame_bshapes_list)
 
         #
         # Manage composite video output
@@ -315,7 +324,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
             pil_draw = ImageDraw.Draw(pil_image)
             #draw.rectangle(xy=[bbox[0], bbox[1], bbox[0] + bbox[2], bbox[1] + bbox[3]], outline=(220, 10, 10))
 
-
+            #
             # Draw face mesh landmarks on the overlay image.
             if landmarks is not None:
 
@@ -380,6 +389,22 @@ def extract_face_data(frames_in: VideoFrameProducer,
                     pil_draw.ellipse(xy=[lm_x - norm_landmark_radius, lm_y - norm_landmark_radius,
                                         lm_x + norm_landmark_radius, lm_y + norm_landmark_radius],
                                      fill=(int(255 * norm_z), 20, 20))
+
+            #
+            # Draw face blendshape values on the overlay image.
+            if frame_bshapes is not None:
+
+                for i, bshape_info in enumerate(frame_bshapes):
+                    bshape_name = bshape_info.category_name
+                    bshape_score = bshape_info.score
+
+                    # Draw the blendshape name and score in the upper left corner
+                    y_coord = font_size + font_size * i
+                    pil_draw.text(
+                        xy=(10, y_coord),
+                        text=f"{bshape_name}: {bshape_score:.3f}",
+                          fill=(255, 255, 255),
+                          font=pil_font)
 
             #
             # Finally, write the annotated frame to the output video
