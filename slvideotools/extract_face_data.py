@@ -1,16 +1,9 @@
-import cv2
-import numpy as np
+# Extracts the face mesh data from the frames of a video using MediaPipe.
+# See: https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker
 
 import math
 
-from .datagen import create_frame_producer, create_frame_consumer
-from .datagen import VideoFrameProducer, VideoFrameConsumer
-
-from typing import List
-from typing import Tuple
-
-# Extracts the face mesh data from the frames of a video using MediaPipe.
-# See: https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker
+import numpy as np
 
 # Code to overlay the face mesh point taken from https://colab.research.google.com/github/googlesamples/mediapipe/blob/main/examples/face_landmarker/python/%5BMediaPipe_Python_Tasks%5D_Face_Landmarker.ipynb
 import mediapipe as mp
@@ -18,6 +11,15 @@ from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision as mp_vision
 VisionRunningMode = mp.tasks.vision.RunningMode
 
+from PIL.Image import Image
+import PIL.Image
+from PIL import ImageDraw
+
+from .datagen import create_frame_producer, create_frame_consumer
+from .datagen import VideoFrameProducer, VideoFrameConsumer
+
+from typing import List
+from typing import Tuple
 
 
 MEDIAPIPE_FACE_LANDMARKS_COUNT = 478 
@@ -283,18 +285,20 @@ def extract_face_data(frames_in: VideoFrameProducer,
         if composite_frames_out is not None:
 
             # Prepare the overlay image
-            annotated_image = rgb_image.copy()
+            #annotated_image = rgb_image.copy()
+            pil_image: Image = PIL.Image.fromarray(obj=rgb_image)
+            pil_draw = ImageDraw.Draw(pil_image)
+            #draw.rectangle(xy=[bbox[0], bbox[1], bbox[0] + bbox[2], bbox[1] + bbox[3]], outline=(220, 10, 10))
+
 
             # Draw face mesh landmarks on the overlay image.
             if landmarks is not None:
 
                 # Let's use 1 pixel radius every 500 pixels of video.
                 norm_landmark_radius = max(1, int(width / 600))
-                # Set the thickness as the same as the radius.
-                norm_landmark_thickness = norm_landmark_radius
 
                 # 
-                # Draw the landmarks over the face
+                # Draw the original landmarks over the face
                 for i, lm in enumerate(orig_frame_lm_list):
                     lm_x, lm_y, lm_z = lm[:]
 
@@ -313,8 +317,9 @@ def extract_face_data(frames_in: VideoFrameProducer,
                     else:
                         vcol = (20, 20, 220)
 
-                    cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=norm_landmark_radius,
-                               color=vcol, thickness=norm_landmark_thickness)
+                    pil_draw.ellipse(xy=[lm_x - norm_landmark_radius, lm_y - norm_landmark_radius,  
+                                        lm_x + norm_landmark_radius, lm_y + norm_landmark_radius],
+                                     fill=vcol)
 
                 #
                 # DEBUG: save the landmarks to a file
@@ -323,7 +328,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
                 #     pickle.dump(obj=lm_list, file=outfile)
 
                 #
-                # Draw the landmarks in the upper left corner of the image using a orthographic projection (i.e., use only x and y)
+                # Draw the (normaized) landmarks in the upper left corner of the image using a orthographic projection (i.e., use only x and y)
                 # and we use the depth to modulate the color intensity.
 
                 # First compute the dynamic range of the z coordinate among all points
@@ -347,11 +352,13 @@ def extract_face_data(frames_in: VideoFrameProducer,
                     # rescale z in [0,1]
                     norm_z = 1 - ((lm_z - z_min) / z_range)
 
-                    cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=norm_landmark_radius,
-                               color=(int(255 * norm_z), 20, 20), thickness=norm_landmark_thickness)
+                    pil_draw.ellipse(xy=[lm_x - norm_landmark_radius, lm_y - norm_landmark_radius,
+                                        lm_x + norm_landmark_radius, lm_y + norm_landmark_radius],
+                                     fill=(int(255 * norm_z), 20, 20))
 
             #
             # Finally, write the annotated frame to the output video
+            annotated_image = np.asarray(pil_image)  # Back from PIL to numpy array
             composite_frames_out.consume(annotated_image)
 
         frame_num += 1
