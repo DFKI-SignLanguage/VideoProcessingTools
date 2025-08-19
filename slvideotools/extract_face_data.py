@@ -183,18 +183,19 @@ def compute_normalization_params(landmarks: List[List[float]],
 
 def extract_face_data(frames_in: VideoFrameProducer,
                       composite_frames_out: VideoFrameConsumer = None,
-                      normalize_landmarks: bool = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+                      normalize_landmarks: bool = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Extract the MediaPipe face mesh data from the specified videofile.
 
     :param frames_in: A FrameProducer of some video material containing a face.
     :param composite_frames_out: If provided, the landmark information are overlayed to the original frames and saved here.
     :param normalize_landmarks: If set, the output landmarks are normalized.
-    :return: a 4-tuple of numpy ndarrasys:
+    :return: a 5-tuple of numpy ndarrasys:
       1) ndarray with the face landmark data in shape [N][468][3];
       2) ndarray with the nose tip positions in shape [N][3];
       3) ndarray with the face rotation transforms in shape [N][3][3];
       4) ndarray with the face scaling in shape [N][1].
+      5) ndarray with the blendshape activation values in shape [N][52].
              Where N is the number of frames in the video.
     """
 
@@ -218,6 +219,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
 
     # Accumulators that wil contain the data for all frames.
     out_landmarks_list = []
+    out_blendshapes_list = []
     out_nose_tips = np.ndarray(shape=(0, 3), dtype=np.float32)
     out_Rs = np.ndarray(shape=(0, 3, 3), dtype=np.float32)
     out_scales = np.ndarray(shape=(0,), dtype=np.float32)
@@ -230,10 +232,13 @@ def extract_face_data(frames_in: VideoFrameProducer,
             width = rgb_image.shape[1]
             height = rgb_image.shape[0]
 
-        # To improve performance, optionally mark the image as not writeable to pass by reference.
+        #
+        # RUN MEDIAPIPE FACE LANDMARKER
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
         results = face_landmarker.detect(mp_image)
 
+        #
+        # Process LANDMARKS
         # Check if at least one face is available
         if len(results.face_landmarks) == 0:
             landmarks = None
@@ -279,6 +284,26 @@ def extract_face_data(frames_in: VideoFrameProducer,
 
         # Append to frames container
         out_landmarks_list.append(out_frame_lm_list)
+
+        #
+        # Process BLENDSHAPES
+        if len(results.face_blendshapes) == 0:
+            frame_bshapes = [float('nan')] * MEDIAPIPE_FACE_BLENDSHAPES_COUNT
+        else:
+            # Assume there is only one face
+            frame_bshapes_info = results.face_blendshapes[0]
+            frame_bshapes = [f.score for f in frame_bshapes_info]
+            
+            # DEBUG code, also to generate the docs
+            # print("MP_BLENDSHAPES=[", end="")
+            # for i, bshape in enumerate(frame_bshapes_info):
+            #     print(f"\"{bshape.category_name}\", ", end="")  # {i} ") # {bshape.score:.3f}")
+            # print("]", end="")
+
+        assert type(frame_bshapes) == list
+        assert len(frame_bshapes) == MEDIAPIPE_FACE_BLENDSHAPES_COUNT
+
+        out_blendshapes_list.append(frame_bshapes)
 
         #
         # Manage composite video output
@@ -364,8 +389,9 @@ def extract_face_data(frames_in: VideoFrameProducer,
         frame_num += 1
 
     out_landmarks = np.asarray(out_landmarks_list, dtype=np.float32)
+    out_blendshapes = np.asarray(out_blendshapes_list, dtype=np.float32)
 
-    return out_landmarks, out_nose_tips, out_Rs, out_scales
+    return out_landmarks, out_nose_tips, out_Rs, out_scales, out_blendshapes
 
 
 #
@@ -376,31 +402,45 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
         description="Uses mediapipe to extract the face mesh data from the frames of a video.")
+
     parser.add_argument('--inframes', '--invideo',
                         help='Path to a video or image directory providing the frames with the face of a person.',
                         required=True, type=str)
+
     parser.add_argument('--outlandmarks',
                         help='Path to the output numpy array of size [N][468][3],'
                              ' where N is the number of video frames,'
-                             ' 468 are the number of landmarks of the [MediaPipe](https://mediapipe.dev) face mesh,'
+                             ' 478 are the number of landmarks of the [MediaPipe](https://mediapipe.dev) face mesh,'
                              ' and 3 is to store <x,y,z> 3D coords.'
-                             ' If no faces are detected, all values are NaN!' 
+                             ' Inside a frame, if no faces are detected, all values are NaN!' 
                              ' If more faces are detected, only the first in the mediapipe list is used.',
                         required=True, type=str)
+
     parser.add_argument('--outnosetipposition',
                         help='Path to an output numpy array of shape [N][3] with the x,y,z movement of the nose tip in space.'
                              ' N is the number of video frames'
                              ' As for MediaPipe, X and Y coordinates are normalized in the range [0,1] in the frame size.',
                         required=False, type=str)
+
     parser.add_argument('--outfacerotation',
                         help='Path to an output numpy array of shape [N][3][3] with the 3x3 rotation of the face.'
                              ' N is the number of video frames',
                         required=False, type=str)
+
     parser.add_argument('--outfacescale',
                         help='Path to the output numpy array of shape [N] with the scaling of the face.'
                              ' N is the number of video frames.'
                              ' The scaling factor needed to resize the vertical distance within ear and jaw-base into 10 percent of the height of the frame.',
                         required=False, type=str)
+
+    parser.add_argument('--outblendshapes',
+                        help='Path to the output numpy array of shape [N][52] with the blendshape activation values.'
+                             ' N is the number of video frames.'
+                             ' Inside a frame, if no faces are detected, all values are NaN!' 
+                             ' If more faces are detected, only the first in the mediapipe list is used.'
+                             ' This is the list of blendshapes: MP_BLENDSHAPES=["_neutral", "browDownLeft", "browDownRight", "browInnerUp", "browOuterUpLeft", "browOuterUpRight", "cheekPuff", "cheekSquintLeft", "cheekSquintRight", "eyeBlinkLeft", "eyeBlinkRight", "eyeLookDownLeft", "eyeLookDownRight", "eyeLookInLeft", "eyeLookInRight", "eyeLookOutLeft", "eyeLookOutRight", "eyeLookUpLeft", "eyeLookUpRight", "eyeSquintLeft", "eyeSquintRight", "eyeWideLeft", "eyeWideRight", "jawForward", "jawLeft", "jawOpen", "jawRight", "mouthClose", "mouthDimpleLeft", "mouthDimpleRight", "mouthFrownLeft", "mouthFrownRight", "mouthFunnel", "mouthLeft", "mouthLowerDownLeft", "mouthLowerDownRight", "mouthPressLeft", "mouthPressRight", "mouthPucker", "mouthRight", "mouthRollLower", "mouthRollUpper", "mouthShrugLower", "mouthShrugUpper", "mouthSmileLeft", "mouthSmileRight", "mouthStretchLeft", "mouthStretchRight", "mouthUpperUpLeft", "mouthUpperUpRight", "noseSneerLeft", "noseSneerRight", ]',
+                        required=False, type=str)
+
     parser.add_argument('--outcompositeframes', '--outcompositevideo',
                         help='Path to a videofile or directory for image files. Will have the same resolution and content of the input frames,'
                              ' plus the overlay of the face landmarks.'
@@ -408,6 +448,7 @@ if __name__ == '__main__':
                              ' The red landmarks, possibly normalized, and printed in the upper-left quadrant,'
                              ' are the outputted values',
                         required=False, type=str)
+
     parser.add_argument('--normalize-landmarks',
                         action='store_true',
                         help='If specified, neutralizes the head translation, rotation, and zoom.'
@@ -424,6 +465,7 @@ if __name__ == '__main__':
     nosetippositionpath = args.outnosetipposition
     facerotationpath = args.outfacerotation
     facescalepath = args.outfacescale
+    blendshapespath = args.outblendshapes
     compositeoutpath = args.outcompositeframes
     normalize_landmarks = args.normalize_landmarks
 
@@ -435,7 +477,7 @@ if __name__ == '__main__':
         frames_cons = create_frame_consumer(compositeoutpath) if compositeoutpath is not None else None
 
         try:
-            landmarksdata, nosetipdata, facerotdata, facescaledata =\
+            landmarksdata, nosetipdata, facerotdata, facescaledata, blendshapesdata =\
                 extract_face_data(frames_in=frames_prod,
                                   composite_frames_out=frames_cons,
                                   normalize_landmarks=normalize_landmarks)
@@ -452,7 +494,8 @@ if __name__ == '__main__':
             [(landmarkspath, landmarksdata),
              (nosetippositionpath, nosetipdata),
              (facerotationpath, facerotdata),
-             (facescalepath, facescaledata)]:
+             (facescalepath, facescaledata),
+             (blendshapespath, blendshapesdata)]:
 
         if filepath is not None:
             print("Saving numpy array to '{}'".format(filepath))

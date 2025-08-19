@@ -21,6 +21,7 @@ from .datagen import create_frame_producer
 TEST_VIDEO_PATH = pkg_resources.resource_filename("slvideotools.data", "testvideo.mp4")
 
 from .extract_face_data import MEDIAPIPE_FACE_LANDMARKS_COUNT
+from .extract_face_data import MEDIAPIPE_FACE_BLENDSHAPES_COUNT
 
 
 def test_trimming(tmp_path):
@@ -137,7 +138,7 @@ def test_face_data_extraction(tmp_path):
     with create_frame_producer(dir_or_video=TEST_VIDEO_PATH) as frame_prod,\
             create_frame_consumer(dir_or_video=os.path.join(tmp_path, "landmarks_composite.mp4")) as frame_cons:
 
-        landmarks_data, nosetip_data, facerotation_data, facescale_data = extract_face_data(
+        landmarks_data, nosetip_data, facerotation_data, facescale_data, blendshapes_data = extract_face_data(
             frames_in=frame_prod,
             composite_frames_out=frame_cons,
             normalize_landmarks=True)
@@ -146,12 +147,15 @@ def test_face_data_extraction(tmp_path):
     assert type(nosetip_data) == np.ndarray
     assert type(facerotation_data) == np.ndarray
     assert type(facescale_data) == np.ndarray
+    assert type(blendshapes_data) == np.ndarray
 
     assert len(landmarks_data.shape) == 3
     assert landmarks_data.shape[0] == n_frames
     assert landmarks_data.shape[1] == MEDIAPIPE_FACE_LANDMARKS_COUNT
     assert landmarks_data.shape[2] == 3
     assert landmarks_data.dtype == np.float32
+    landmarks_data_no_nan = np.nan_to_num(landmarks_data)
+    assert 0.0 <= np.min(landmarks_data_no_nan) <= np.max(landmarks_data_no_nan) <=  1.0
 
     assert len(nosetip_data.shape) == 2
     assert nosetip_data.shape[0] == n_frames
@@ -167,6 +171,13 @@ def test_face_data_extraction(tmp_path):
     assert len(facescale_data.shape) == 1
     assert facescale_data.shape[0] == n_frames
     assert facescale_data.dtype == np.float32
+
+    assert len(blendshapes_data.shape) == 2
+    assert blendshapes_data.shape[0] == n_frames
+    assert blendshapes_data.shape[1] == MEDIAPIPE_FACE_BLENDSHAPES_COUNT
+    assert blendshapes_data.dtype == np.float32
+    blendshapes_data_no_nan = np.nan_to_num(blendshapes_data)
+    assert 0.0 <= np.min(blendshapes_data_no_nan) <= np.max(blendshapes_data_no_nan) <=  1.0
 
 
 def test_motion_energy_computation(tmp_path):
