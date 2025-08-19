@@ -1,5 +1,4 @@
 import cv2
-import mediapipe as mp
 import numpy as np
 
 import math
@@ -10,10 +9,20 @@ from .datagen import VideoFrameProducer, VideoFrameConsumer
 from typing import List
 from typing import Tuple
 
-# Code to overlay the face mesh point taken from https://google.github.io/mediapipe/solutions/holistic.html
-mp_drawing = mp.solutions.drawing_utils
+# Extracts the face mesh data from the frames of a video using MediaPipe.
+# See: https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker
 
-MEDIAPIPE_FACE_LANDMARKS_COUNT = 468
+# Code to overlay the face mesh point taken from https://colab.research.google.com/github/googlesamples/mediapipe/blob/main/examples/face_landmarker/python/%5BMediaPipe_Python_Tasks%5D_Face_Landmarker.ipynb
+import mediapipe as mp
+from mediapipe.tasks import python as mp_python
+from mediapipe.tasks.python import vision as mp_vision
+VisionRunningMode = mp.tasks.vision.RunningMode
+
+
+
+MEDIAPIPE_FACE_LANDMARKS_COUNT = 478 
+
+MEDIAPIPE_FACE_BLENDSHAPES_COUNT = 52
 
 # Vertices numbers derived from uv texture or from FBX model.
 # Vertices on the front. Will be usd to compute the reference horizontal vector
@@ -28,7 +37,7 @@ VERTEX_ID_JAW_BASE_R = 132
 VERTEX_ID_NOSE_BASE = 168
 VERTEX_ID_NOSE_TIP = 4
 
-VERTICES_TO_DRAW = {
+VERTICES_TO_HIGHLIGHT = {
     VERTEX_ID_FRONT_TOP_RIGHT, VERTEX_ID_FRONT_TOP_LEFT,
     VERTEX_ID_EAR_TOP_R, VERTEX_ID_EAR_TOP_L,
     VERTEX_ID_JAW_BASE_R, VERTEX_ID_JAW_BASE_L,
@@ -37,6 +46,7 @@ VERTICES_TO_DRAW = {
 
 
 def vec_len(a: np.ndarray) -> float:
+    """Computes the length of a vector."""
 
     a = np.power(a, 2)
     a = a.sum()
@@ -47,7 +57,7 @@ def vec_len(a: np.ndarray) -> float:
 
 def normalize_face_landmarks(landmarks: List[List[float]], frame_width_px: int, frame_height_px: int,
                              nose_translation: np.ndarray, rot_mat: np.ndarray, scale: float) -> List[List[float]]:
-    """Performs a normalizatiopn of the orientation of the Mediapipe face landmarks using forehead and lateral
+    """Performs a normalization of the orientation of the Mediapipe face landmarks using forehead and lateral
      keypoints to build a rigid reference system
      """
 
@@ -187,9 +197,18 @@ def extract_face_data(frames_in: VideoFrameProducer,
     """
 
     # For video input:
-    mp_face_mesh = mp.solutions.face_mesh
-    face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.7, min_tracking_confidence=0.5,
-                                      static_image_mode=False, refine_landmarks=False)
+    #mp_face_mesh = mp.solutions.face_mesh
+    #face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.7, min_tracking_confidence=0.5,
+    #                                  static_image_mode=False, refine_landmarks=False)
+    
+    #
+    # Initialize the Mediapipe Face Landmarker 
+    base_options = mp_python.BaseOptions(model_asset_path='models/face_landmarker.task')
+    options = mp_vision.FaceLandmarkerOptions(base_options=base_options,
+                                            output_face_blendshapes=True,
+                                            output_facial_transformation_matrixes=True,
+                                            num_faces=1)
+    face_landmarker = mp_vision.FaceLandmarker.create_from_options(options)
 
     # Will store the H and W of the input video frame
     width = None
@@ -210,33 +229,41 @@ def extract_face_data(frames_in: VideoFrameProducer,
             height = rgb_image.shape[0]
 
         # To improve performance, optionally mark the image as not writeable to pass by reference.
-        rgb_image.flags.writeable = False
-        results = face_mesh.process(rgb_image)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
+        results = face_landmarker.detect(mp_image)
 
         # Check if at least one face is available
-        if results.multi_face_landmarks is None:
+        if len(results.face_landmarks) == 0:
             landmarks = None
             # We just fill in the data with NaNs
-            lm_list = [[float('nan')] * 3] * MEDIAPIPE_FACE_LANDMARKS_COUNT
+            orig_frame_lm_list = [[float('nan')] * 3] * MEDIAPIPE_FACE_LANDMARKS_COUNT
+            out_frame_lm_list = [[float('nan')] * 3] * MEDIAPIPE_FACE_LANDMARKS_COUNT
             nose_tip = np.asarray([float('nan')] * 3, dtype=np.float32)
             R = np.asarray([float('nan')] * 9, dtype=np.float32).reshape(3, 3)
             scale = float('nan')
         else:
 
             # Assume there is only one face
-            landmarks = results.multi_face_landmarks[0]
+            landmarks = results.face_landmarks[0]
+
+            assert len(landmarks) == MEDIAPIPE_FACE_LANDMARKS_COUNT
+
 
             # Map the list of landmarks into a bi-dimensional array (and convert it into a list)
-            lm_list = list(map(lambda l: [l.x, l.y, l.z], landmarks.landmark))
+            orig_frame_lm_list = list(map(lambda l: [l.x, l.y, l.z], landmarks))
 
-            nose_tip, R, scale = compute_normalization_params(landmarks=lm_list, frame_width_px=width, frame_height_px=height)
+            nose_tip, R, scale = compute_normalization_params(landmarks=orig_frame_lm_list, frame_width_px=width, frame_height_px=height)
 
             if normalize_landmarks:
-                lm_list = normalize_face_landmarks(landmarks=lm_list, frame_width_px=width, frame_height_px=height,
+                out_frame_lm_list = normalize_face_landmarks(landmarks=orig_frame_lm_list, frame_width_px=width, frame_height_px=height,
                                                    nose_translation=nose_tip, rot_mat=R, scale=scale)
+            else:
+                out_frame_lm_list = orig_frame_lm_list
 
-        assert type(lm_list) == list
-        assert len(lm_list) == MEDIAPIPE_FACE_LANDMARKS_COUNT
+        assert type(orig_frame_lm_list) == list
+        assert type(out_frame_lm_list) == list
+        assert len(orig_frame_lm_list) == MEDIAPIPE_FACE_LANDMARKS_COUNT
+        assert len(out_frame_lm_list) == MEDIAPIPE_FACE_LANDMARKS_COUNT
         assert type(nose_tip) == np.ndarray
         assert nose_tip.shape == (3,)
         assert type(R) == np.ndarray
@@ -249,7 +276,7 @@ def extract_face_data(frames_in: VideoFrameProducer,
         out_scales = np.append(out_scales, [np.float32(scale)], axis=0)
 
         # Append to frames container
-        out_landmarks_list.append(lm_list)
+        out_landmarks_list.append(out_frame_lm_list)
 
         #
         # Manage composite video output
@@ -261,41 +288,14 @@ def extract_face_data(frames_in: VideoFrameProducer,
             # Draw face mesh landmarks on the overlay image.
             if landmarks is not None:
 
-                # Let's use 1 pixel radius every 500 pixels of video. Can be 0, but it is OK.
-                norm_landmark_radius = int(width / 500)
+                # Let's use 1 pixel radius every 500 pixels of video.
+                norm_landmark_radius = max(1, int(width / 600))
                 # Set the thickness as the same as the radius.
                 norm_landmark_thickness = norm_landmark_radius
-                # Drawing specifications for MediaPipe
-                drawing_specs = mp_drawing.DrawingSpec(color=mp_drawing.RED_COLOR,
-                                                       circle_radius=norm_landmark_radius,
-                                                       thickness=norm_landmark_thickness)
 
-                # print('face_landmarks:', face_landmarks)
-                mp_drawing.draw_landmarks(
-                    image=annotated_image,
-                    landmark_list=landmarks,
-                    landmark_drawing_spec=drawing_specs
-                )
-
-                #
-                # DEBUG: save the landmarks to a file
-                # import pickle
-                # with open("landmarks-{:010d}.pck".format(frame_num), "wb") as outfile:
-                #     pickle.dump(obj=lm_list, file=outfile)
-
-                #
-                # Print landmarks with custom routine
-                # Fill the upper left quarter of the image using a orthographic projection (i.e., use only x and y)
-                # and we use the depth to modulate the color intensity.
-
-                # First compute the dynamic range of the z coordinate among all points
-                zs = [p[2] for p in lm_list]
-                z_min = min(zs)
-                z_max = max(zs)
-                z_range = z_max - z_min
-
-                # Draw the landmarks
-                for i, lm in enumerate(lm_list):
+                # 
+                # Draw the landmarks over the face
+                for i, lm in enumerate(orig_frame_lm_list):
                     lm_x, lm_y, lm_z = lm[:]
 
                     # If a coordinate is NaN, it's because the face was not found
@@ -305,8 +305,46 @@ def extract_face_data(frames_in: VideoFrameProducer,
                     # As the landmarks are already normalized in a range [0,1],
                     # bring them to the half of the output frame resolution
 
+                    lm_x *= width
+                    lm_y *= height
+
+                    if i in VERTICES_TO_HIGHLIGHT:
+                        vcol = (20, 220, 220)
+                    else:
+                        vcol = (20, 20, 220)
+
+                    cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=norm_landmark_radius,
+                               color=vcol, thickness=norm_landmark_thickness)
+
+                #
+                # DEBUG: save the landmarks to a file
+                # import pickle
+                # with open("landmarks-{:010d}.pck".format(frame_num), "wb") as outfile:
+                #     pickle.dump(obj=lm_list, file=outfile)
+
+                #
+                # Draw the landmarks in the upper left corner of the image using a orthographic projection (i.e., use only x and y)
+                # and we use the depth to modulate the color intensity.
+
+                # First compute the dynamic range of the z coordinate among all points
+                zs = [p[2] for p in out_frame_lm_list]
+                z_min = min(zs)
+                z_max = max(zs)
+                z_range = z_max - z_min
+
+                # Draw the landmarks
+                for i, lm in enumerate(out_frame_lm_list):
+                    lm_x, lm_y, lm_z = lm[:]
+
+                    # If a coordinate is NaN, it's because the face was not found
+                    if math.isnan(lm_x):
+                        continue
+
+                    # As the landmarks are already normalized in a range [0,1],
+                    # bring them to the half of the output frame resolution
                     lm_x *= width / 2
                     lm_y *= height / 2
+                    # rescale z in [0,1]
                     norm_z = 1 - ((lm_z - z_min) / z_range)
 
                     cv2.circle(img=annotated_image, center=(int(lm_x), int(lm_y)), radius=norm_landmark_radius,

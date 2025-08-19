@@ -17,8 +17,11 @@ Types of changes:
 
 ## [Unreleased]
 
-
 ### Changed
+
+- Switched from old mediapipe 0.8 Facemesh solution to new 0.10 FaceLandmarker
+  - Number of landmasks increased from 468 to 478! Output shape of the landmark infomation numpy file is changed!
+
 
 ## [0.3] - 2025-08-14
 

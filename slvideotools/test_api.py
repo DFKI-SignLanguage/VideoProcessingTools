@@ -20,6 +20,8 @@ from .datagen import create_frame_producer
 
 TEST_VIDEO_PATH = pkg_resources.resource_filename("slvideotools.data", "testvideo.mp4")
 
+from .extract_face_data import MEDIAPIPE_FACE_LANDMARKS_COUNT
+
 
 def test_trimming(tmp_path):
     #
@@ -147,7 +149,7 @@ def test_face_data_extraction(tmp_path):
 
     assert len(landmarks_data.shape) == 3
     assert landmarks_data.shape[0] == n_frames
-    assert landmarks_data.shape[1] == 468
+    assert landmarks_data.shape[1] == MEDIAPIPE_FACE_LANDMARKS_COUNT
     assert landmarks_data.shape[2] == 3
     assert landmarks_data.dtype == np.float32
 
@@ -180,6 +182,8 @@ def test_motion_energy_computation(tmp_path):
     # Limit to a few keyframes to speed-up the test
     FRAME_START = 10
     FRAME_END = 100
+
+    assert n_frames > FRAME_END, "Test video must have more frames than FRAME_END"
 
     with create_frame_producer(dir_or_video=TEST_VIDEO_PATH) as frame_prod:
 
