@@ -19,11 +19,13 @@ Types of changes:
 
 ### Changed
 
-- Switched from old mediapipe 0.8 Facemesh solution to new 0.10 FaceLandmarker.
-  - Number of landmasks increased from 468 to 478! Output shape of the landmark infomation numpy file is changed!
+## [0.4] - 2025-08-20
+
+- Switched from old mediapipe 0.8 FaceMesh solution to new 0.10 FaceLandmarker.
+  - Number of landmasks increased from 468 to 478!Thus, the output shape of the landmark infomation numpy file is changed to [N][478][3].
 - Removed cv2 dependency from face extraction.
   - Now OpenCV is needed only for the computation of the motion energy.
-- Added code to extract blendshape data from faces. 52 blendshapes are optionally saved into a numyp array. See option --outblendshapes in extract_face_data module.
+- Added code to extract blendshape data from faces. 52 blendshapes are optionally saved into a numyp array of shape [N][52]. See option --outblendshapes in `extract_face_data` module.
 
 ## [0.3] - 2025-08-14
 
