@@ -85,7 +85,7 @@ Watch here the [crop_video help text](Docs/Help/crop_video.txt)
 
 _Warning!!!_ The resolution of the output video might differ from the width/height specified in the JSON file. This is due to limitations of some codecs.
 
-### Extract Face Mesh
+### Extract Face Data
 
 Finds a face in the video and uses MediaPipe to extract landmarks and other head transformation data.
 
@@ -112,6 +112,8 @@ If the normalization flag is active, reverse-transformations are applied and the
 The normalization is performed assuming that some of the points at the border of the face have no (or very limited) deformation during the execution of facial expressions.
 Hence, those points are used to compute a "rigid" orthogonal system. The advantage is that we don't need any other MediaPipe module to estimate the rotation of the head.
 The following pic shows the vectors used for the normalization process. It helps understanding the implementation of the `compute_normalization_params()` function.
+
+Since v0.4, the tool uses mediapipe 0.10 FaceLandmarker and can also extract AR-Kit complatible blendshapes.
 
 ![Vectors used for the face landmarks normalization](Docs/Pics/face_normalization_notes.png)
 
