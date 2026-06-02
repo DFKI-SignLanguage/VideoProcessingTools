@@ -2,6 +2,7 @@
 # See: https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker
 
 import math
+from pathlib import Path
 
 import numpy as np
 
@@ -17,10 +18,9 @@ from PIL import ImageDraw
 import PIL.ImageFont
 
 from .datagen import create_frame_producer, create_frame_consumer
-from .datagen import VideoFrameProducer, VideoFrameConsumer
+from .datagen import FrameProducer, FrameConsumer
 
-from typing import List
-from typing import Tuple
+from typing import List, Tuple, Optional
 
 
 MEDIAPIPE_FACE_LANDMARKS_COUNT = 478 
@@ -182,8 +182,8 @@ def compute_normalization_params(landmarks: List[List[float]],
     return nose_tip, R, scale
 
 
-def extract_face_data(frames_in: VideoFrameProducer,
-                      composite_frames_out: VideoFrameConsumer = None,
+def extract_face_data(frames_in: FrameProducer,
+                      composite_frames_out: Optional[FrameConsumer] = None,
                       normalize_landmarks: bool = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Extract the MediaPipe face mesh data from the specified videofile.
@@ -206,8 +206,9 @@ def extract_face_data(frames_in: VideoFrameProducer,
     #                                  static_image_mode=False, refine_landmarks=False)
     
     #
-    # Initialize the Mediapipe Face Landmarker 
-    base_options = mp_python.BaseOptions(model_asset_path='models/face_landmarker.task')
+    # Initialize the Mediapipe Face Landmarker
+    models_dir_path = Path(__file__).parent.parent / 'models'
+    base_options = mp_python.BaseOptions(model_asset_path=str(models_dir_path / 'face_landmarker.task'))
     options = mp_vision.FaceLandmarkerOptions(base_options=base_options,
                                             output_face_blendshapes=True,
                                             output_facial_transformation_matrixes=True,
@@ -215,8 +216,8 @@ def extract_face_data(frames_in: VideoFrameProducer,
     face_landmarker = mp_vision.FaceLandmarker.create_from_options(options)
 
     # Will store the H and W of the input video frame
-    width = None
-    height = None
+    width: Optional[int] = None
+    height: Optional[int] = None
 
     # Accumulators that wil contain the data for all frames.
     out_landmarks_list = []
@@ -234,11 +235,16 @@ def extract_face_data(frames_in: VideoFrameProducer,
         if width is None:
             width = rgb_image.shape[1]
             height = rgb_image.shape[0]
+            assert (height is not None)
 
             # Prepare the font size according to the video resolution
             font_size = max(10, height // MEDIAPIPE_FACE_BLENDSHAPES_COUNT)
             font_size = 32 if font_size > 32 else font_size
             pil_font = PIL.ImageFont.load_default(size=font_size)
+
+        assert (width is not None)
+        assert (height is not None)
+        assert (pil_font is not None)
 
         #
         # RUN MEDIAPIPE FACE LANDMARKER
