@@ -6,6 +6,7 @@
 
 #local data
 First10/
+models/*.task
 # MacOS stuff
 .DS_Store
 
