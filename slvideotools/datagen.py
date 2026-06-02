@@ -5,11 +5,13 @@ from abc import ABC
 from abc import abstractmethod
 
 import PIL
+import PIL.Image
 from PIL.Image import Image
 import ffmpeg
 import numpy as np
 
 from typing import List
+from collections.abc import Generator
 
 import os
 
@@ -28,7 +30,7 @@ VIDEO_FORMATS = {'mp4', 'mov'}
 class FrameProducer(ABC):
 
     @abstractmethod
-    def frames(self) -> np.ndarray:
+    def frames(self) -> Generator[np.ndarray]:
         """Generator. Returns, one-by-one, all of the available frames."""
         pass
 
@@ -64,7 +66,7 @@ class ImageDirFrameProducer(FrameProducer):
         # Take the list of all files in the directory and sort them alphabetically
         self.dir_filenames: List[str] = sorted(os.listdir(self.dir_path))
 
-    def frames(self) -> np.ndarray:
+    def frames(self) -> Generator[np.ndarray]:
 
         for file_name in self.dir_filenames:
 
@@ -125,9 +127,9 @@ class VideoFrameProducer(FrameProducer):
             .run_async(pipe_stdout=True)
         )
 
-    def frames(self) -> np.ndarray:
+    def frames(self) -> Generator[np.ndarray]:
         while True:
-            in_bytes = self._ffmpeg_read_process.stdout.read(self._video_w * self._video_h * 3)
+            in_bytes = self._ffmpeg_read_process.stdout.read(self._video_w * self._video_h * 3) # type: ignore
             if not in_bytes:
                 break
 
