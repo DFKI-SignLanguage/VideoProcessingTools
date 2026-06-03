@@ -10,4 +10,5 @@ jobs:
       #- run: cd VideoProcessingTools
       - run: sudo apt update && sudo apt install ffmpeg
       - run: pip install -r requirements.txt
+      - run: mkdir -p models && wget -q -O models/face_landmarker.task https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
       - run: pytest
