@@ -4,11 +4,13 @@
 *.pyc
 .*json
 
-#local data
-First10/
+# Python environment
+venv
+.venv
+
+# Local data
 models/*.task
+
 # MacOS stuff
 .DS_Store
 
-venv
-.venv
