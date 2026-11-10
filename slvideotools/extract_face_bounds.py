@@ -1,4 +1,6 @@
 import mediapipe as mp
+from mediapipe.tasks import python as mp_python
+from mediapipe.tasks.python import vision as mp_vision
 from mtcnn import MTCNN
 import numpy as np
 
@@ -9,58 +11,92 @@ from .datagen import FrameProducer
 from .datagen import create_frame_producer
 
 import json
+from pathlib import Path
 from typing import List
 from typing import Tuple
 from typing import Union
 from typing import Optional
 
-mp_face_detection = mp.solutions.face_detection
-mp_pose = mp.solutions.pose
-mp_holistic = mp.solutions.holistic
+# Models must be downloaded into the `models` directory. See models/README.txt
+MODELS_DIR_PATH = Path(__file__).parent.parent / 'models'
+FACE_DETECTOR_MODEL_PATH = MODELS_DIR_PATH / 'blaze_face_short_range.tflite'
+POSE_LANDMARKER_MODEL_PATH = MODELS_DIR_PATH / 'pose_landmarker_heavy.task'
 
 
-def _get_head_region_info(image: np.ndarray, pose_detector: mp_pose.Pose)\
+
+class PoseLandmark:
+    """Indices of the used landmarks in the 33-points MediaPipe (BlazePose) body topology.
+    Defined here because `mp_vision.PoseLandmark` is exported only by mediapipe >= 1.0."""
+    NOSE = 0
+    LEFT_SHOULDER = 11
+    RIGHT_SHOULDER = 12
+
+
+def _create_face_detector() -> mp_vision.FaceDetector:
+    base_options = mp_python.BaseOptions(model_asset_path=str(FACE_DETECTOR_MODEL_PATH))
+    options = mp_vision.FaceDetectorOptions(base_options=base_options,
+                                            running_mode=mp_vision.RunningMode.IMAGE,
+                                            min_detection_confidence=0.5)
+    return mp_vision.FaceDetector.create_from_options(options)
+
+
+def _create_pose_detector() -> mp_vision.PoseLandmarker:
+    base_options = mp_python.BaseOptions(model_asset_path=str(POSE_LANDMARKER_MODEL_PATH))
+    options = mp_vision.PoseLandmarkerOptions(base_options=base_options,
+                                              running_mode=mp_vision.RunningMode.IMAGE,
+                                              num_poses=1,
+                                              min_pose_detection_confidence=0.5)
+    return mp_vision.PoseLandmarker.create_from_options(options)
+
+
+def _to_mp_image(image: np.ndarray) -> mp.Image:
+    return mp.Image(image_format=mp.ImageFormat.SRGB, data=np.ascontiguousarray(image))
+
+
+def _get_head_region_info(image: np.ndarray, pose_detector: mp_vision.PoseLandmarker)\
         -> Union[None, Tuple[Tuple[float, float], Tuple[float, float], Tuple[float, float]]]:
     """
         Find the ROI containing the face from an input image
 
-        :param image: input BGR (cv2 format) image of type np.ndarray and shape [height, width, 3]
-        :param pose_detector: the MediaPipe pose detector
+        :param image: input RGB image of type np.ndarray and shape [height, width, 3]
+        :param pose_detector: the MediaPipe pose landmarker
 
         :returns List[nose, rshoulder, lshoulder]. Each element is a 2-size ndarray with 2D landmark coordinates in pixel space.
         Or returns None if no body could be detected
     """
 
     image_height, image_width, _ = image.shape
-    # Convert the BGR image to RGB before processing.
-    results = pose_detector.process(image)
+    results = pose_detector.detect(_to_mp_image(image))
 
     # Get the pose keypoint of the whole body
     if not results.pose_landmarks:
         return None
 
+    # Landmarks of the first detected body
+    landmarks = results.pose_landmarks[0]
+
     # Selection of the necessary part from landmarks
-    nose = (results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].x * image_width,
-                     results.pose_landmarks.landmark[mp_holistic.PoseLandmark.NOSE].y * image_height)
-    rshoulder = (results.pose_landmarks.landmark[mp_holistic.PoseLandmark.RIGHT_SHOULDER].x * image_width,
-                          results.pose_landmarks.landmark[mp_holistic.PoseLandmark.RIGHT_SHOULDER].y * image_height)
-    lshoulder = (results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_SHOULDER].x * image_width,
-                          results.pose_landmarks.landmark[mp_holistic.PoseLandmark.LEFT_SHOULDER].y * image_height)
+    nose = (landmarks[PoseLandmark.NOSE].x * image_width,
+            landmarks[PoseLandmark.NOSE].y * image_height)
+    rshoulder = (landmarks[PoseLandmark.RIGHT_SHOULDER].x * image_width,
+                 landmarks[PoseLandmark.RIGHT_SHOULDER].y * image_height)
+    lshoulder = (landmarks[PoseLandmark.LEFT_SHOULDER].x * image_width,
+                 landmarks[PoseLandmark.LEFT_SHOULDER].y * image_height)
 
     return nose, rshoulder, lshoulder
 
 
 def _get_face_bounds_mediapipe(image: np.ndarray,
-                               face_detector: mp_face_detection.FaceDetection,
+                               face_detector: mp_vision.FaceDetector,
                                head_focus: bool = False,
-                               pose_detector: mp_pose.Pose = None) -> Optional[Tuple[int, int, int, int]]:
+                               pose_detector: Optional[mp_vision.PoseLandmarker] = None) -> Optional[Tuple[int, int, int, int]]:
     """
     Detects the bounds of the face using the mediapipe framework
 
     :param image: RGB image pixels
-    :param face_detection: The MediaPipe face detection solution
+    :param face_detector: The MediaPipe face detector
     :param head_focus: If True, first we try to get the body location (shoulders, nose), and search there
-    :param pose_detector: If head_focus if used, this must be an initialized MediaPipe Pose instance
+    :param pose_detector: If head_focus if used, this must be an initialized MediaPipe PoseLandmarker instance
     :return: A 4-tuple with [x, y, width, height] of the bounds containing the face, or None if no face was found.
     """
 
@@ -93,24 +129,21 @@ def _get_face_bounds_mediapipe(image: np.ndarray,
             # crop the bbox, if a body was visible from the front
             if w > 0 and h > 0:
                 image = image[y:y + h, x:x + w]
-                # the `face_detection.process()` requires a contiguous array
-                image = np.ascontiguousarray(image)
 
-    # Process the image with MediaPipe Face Detection.
-    results = face_detector.process(image)
+    # Process the image with MediaPipe Face Detector.
+    results = face_detector.detect(_to_mp_image(image))
 
     if not results.detections:  # if no face can be detected -> None
         return None
 
-    # we assume that there is always at least 1 face
-    bbox_face = results.detections[0].location_data.relative_bounding_box
-    # Map [0,1] bbox_face range to pixel space
-    xm, ym, wm, hm = bbox_face.xmin * w, bbox_face.ymin * h, bbox_face.width * w, bbox_face.height * h
+    # we assume that there is always at least 1 face.
+    # The Tasks API returns the bounding box already in pixel space (of the possibly cropped image).
+    bbox_face = results.detections[0].bounding_box
     # shift back to the original pixel space
-    x += int(xm)
-    y += int(ym)
+    x += bbox_face.origin_x
+    y += bbox_face.origin_y
 
-    return x, y, int(wm), int(hm)
+    return x, y, bbox_face.width, bbox_face.height
 
 
 def _get_face_bounds_mtcnn(image: np.ndarray, detector: MTCNN) -> Optional[Tuple[int, int, int, int]]:
@@ -158,9 +191,9 @@ def extract_face_bounds(frames_in: FrameProducer,
     mp_face_detector = None
     mp_pose_detector = None
     if method == "mediapipe":
-        mp_face_detector = mp_face_detection.FaceDetection(min_detection_confidence=0.5)
+        mp_face_detector = _create_face_detector()
         if head_focus:
-            mp_pose_detector = mp_pose.Pose(static_image_mode=True, model_complexity=2, min_detection_confidence=0.5)
+            mp_pose_detector = _create_pose_detector()
 
     # Init MTCNN class
     mtcnn_detector = None

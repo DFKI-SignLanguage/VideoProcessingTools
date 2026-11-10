@@ -10,6 +10,7 @@ venv
 
 # Local data
 models/*.task
+models/*.tflite
 
 # MacOS stuff
 .DS_Store
