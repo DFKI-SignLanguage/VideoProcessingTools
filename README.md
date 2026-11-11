@@ -251,16 +251,11 @@ Install the frozen requirements:
 OR freshly install the following packages:
 
 ```
-pip install numpy==1.26.4
-pip install pillow==11.3.0
-
+pip install mediapipe==1.2.2
+pip install pytest==9.2.0
 pip install ffmpeg-python==0.2.0
-pip install opencv-python==4.9.0.80
-
-pip install mediapipe==0.10.21
-pip install tensorflow==2.19.0
 pip install mtcnn==1.0.0
-
+pip install tensorflow==2.21.0
 pip install pytest==8.4.1
 ```
 
