@@ -2,13 +2,19 @@ name: run-tests
 on: [push]
 jobs:
   pytester:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
-      - run: python3.11 -m venv p3env-videotools
-      - run: source p3env-videotools/bin/activate
-      #- run: cd VideoProcessingTools
-      - run: sudo apt update && sudo apt install ffmpeg
-      - run: pip install -r requirements.txt
-      - run: mkdir -p models && wget -q -O models/face_landmarker.task https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
-      - run: pytest
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: sudo apt update && sudo apt install -y ffmpeg
+      - run: python -m pip install -r requirements.txt
+      - name: Download MediaPipe models
+        run: |
+          mkdir -p models
+          wget -q -O models/face_landmarker.task https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
+          wget -q -O models/blaze_face_short_range.tflite https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite
+          wget -q -O models/pose_landmarker_heavy.task https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/latest/pose_landmarker_heavy.task
+      - run: python -m pytest
