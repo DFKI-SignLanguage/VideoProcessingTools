@@ -10,6 +10,7 @@
 # Local data
 models/*.task
 models/*.tflite
+*.local.*
 
 # MacOS stuff
 .DS_Store
