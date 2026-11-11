@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: python3 -m venv p3env-videotools
+      - run: python3.11 -m venv p3env-videotools
       - run: source p3env-videotools/bin/activate
       #- run: cd VideoProcessingTools
       - run: sudo apt update && sudo apt install ffmpeg
