@@ -1,4 +1,4 @@
-# Chengelog
+# Changelog
 
 Template and more info at <https://keepachangelog.com/en/1.0.0/>. 
 
@@ -18,6 +18,22 @@ Types of changes:
 ## [Unreleased]
 
 ### Changed
+
+## [0.6] - 2026-11-11
+
+- Updated dependencies to the latest MediaPipe (0.10.30, then 1.2.2), TensorFlow 2.21.0, NumPy 2.x and OpenCV 5.0.
+- Ported face bounds extraction (`extract_face_bounds`) from the legacy `mp.solutions` API (FaceDetection, Pose) to the MediaPipe Tasks API (`FaceDetector`, `PoseLandmarker`).
+  - Two more models are needed in the `models/` directory: `blaze_face_short_range.tflite` and `pose_landmarker_heavy.task`. See `models/README.txt` for download links.
+- Updated the installation instructions in the README.
+- Added a `MediaPipeDocs/` folder with MediaPipe model cards (BlazeFace, Face Mesh V2, Blendshape V2) and the full-size face landmarks map, for quick reference.
+- CI: tests now run on Ubuntu 24.04 with Python 3.11 and download all the required MediaPipe models.
+
+## [0.5] - 2026-06-24
+
+- Added the explicit list of the 52 blendshape names (`MEDIAPIPE_FACE_BLENDSHAPES`) to the `extract_face_data` module.
+- Fixed: the face landmarker model is now loaded from the package `models/` directory instead of a path relative to the current working directory.
+- Fixed many type-check issues (annotations in `extract_face_data` and in the `frames()` generator).
+- CI: the GitHub test workflow now downloads the face landmarker model.
 
 ## [0.4] - 2025-08-20
 
