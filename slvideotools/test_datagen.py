@@ -9,13 +9,16 @@ from .datagen import create_frame_producer
 from .datagen import create_frame_consumer
 
 from .common import video_info
+from .common import video_info_ext
 
-import pkg_resources
+import json
+
+from importlib.resources import files
 
 import numpy as np
 
-TEST_FRAMES_PATH = pkg_resources.resource_filename("slvideotools.data", "frames")
-TEST_VIDEO_PATH = pkg_resources.resource_filename("slvideotools.data", "testvideo.mp4")
+TEST_FRAMES_PATH = str(files("slvideotools.data") / "frames")
+TEST_VIDEO_PATH = str(files("slvideotools.data") / "testvideo.mp4")
 
 
 def test_image_files_production(tmp_path):
@@ -67,6 +70,23 @@ def test_video_frames_production(tmp_path):
     assert w == w2
     assert h == h2
     assert n_frames == n_frames2
+
+
+def test_video_info_ext():
+    """Test that the extended video info is consistent with video_info() and adds a valid frame rate."""
+
+    w, h, n_frames = video_info(TEST_VIDEO_PATH)
+    info = video_info_ext(TEST_VIDEO_PATH)
+
+    assert set(info.keys()) == {"width", "height", "n_frames", "fps"}
+    assert info["width"] == w
+    assert info["height"] == h
+    assert info["n_frames"] == n_frames
+    assert isinstance(info["fps"], float)
+    assert info["fps"] > 0
+
+    # Must be serializable as JSON
+    assert json.loads(json.dumps(info)) == info
 
 
 def test_factory_methods():

@@ -37,6 +37,35 @@ def video_info(video_path: str) -> Tuple[int, int, int]:
     return video_w, video_h, n_frames
 
 
+def video_info_ext(video_path: str) -> dict:
+    """
+    Extended version of `video_info()`, returning the information as a JSON-serializable dictionary.
+
+    :param video_path: Path to a valid video file
+    :return: A dictionary with keys:
+        "width" (int), "height" (int), "n_frames" (int), and "fps" (float, the stream's nominal frame rate).
+    """
+
+    from fractions import Fraction
+
+    info = ffmpeg.probe(video_path)
+    video_streams = [stream for stream in info['streams'] if stream['codec_type'] == 'video']
+    if len(video_streams) == 0:
+        raise BaseException("No video streams found in file '{}'".format(video_path))
+
+    info_video = video_streams[0]
+
+    # The frame rate is reported as a fraction string, e.g. "24000/1001" or "50/1"
+    fps = float(Fraction(info_video['r_frame_rate']))
+
+    return {
+        "width": int(info_video['width']),
+        "height": int(info_video['height']),
+        "n_frames": int(info_video['nb_frames']),
+        "fps": fps,
+    }
+
+
 # https://en.wikipedia.org/wiki/Point_reflection
 def reflect(c: Tuple[float, float], P: Tuple[float, float]) -> Tuple[float, float]:
     """ 

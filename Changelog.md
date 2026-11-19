@@ -17,7 +17,13 @@ Types of changes:
 
 ## [Unreleased]
 
+### Added
+
+- `common.video_info_ext()`: returns width, height, number of frames, and frame rate (fps) of a video as a JSON-serializable dictionary. The existing `video_info()` is unchanged.
+
 ### Changed
+
+- Tests: replaced the deprecated `pkg_resources` (removed from setuptools ≥ 81) with `importlib.resources.files()` to locate the package test data.
 
 ## [0.6] - 2026-11-11
 

@@ -1,6 +1,6 @@
 import pytest
 
-import pkg_resources
+from importlib.resources import files
 import os
 import json
 
@@ -18,7 +18,7 @@ from .datagen import create_frame_consumer
 from .datagen import create_frame_producer
 
 
-TEST_VIDEO_PATH = pkg_resources.resource_filename("slvideotools.data", "testvideo.mp4")
+TEST_VIDEO_PATH = str(files("slvideotools.data") / "testvideo.mp4")
 
 from .extract_face_data import MEDIAPIPE_FACE_LANDMARKS_COUNT
 from .extract_face_data import MEDIAPIPE_FACE_BLENDSHAPES_COUNT
