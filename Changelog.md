@@ -20,6 +20,7 @@ Types of changes:
 ### Added
 
 - `common.video_info_ext()`: returns width, height, number of frames, and frame rate (fps) of a video as a JSON-serializable dictionary. The existing `video_info()` is unchanged.
+- `datagen.VideoFrameConsumer`: new optional constructor parameter `ffmpeg_params`, a dictionary of extra keyword arguments for the `ffmpeg.input()` call, e.g. `{"framerate": 50}` to set the output frame rate (default remains ffmpeg's 25 fps).
 
 ### Changed
 

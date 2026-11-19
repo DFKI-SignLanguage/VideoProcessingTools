@@ -72,6 +72,26 @@ def test_video_frames_production(tmp_path):
     assert n_frames == n_frames2
 
 
+def test_video_consumer_ffmpeg_params(tmp_path):
+    """Test that the ffmpeg_params of the VideoFrameConsumer are used, e.g., to set the output frame rate."""
+
+    video_path = str(tmp_path / "video_50fps.mp4")
+    target_fps = 50
+
+    with VideoFrameProducer(video_in=TEST_VIDEO_PATH) as prod,\
+         VideoFrameConsumer(video_out=video_path, ffmpeg_params={"framerate": target_fps}) as cons:
+        for frame in prod.frames():
+            cons.consume(frame)
+
+    in_info = video_info_ext(TEST_VIDEO_PATH)
+    out_info = video_info_ext(video_path)
+
+    assert out_info["fps"] == target_fps
+    assert out_info["width"] == in_info["width"]
+    assert out_info["height"] == in_info["height"]
+    assert out_info["n_frames"] == in_info["n_frames"]
+
+
 def test_video_info_ext():
     """Test that the extended video info is consistent with video_info() and adds a valid frame rate."""
 

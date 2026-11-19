@@ -11,6 +11,7 @@ import ffmpeg
 import numpy as np
 
 from typing import List
+from typing import Optional
 from collections.abc import Generator
 
 import os
@@ -209,9 +210,16 @@ class ImageDirFrameConsumer(FrameConsumer):
 
 class VideoFrameConsumer(FrameConsumer):
 
-    def __init__(self, video_out: str):
+    def __init__(self, video_out: str, ffmpeg_params: Optional[dict] = None):
+        """
+        :param video_out: Path to the video file to write.
+        :param ffmpeg_params: Optional dictionary of extra keyword arguments for the `ffmpeg.input()` call
+            that reads the raw frames, e.g. `{"framerate": 50}` to set the frame rate of the output video
+            (ffmpeg defaults to 25 fps). The keys `format`, `pix_fmt`, and `s` are already set by the consumer.
+        """
 
         self._target_video_path = video_out
+        self._ffmpeg_params = dict(ffmpeg_params) if ffmpeg_params is not None else {}
 
         # There will be a lazy initialization as soon as we know the frame size
         self._ffmpeg_video_out_process = None
@@ -240,7 +248,8 @@ class VideoFrameConsumer(FrameConsumer):
 
             self._ffmpeg_video_out_process = (
                 ffmpeg
-                .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height))
+                .input('pipe:', format='rawvideo', pix_fmt='rgb24', s='{}x{}'.format(width, height),
+                       **self._ffmpeg_params)
                 .output(self._target_video_path, pix_fmt='yuv420p')
                 .overwrite_output()
                 .run_async(pipe_stdin=True)
