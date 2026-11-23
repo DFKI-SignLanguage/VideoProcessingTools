@@ -127,6 +127,9 @@ python -m slvideotools.extract_body_data --help
 
 Watch here the [extract_body_data help text](Docs/Help/extract_body_data.txt)
 
+<img src="Docs/Pics/video_body_data.png" width="30%" alt="Video with moving body">
+
+
 For a reference about the landmark IDs and their location on the body, please see the official MediaPipe docs [Here](https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker).
 The model `pose_landmarker_heavy.task` must be in the `models/` directory (see `models/README.txt`).
 

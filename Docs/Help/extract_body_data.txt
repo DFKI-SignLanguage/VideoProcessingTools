@@ -1,13 +1,12 @@
-usage: python -m slvideotools.extract_body_data [-h] --inframes INFRAMES
-                                                --outlandmarks OUTLANDMARKS
-                                                [--outvisibility OUTVISIBILITY]
-                                                [--outcompositeframes OUTCOMPOSITEFRAMES]
+usage: extract_body_data.py [-h] --inframes INFRAMES --outlandmarks
+                            OUTLANDMARKS [--outvisibility OUTVISIBILITY]
+                            [--outcompositeframes OUTCOMPOSITEFRAMES]
 
 Uses mediapipe to extract the body landmarks data from the frames of a video.
 
 options:
   -h, --help            show this help message and exit
-  --inframes, --invideo INFRAMES
+  --inframes INFRAMES, --invideo INFRAMES
                         Path to a video or image directory providing the
                         frames with the body of a person. For a video, the
                         frame rate is read from the file and the landmarks are
@@ -30,7 +29,7 @@ options:
                         storing the MediaPipe <visibility,presence> scores of
                         each landmark, in range [0,1]. Inside a frame, if no
                         bodies are detected, all values are NaN!
-  --outcompositeframes, --outcompositevideo OUTCOMPOSITEFRAMES
+  --outcompositeframes OUTCOMPOSITEFRAMES, --outcompositevideo OUTCOMPOSITEFRAMES
                         Path to a videofile or directory for image files. Will
                         have the same resolution and content of the input
                         frames, plus the overlay of the body landmarks and
