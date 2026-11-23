@@ -22,6 +22,11 @@ def test_cli_extract_face_data():
     assert exit_status == 0
 
 
+def test_cli_extract_body_data():
+    exit_status = os.system('python -m slvideotools.extract_body_data --help')
+    assert exit_status == 0
+
+
 def test_cli_trim_video():
     exit_status = os.system('python -m slvideotools.trim_video --help')
     assert exit_status == 0

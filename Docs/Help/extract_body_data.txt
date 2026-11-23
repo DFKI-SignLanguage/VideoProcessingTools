@@ -1,0 +1,40 @@
+usage: python -m slvideotools.extract_body_data [-h] --inframes INFRAMES
+                                                --outlandmarks OUTLANDMARKS
+                                                [--outvisibility OUTVISIBILITY]
+                                                [--outcompositeframes OUTCOMPOSITEFRAMES]
+
+Uses mediapipe to extract the body landmarks data from the frames of a video.
+
+options:
+  -h, --help            show this help message and exit
+  --inframes, --invideo INFRAMES
+                        Path to a video or image directory providing the
+                        frames with the body of a person. For a video, the
+                        frame rate is read from the file and the landmarks are
+                        tracked across frames (MediaPipe VIDEO mode). For an
+                        image directory, every frame is processed
+                        independently (MediaPipe IMAGE mode).
+  --outlandmarks OUTLANDMARKS
+                        Path to the output numpy array of size [N][33][3],
+                        where N is the number of video frames, 33 are the
+                        number of landmarks of the
+                        [MediaPipe](https://mediapipe.dev) Pose Landmarker,
+                        and 3 is to store <x,y,z> 3D coords. As for MediaPipe,
+                        x and y are normalized in the range [0,1] by the frame
+                        width and height. Inside a frame, if no bodies are
+                        detected, all values are NaN! If more bodies are
+                        detected, only the first in the mediapipe list is
+                        used.
+  --outvisibility OUTVISIBILITY
+                        Path to the output numpy array of size [N][33][2],
+                        storing the MediaPipe <visibility,presence> scores of
+                        each landmark, in range [0,1]. Inside a frame, if no
+                        bodies are detected, all values are NaN!
+  --outcompositeframes, --outcompositevideo OUTCOMPOSITEFRAMES
+                        Path to a videofile or directory for image files. Will
+                        have the same resolution and content of the input
+                        frames, plus the overlay of the body landmarks and
+                        skeleton. Red landmarks are on the left side of the
+                        body, blue on the right side, green is the nose.
+                        Landmarks with visibility below 0.5 are drawn as
+                        hollow circles.

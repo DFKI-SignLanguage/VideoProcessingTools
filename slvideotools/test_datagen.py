@@ -18,7 +18,7 @@ from importlib.resources import files
 import numpy as np
 
 TEST_FRAMES_PATH = str(files("slvideotools.data") / "frames")
-TEST_VIDEO_PATH = str(files("slvideotools.data") / "testvideo.mp4")
+TEST_FACE_VIDEO_PATH = str(files("slvideotools.data") / "test_face.mp4")
 
 
 def test_image_files_production(tmp_path):
@@ -46,9 +46,9 @@ def test_video_frames_production(tmp_path):
 
     print("Generating video in path " + str(video_path))
 
-    w, h, n_frames = video_info(TEST_VIDEO_PATH)
+    w, h, n_frames = video_info(TEST_FACE_VIDEO_PATH)
 
-    with VideoFrameProducer(video_in=TEST_VIDEO_PATH) as prod,\
+    with VideoFrameProducer(video_in=TEST_FACE_VIDEO_PATH) as prod,\
          VideoFrameConsumer(video_out=video_path) as cons:
 
         frame_count = 0
@@ -78,12 +78,12 @@ def test_video_consumer_ffmpeg_params(tmp_path):
     video_path = str(tmp_path / "video_50fps.mp4")
     target_fps = 50
 
-    with VideoFrameProducer(video_in=TEST_VIDEO_PATH) as prod,\
+    with VideoFrameProducer(video_in=TEST_FACE_VIDEO_PATH) as prod,\
          VideoFrameConsumer(video_out=video_path, ffmpeg_params={"framerate": target_fps}) as cons:
         for frame in prod.frames():
             cons.consume(frame)
 
-    in_info = video_info_ext(TEST_VIDEO_PATH)
+    in_info = video_info_ext(TEST_FACE_VIDEO_PATH)
     out_info = video_info_ext(video_path)
 
     assert out_info["fps"] == target_fps
@@ -95,8 +95,8 @@ def test_video_consumer_ffmpeg_params(tmp_path):
 def test_video_info_ext():
     """Test that the extended video info is consistent with video_info() and adds a valid frame rate."""
 
-    w, h, n_frames = video_info(TEST_VIDEO_PATH)
-    info = video_info_ext(TEST_VIDEO_PATH)
+    w, h, n_frames = video_info(TEST_FACE_VIDEO_PATH)
+    info = video_info_ext(TEST_FACE_VIDEO_PATH)
 
     assert set(info.keys()) == {"width", "height", "n_frames", "fps"}
     assert info["width"] == w
@@ -115,7 +115,7 @@ def test_factory_methods():
     assert isinstance(dir_prod, FrameProducer)
     dir_prod.close()
 
-    video_prod = create_frame_producer(dir_or_video=TEST_VIDEO_PATH)
+    video_prod = create_frame_producer(dir_or_video=TEST_FACE_VIDEO_PATH)
     assert isinstance(video_prod, FrameProducer)
     video_prod.close()
 
@@ -123,6 +123,6 @@ def test_factory_methods():
     assert isinstance(dir_cons, FrameConsumer)
     dir_cons.close()
 
-    video_cons = create_frame_consumer(dir_or_video=TEST_VIDEO_PATH)
+    video_cons = create_frame_consumer(dir_or_video=TEST_FACE_VIDEO_PATH)
     assert isinstance(video_cons, FrameConsumer)
     video_cons.close()

@@ -117,6 +117,19 @@ Since v0.4, the tool uses mediapipe 0.10 FaceLandmarker and can also extract AR-
 
 ![Vectors used for the face landmarks normalization](Docs/Pics/face_normalization_notes.png)
 
+### Extract Body Data
+
+Uses the MediaPipe Pose Landmarker to extract the 33 body landmarks, and their visibility and presence scores, from each frame.
+
+```
+python -m slvideotools.extract_body_data --help
+```
+
+Watch here the [extract_body_data help text](Docs/Help/extract_body_data.txt)
+
+For a reference about the landmark IDs and their location on the body, please see the official MediaPipe docs [Here](https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker).
+The model `pose_landmarker_heavy.task` must be in the `models/` directory (see `models/README.txt`).
+
 ### Trim Video
 
 Trims a video, i.e., retains only a subrange of frames.
