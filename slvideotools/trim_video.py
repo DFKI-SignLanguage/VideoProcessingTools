@@ -21,6 +21,7 @@ def trim_video(input_path: str, output_path: str, start_frame: int, end_frame: i
 
     stream = ffmpeg.output(stream, output_path)
     stream = ffmpeg.overwrite_output(stream)  # <-- OVERWRITE OPTION!!!
+    stream = stream.global_args('-hide_banner', '-loglevel', 'warning')
 
     ffmpeg.run(stream)
 
