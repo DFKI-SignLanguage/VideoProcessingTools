@@ -17,6 +17,9 @@ Types of changes:
 
 ## [Unreleased]
 
+
+## [0.7] - 2026-11-26
+
 ### Added
 
 - `extract_body_data` module and CLI: extracts the 33 MediaPipe Pose Landmarker body landmarks from the frames of a video into a numpy array [N][33][3], and optionally their visibility and presence scores [N][33][2] (`--outvisibility`) and a composite video with the skeleton overlay. For video files, the landmarks are tracked across frames (MediaPipe VIDEO mode, timestamps from the frame rate); image directories are processed frame by frame (IMAGE mode).
