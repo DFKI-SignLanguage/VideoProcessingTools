@@ -27,6 +27,10 @@ pip install -r requirements.txt
 
 Get the binary models listed under folder `models`!!!
 
+´´´
+bash models/downloadModels.sh
+´´´
+
 ## Scripts
 
 Here is the list of scripts and their description.
