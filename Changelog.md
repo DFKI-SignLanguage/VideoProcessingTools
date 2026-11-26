@@ -22,6 +22,8 @@ Types of changes:
 - `extract_body_data` module and CLI: extracts the 33 MediaPipe Pose Landmarker body landmarks from the frames of a video into a numpy array [N][33][3], and optionally their visibility and presence scores [N][33][2] (`--outvisibility`) and a composite video with the skeleton overlay. For video files, the landmarks are tracked across frames (MediaPipe VIDEO mode, timestamps from the frame rate); image directories are processed frame by frame (IMAGE mode).
 - `common.video_info_ext()`: returns width, height, number of frames, and frame rate (fps) of a video as a JSON-serializable dictionary. The existing `video_info()` is unchanged.
 - `datagen.VideoFrameConsumer`: new optional constructor parameter `ffmpeg_params`, a dictionary of extra keyword arguments for the `ffmpeg.input()` call, e.g. `{"framerate": 50}` to set the output frame rate (default remains ffmpeg's 25 fps).
+- Ensured compatibility with Python 3.13 (github automated test updated).
+- Added a bash script to easily download all models.
 
 ### Changed
 
